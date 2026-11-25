@@ -1,131 +1,1482 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f6f0e8" />
-    <meta name="description" content="Program World Model — executable worlds, benchmarks, and code-agent methods." />
-    <title>Program World Model</title>
+    <meta name="theme-color" content="#ffffff" id="meta-theme-color" />
+    <meta
+      name="description"
+      content="Program World Model — executable worlds, paradigm taxonomy, counterfactual benchmarks, and code-agent synthesis."
+    />
+    <title>Program World Model · Executable Worlds &amp; Open Research</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Noto+Sans+SC:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#main" data-en="Skip to content" data-zh="跳转到正文">Skip to content</a>
-    <header class="site-header">
-      <a class="brand" href="#top" aria-label="Program World Model home">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="brand-name">Program<br />World Model</span>
+
+    <!-- Top Announcement Banner -->
+    <div class="offer-banner" id="offer-banner" role="region" aria-label="Research announcement">
+      <a class="offer-banner__link" href="#work">
+        <span class="offer-banner__bolt" aria-hidden="true">⚡</span>
+        <strong data-en="Open Research Program" data-zh="开放研究计划">Open Research Program</strong>
+        <span class="offer-banner__sep" aria-hidden="true">·</span>
+        <span
+          data-en="Explore the L0–L4 survey catalogue, PWM-Arena benchmark &amp; upcoming code-agent method →"
+          data-zh="浏览 L0–L4 范式综述目录、PWM-Arena 评测基准与即将发布的 Code-Agent 方法 →"
+          >Explore the L0–L4 survey catalogue, PWM-Arena benchmark &amp; upcoming code-agent method →</span
+        >
       </a>
-      <nav class="site-nav" aria-label="Primary navigation">
-        <a href="#idea" data-en="Why programs" data-zh="为什么是程序">Why programs</a>
-        <a href="#work" data-en="The work" data-zh="工作线">The work</a>
-        <a href="#frame" data-en="The frame" data-zh="统一框架">The frame</a>
-      </nav>
-      <div class="header-actions">
-        <a class="text-link" href="https://github.com/MichaelCao0/Awesome-Code-World-Model" target="_blank" rel="noreferrer">Catalogue ↗</a>
-        <button class="lang-switch" type="button" aria-label="Switch language" aria-pressed="false">中</button>
+      <button class="offer-banner__close" id="dismiss-banner" type="button" aria-label="Dismiss announcement">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Sticky 56px Header (AffectUI style) -->
+    <header class="lp-nav" id="site-header">
+      <div class="lp-nav__inner">
+        <div class="lp-nav__left">
+          <a class="brand" href="#top" aria-label="Program World Model home">
+            <svg class="brand__mark" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <rect x="7" y="1" width="5" height="5" rx="1" fill="currentColor" />
+              <rect x="12" y="6" width="5" height="5" rx="1" fill="currentColor" />
+              <rect x="1" y="6" width="5" height="5" rx="1" fill="currentColor" />
+              <rect x="6" y="12" width="6" height="5" rx="1" fill="currentColor" />
+              <rect x="7" y="7" width="4" height="4" rx="0.8" fill="currentColor" opacity="0.28" />
+            </svg>
+            <span class="brand__name">Program World Model</span>
+          </a>
+
+          <nav class="lp-nav__links" aria-label="Primary navigation">
+            <a href="#work" data-en="Works" data-zh="系列工作">Works</a>
+            <a href="#inspector" data-en="Inspector" data-zh="交互演示">Inspector</a>
+            <a href="#frame" data-en="Spectrum" data-zh="范式谱系">Spectrum</a>
+            <a href="#idea" data-en="Why Code" data-zh="为何是代码">Why Code</a>
+            <a href="#principles" data-en="Principles" data-zh="核心原则">Principles</a>
+          </nav>
+        </div>
+
+        <div class="lp-nav__right">
+          <div class="theme-segmented" role="group" aria-label="Color theme">
+            <button class="theme-btn" type="button" data-theme-set="light" aria-label="Light mode" aria-pressed="true">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="3.1" stroke="currentColor" stroke-width="1.4" />
+                <path
+                  d="M8 1.5V3M8 13V14.5M1.5 8H3M13 8H14.5M3.4 3.4L4.45 4.45M11.55 11.55L12.6 12.6M12.6 3.4L11.55 4.45M4.45 11.55L3.4 12.6"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+            <button class="theme-btn" type="button" data-theme-set="dark" aria-label="Dark mode" aria-pressed="false">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="M13.2 9.8A5.5 5.5 0 0 1 6.2 2.8a5.5 5.5 0 1 0 7 7Z"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <button class="pill-control" id="lang-switch" type="button" aria-label="Switch language" aria-pressed="false">
+            中
+          </button>
+
+          <a
+            class="pill-control pill-control--gh"
+            href="https://github.com/MichaelCao0/Awesome-Code-World-Model"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Awesome Code World Model on GitHub"
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path
+                d="M8 0.2a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38l-.01-1.34c-2.23.48-2.7-1.07-2.7-1.07-.36-.93-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.81.06 1.23.83 1.23.83.72 1.22 1.88.87 2.34.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 8 .2Z"
+              />
+            </svg>
+            <span data-en="Catalogue" data-zh="文献库">Catalogue</span>
+          </a>
+
+          <a class="btn btn--primary btn--sm" href="#work" data-en="Explore works" data-zh="浏览工作">Explore works</a>
+        </div>
       </div>
     </header>
 
     <main id="main" tabindex="-1">
-      <section class="hero section" id="top">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="eyebrow-line"></span><span data-en="A research program in public" data-zh="一个公开推进的研究计划">A research program in public</span></p>
-          <h1 data-en="Make the world <em>executable.</em>" data-zh="让世界<em>可执行。</em>">Make the world <em>executable.</em></h1>
-          <p class="hero-lede" data-en="Program World Model studies what changes when a world is written as a program: rules can be inspected, state can persist, and every action can leave a trace that another system can test." data-zh="Program World Model 研究：当世界被写成程序后会发生什么。规则可以被检查，状态可以持续存在，每个动作都留下可被另一个系统检验的轨迹。">Program World Model studies what changes when a world is written as a program: rules can be inspected, state can persist, and every action can leave a trace that another system can test.</p>
-          <div class="hero-cta">
-            <a class="button button-dark" href="#work" data-en="Explore the program" data-zh="查看研究计划">Explore the program</a>
-            <a class="button button-quiet" href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft" target="_blank" rel="noreferrer" data-en="Open PWM-Arena ↗" data-zh="打开 PWM-Arena ↗">Open PWM-Arena ↗</a>
+      <!-- HERO SECTION with 3D-Perspectived Blueprint Inspector Wings -->
+      <section class="lp-hero" id="top">
+        <div class="lp-hero__stage">
+          <!-- Left 3D Blueprint Wing -->
+          <div class="lp-wing lp-wing--left" aria-hidden="true">
+            <div class="lp-wing__plane">
+              <div class="wing-guide wing-guide--v"></div>
+              <div class="wing-card wing-card--faded">
+                <div class="wing-row">
+                  <span class="wing-dot"></span>
+                  <span class="wing-mono">world_schema · v1</span>
+                  <span class="wing-muted">entities: 4</span>
+                </div>
+              </div>
+
+              <div class="wing-bp-frame">
+                <span class="wing-bp-tag">State Contract</span>
+                <span class="wing-bp-pad">10</span>
+                <div class="wing-bp-hatch"></div>
+                <div class="wing-card wing-card--selected">
+                  <div class="wing-head">
+                    <span class="wing-title">s<sub>t</sub> → s<sub>t+1</sub></span>
+                    <span class="wing-status wing-status--ok">✓ Verified</span>
+                  </div>
+                  <div class="wing-kv">
+                    <code>door.locked</code>
+                    <span>false</span>
+                  </div>
+                  <div class="wing-kv">
+                    <code>rule#03</code>
+                    <span class="wing-accent">key_gate(active)</span>
+                  </div>
+                </div>
+                <span class="wing-bp-dim">strict_pair · 1/1</span>
+                <svg class="wing-cursor" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path
+                    d="M3 2.2L14.6 8.1L9.3 9.7L7.4 14.9L3 2.2Z"
+                    fill="#ffffff"
+                    stroke="#0a0a0a"
+                    stroke-width="1.3"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <div class="wing-card wing-card--faded">
+                <div class="wing-row">
+                  <span class="wing-mono">obs: occluded</span>
+                  <span class="wing-muted">persisted 18 ticks</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="hero-note"><span class="live-dot"></span><span data-en="Survey · Benchmark · Method" data-zh="综述 · 基准 · 方法">Survey · Benchmark · Method</span></div>
-        </div>
-        <div class="hero-visual" aria-label="Executable world loop diagram">
-          <div class="visual-caption"><span>PROGRAM LOOP / 01</span><span>STATE → ACTION → CONSEQUENCE</span></div>
-          <div class="loop-stage">
-            <div class="loop-orbit orbit-one"></div>
-            <div class="loop-orbit orbit-two"></div>
-            <div class="loop-node node-state"><span class="node-index">01</span><strong data-en="state" data-zh="状态">state</strong><small>x<sub>t</sub> · memory</small></div>
-            <div class="loop-node node-action"><span class="node-index">02</span><strong data-en="action" data-zh="动作">action</strong><small>a<sub>t</sub> · intervention</small></div>
-            <div class="loop-node node-program"><span class="node-index">03</span><strong data-en="program" data-zh="程序">program</strong><small>rules · executor</small></div>
-            <div class="loop-arrow arrow-a" aria-hidden="true">↗</div>
-            <div class="loop-arrow arrow-b" aria-hidden="true">↘</div>
-            <div class="loop-arrow arrow-c" aria-hidden="true">↙</div>
-            <div class="code-slip"><span class="code-dot"></span><code><b>next</b> = world.step(action)<br /><i>return</i> next, render(next)</code></div>
+
+          <!-- Center Hero Copy -->
+          <div class="lp-hero__copy">
+            <a class="hero-pill" href="#work">
+              <span class="hero-pill__badge">L2 · L3</span>
+              <span data-en="Survey · Benchmark · Agent Method →" data-zh="范式综述 · 评测基准 · 智能体方法 →"
+                >Survey · Benchmark · Agent Method →</span
+              >
+            </a>
+
+            <h1 data-en="Make the world executable." data-zh="让世界可执行。">Make the world executable.</h1>
+
+            <p
+              class="lp-hero__sub"
+              data-en="Program World Model is an open research program studying worlds written as code — where rules can be inspected, state persists out of view, and every action leaves a trace another system can test."
+              data-zh="Program World Model 是一个开放研究计划，探索当世界被写成可执行程序后会发生什么：规则可被检查、状态跨遮挡持久存在，每一次干预都留下可被检验的因果轨迹。"
+            >
+              Program World Model is an open research program studying worlds written as code — where rules can be
+              inspected, state persists out of view, and every action leaves a trace another system can test.
+            </p>
+
+            <div class="lp-hero__actions">
+              <a class="btn btn--primary" href="#work" data-en="Explore the works" data-zh="查看系列工作"
+                >Explore the works</a
+              >
+              <a
+                class="btn btn--secondary"
+                href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft"
+                target="_blank"
+                rel="noreferrer"
+                data-en="Open PWM-Arena ↗"
+                data-zh="打开 PWM-Arena ↗"
+                >Open PWM-Arena ↗</a
+              >
+            </div>
           </div>
-          <p class="visual-foot" data-en="A model becomes a world model when its consequences can be run again." data-zh="当一个模型的后果可以被再次执行，它才真正成为世界模型。">A model becomes a world model when its consequences can be run again.</p>
-        </div>
-      </section>
 
-      <section class="marquee" aria-label="Research themes">
-        <div class="marquee-track"><span>RULES THAT RUN</span><b>✳</b><span>STATE THAT PERSISTS</span><b>✳</b><span>OBSERVATIONS THAT ALIGN</span><b>✳</b><span>RULES THAT RUN</span><b>✳</b><span>STATE THAT PERSISTS</span><b>✳</b></div>
-      </section>
+          <!-- Right 3D Blueprint Wing -->
+          <div class="lp-wing lp-wing--right" aria-hidden="true">
+            <div class="lp-wing__plane">
+              <div class="wing-guide wing-guide--v-left"></div>
+              <div class="wing-card wing-card--faded">
+                <div class="wing-row">
+                  <span class="wing-mono">action<sub>t</sub> = activate("lever")</span>
+                </div>
+              </div>
 
-      <section class="section idea-section" id="idea">
-        <div class="section-intro">
-          <p class="eyebrow"><span class="eyebrow-line"></span><span data-en="The question underneath" data-zh="底层的问题">The question underneath</span></p>
-          <h2 data-en="What does code <em>own</em> in a world?" data-zh="在一个世界里，代码究竟<em>负责什么</em>？">What does code <em>own</em> in a world?</h2>
-        </div>
-        <div class="idea-grid">
-          <div class="idea-text">
-            <p data-en="A rendered frame can look plausible while the next action starts from the wrong place. A state table can be explicit while no program ever computes its consequences. Program World Model keeps these questions separate, then asks how they fit together in a runnable system." data-zh="一帧画面可以看起来合理，但下一次动作却从错误的位置开始。状态表可以是显式的，但没有程序真正计算它的后果。Program World Model 先把这些问题分开，再研究它们如何在可运行的系统中组合起来。">A rendered frame can look plausible while the next action starts from the wrong place. A state table can be explicit while no program ever computes its consequences. Program World Model keeps these questions separate, then asks how they fit together in a runnable system.</p>
-            <div class="mini-callout"><span>01</span><strong data-en="Write the rule." data-zh="写下规则。">Write the rule.</strong><span>→</span><strong data-en="Run the consequence." data-zh="运行后果。">Run the consequence.</strong></div>
+              <div class="wing-bp-frame">
+                <span class="wing-bp-tag">Program Trace</span>
+                <span class="wing-bp-pad">10</span>
+                <div class="wing-bp-hatch"></div>
+                <div class="wing-card wing-card--selected">
+                  <div class="wing-head">
+                    <div>
+                      <strong class="wing-agent">world.step(s<sub>t</sub>, a<sub>t</sub>)</strong>
+                      <div class="wing-sub">Code Executor · L2/L3</div>
+                    </div>
+                    <span class="wing-status wing-status--run">
+                      <i class="spin-ring"></i>
+                      Running
+                    </span>
+                  </div>
+                  <div class="wing-trace-row">
+                    <span class="wing-step-pill">P</span>
+                    <span>Ground state &amp; edits</span>
+                    <span class="wing-ms">4ms</span>
+                  </div>
+                  <div class="wing-trace-row">
+                    <span class="wing-step-pill">D</span>
+                    <span>Execute rule transition</span>
+                    <span class="wing-ms">9ms</span>
+                  </div>
+                </div>
+                <span class="wing-bp-dim">render(s_t+1)</span>
+                <svg class="wing-cursor wing-cursor--right" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path
+                    d="M3 2.2L14.6 8.1L9.3 9.7L7.4 14.9L3 2.2Z"
+                    fill="#ffffff"
+                    stroke="#0a0a0a"
+                    stroke-width="1.3"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <div class="wing-card wing-card--faded">
+                <div class="wing-row">
+                  <span class="wing-mono">return next_state, render(next_state)</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="flow-card">
-            <div class="flow-label"><span data-en="THE SAME QUESTION, MADE OPERATIONAL" data-zh="把同一个问题变成可操作的测试">THE SAME QUESTION, MADE OPERATIONAL</span><span>↘</span></div>
-            <div class="flow-row"><span class="flow-chip chip-state">state<sub>t</sub></span><span class="flow-symbol">+</span><span class="flow-chip chip-action">action<sub>t</sub></span><span class="flow-symbol">→</span><span class="flow-chip chip-next">state<sub>t+1</sub></span></div>
-            <div class="flow-divider"></div>
-            <p data-en="Does the same program produce the right next state after the world changes out of view?" data-zh="当世界的变化离开视野后，同一个程序还能产生正确的下一状态吗？">Does the same program produce the right next state after the world changes out of view?</p>
+        </div>
+
+        <!-- Subtle Pillars Marquee / Trust-style Strip -->
+        <div class="lp-pillars">
+          <p class="lp-pillars__label" data-en="Core research pillars" data-zh="核心研究维度">Core research pillars</p>
+          <div class="lp-pillars__mask">
+            <div class="lp-pillars__track">
+              <span class="pillar-item"><i>⌘</i> <b data-en="Executable Rules" data-zh="可执行规则">Executable Rules</b></span>
+              <span class="pillar-item"><i>◈</i> <b data-en="Persistent State" data-zh="持久状态">Persistent State</b></span>
+              <span class="pillar-item"
+                ><i>⇄</i> <b data-en="Counterfactual Twin Pairs" data-zh="反事实孪生配对">Counterfactual Twin Pairs</b></span
+              >
+              <span class="pillar-item"
+                ><i>◎</i> <b data-en="Engine-Verified Readout" data-zh="引擎真值回读">Engine-Verified Readout</b></span
+              >
+              <span class="pillar-item"
+                ><i>⬡</i> <b data-en="Code × Neural Hybrid" data-zh="代码 × 神经混合动力学">Code × Neural Hybrid</b></span
+              >
+              <span class="pillar-item"
+                ><i>{ }</i> <b data-en="Agent World Synthesis" data-zh="智能体世界程序归纳">Agent World Synthesis</b></span
+              >
+              <!-- duplicated for seamless loop -->
+              <span class="pillar-item" aria-hidden="true"
+                ><i>⌘</i> <b data-en="Executable Rules" data-zh="可执行规则">Executable Rules</b></span
+              >
+              <span class="pillar-item" aria-hidden="true"
+                ><i>◈</i> <b data-en="Persistent State" data-zh="持久状态">Persistent State</b></span
+              >
+              <span class="pillar-item" aria-hidden="true"
+                ><i>⇄</i> <b data-en="Counterfactual Twin Pairs" data-zh="反事实孪生配对">Counterfactual Twin Pairs</b></span
+              >
+              <span class="pillar-item" aria-hidden="true"
+                ><i>◎</i> <b data-en="Engine-Verified Readout" data-zh="引擎真值回读">Engine-Verified Readout</b></span
+              >
+              <span class="pillar-item" aria-hidden="true"
+                ><i>⬡</i> <b data-en="Code × Neural Hybrid" data-zh="代码 × 神经混合动力学">Code × Neural Hybrid</b></span
+              >
+              <span class="pillar-item" aria-hidden="true"
+                ><i>{ }</i> <b data-en="Agent World Synthesis" data-zh="智能体世界程序归纳">Agent World Synthesis</b></span
+              >
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="section work-section" id="work">
-        <div class="section-intro work-heading">
-          <div><p class="eyebrow"><span class="eyebrow-line"></span><span data-en="Three connected tracks" data-zh="三条相互连接的工作线">Three connected tracks</span></p><h2 data-en="One program, <em>three ways</em> to ask it." data-zh="同一套计划，<em>三种推进方式</em>。">One program, <em>three ways</em> to ask it.</h2></div>
-          <p class="heading-aside" data-en="The site will grow with the work. Each track has a different job, and each one feeds the next." data-zh="主页会随着工作一起生长。三条线各自承担不同任务，也会彼此提供输入。">The site will grow with the work. Each track has a different job, and each one feeds the next.</p>
-        </div>
-        <div class="work-grid">
-          <article class="work-card survey-card">
-            <div class="card-top"><span class="card-number">01</span><span class="card-status" data-en="IN PROGRESS" data-zh="进行中">IN PROGRESS</span></div>
-            <div class="card-symbol symbol-book">▤</div>
-            <h3 data-en="The Survey" data-zh="综述">The Survey</h3>
-            <p data-en="A map of the field organized around the source of world dynamics: hand-written, predicted, programmatic, hybrid, or learned." data-zh="围绕世界动力学来源梳理领域：手写、预测、程序化、混合，或学习得到。">A map of the field organized around the source of world dynamics: hand-written, predicted, programmatic, hybrid, or learned.</p>
-            <a href="https://github.com/MichaelCao0/Awesome-Code-World-Model" target="_blank" rel="noreferrer" class="card-link" data-en="Read the catalogue ↗" data-zh="查看文献目录 ↗">Read the catalogue ↗</a>
-          </article>
-          <article class="work-card arena-card">
-            <div class="card-top"><span class="card-number">02</span><span class="card-status dark-status" data-en="BENCHMARK" data-zh="基准">BENCHMARK</span></div>
-            <div class="card-symbol symbol-arena">◈</div>
-            <h3>PWM-Arena</h3>
-            <p data-en="An evaluation ground for programmatic worlds. Start with Minecraft: test whether an executable world keeps its rules, state, and interaction loop intact." data-zh="程序化世界的评测场。从 Minecraft 开始：测试一个可执行世界能否保持规则、状态与交互闭环。">An evaluation ground for programmatic worlds. Start with Minecraft: test whether an executable world keeps its rules, state, and interaction loop intact.</p>
-            <a href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft" target="_blank" rel="noreferrer" class="card-link" data-en="Explore the arena ↗" data-zh="探索评测场 ↗">Explore the arena ↗</a>
-          </article>
-          <article class="work-card method-card">
-            <div class="card-top"><span class="card-number">03</span><span class="card-status light-status" data-en="NEXT" data-zh="下一步">NEXT</span></div>
-            <div class="card-symbol symbol-code">{ }</div>
-            <h3 data-en="The Method" data-zh="方法">The Method</h3>
-            <p data-en="A code-agent-facing system for building, inspecting, and improving program world models. The method page will follow as the executable core takes shape." data-zh="面向 Code Agent 的程序世界模型系统，用于构建、检查和改进可执行世界。随着方法核心成形，这里会继续展开。">A code-agent-facing system for building, inspecting, and improving program world models. The method page will follow as the executable core takes shape.</p>
-            <span class="card-link muted-link" data-en="Details coming soon" data-zh="细节即将发布">Details coming soon</span>
-          </article>
+      <!-- SECTION 1: SERIES OF WORKS SHOWCASE (AffectUI Library Tabs + Concentric Cards) -->
+      <section class="lp-section" id="work">
+        <div class="lp-container">
+          <div class="section-head">
+            <h2
+              class="lp-lead"
+              data-en="One research program,<br />a connected series of works"
+              data-zh="同一套研究计划，<br />相互咬合的系列工作"
+            >
+              One research program,<br />a connected series of works
+            </h2>
+            <p
+              class="lp-sub"
+              data-en="Each workstream isolates a distinct question — who owns state transitions across the field, whether models survive runtime rule edits, and how code agents build runnable worlds."
+              data-zh="每条工作线回答一个独立但彼此支撑的问题：领域中谁掌握状态转移决定权、模型能否经受运行时规则编辑检验，以及 Code Agent 如何构建并改进可执行世界。"
+            >
+              Each workstream isolates a distinct question — who owns state transitions across the field, whether models
+              survive runtime rule edits, and how code agents build runnable worlds.
+            </p>
+          </div>
+
+          <!-- Underlined Filter Tabs -->
+          <div class="lp-tabs" role="tablist" aria-label="Filter research works">
+            <button class="lp-tab is-active" type="button" role="tab" aria-selected="true" data-filter="all">
+              <span data-en="All works" data-zh="全部工作">All works</span>
+              <span class="lp-tab__count">3</span>
+            </button>
+            <button class="lp-tab" type="button" role="tab" aria-selected="false" data-filter="survey">
+              <span data-en="Survey &amp; Taxonomy" data-zh="综述与谱系">Survey &amp; Taxonomy</span>
+            </button>
+            <button class="lp-tab" type="button" role="tab" aria-selected="false" data-filter="benchmark">
+              <span data-en="Benchmarks" data-zh="评测基准">Benchmarks</span>
+            </button>
+            <button class="lp-tab" type="button" role="tab" aria-selected="false" data-filter="method">
+              <span data-en="Agent Methods" data-zh="智能体方法">Agent Methods</span>
+            </button>
+          </div>
+
+          <!-- 3-Column Concentric Preview Cards -->
+          <div class="work-grid">
+            <!-- Work 01: The Survey -->
+            <article class="aui-card work-card" data-category="survey">
+              <div class="aui-card__stage">
+                <span class="stage-badge stage-badge--neutral" data-en="01 · In Progress" data-zh="01 · 持续更新"
+                  >01 · In Progress</span
+                >
+                <!-- Mini UI Preview: Taxonomy Matrix -->
+                <div class="mini-ui mini-ui--taxonomy" aria-hidden="true">
+                  <div class="mini-ui__bar">
+                    <span class="mini-ui__dot"></span>
+                    <span class="mini-ui__label">Awesome-Code-World-Model</span>
+                    <span class="mini-ui__meta">L0–L4</span>
+                  </div>
+                  <div class="mini-spec-list">
+                    <div class="mini-spec-row">
+                      <span class="mini-lvl">L0</span>
+                      <span>Native Engine</span>
+                      <span class="mini-tag">Simulator</span>
+                    </div>
+                    <div class="mini-spec-row">
+                      <span class="mini-lvl">L1</span>
+                      <span>Next-state LM</span>
+                      <span class="mini-tag">Symbolic</span>
+                    </div>
+                    <div class="mini-spec-row is-focus">
+                      <span class="mini-lvl">L2</span>
+                      <span>Code World Model</span>
+                      <span class="mini-tag mini-tag--focus">Program</span>
+                    </div>
+                    <div class="mini-spec-row is-focus">
+                      <span class="mini-lvl">L3</span>
+                      <span>Hybrid World Model</span>
+                      <span class="mini-tag mini-tag--focus">Code + Neural</span>
+                    </div>
+                    <div class="mini-spec-row">
+                      <span class="mini-lvl">L4</span>
+                      <span>Learned Dynamics</span>
+                      <span class="mini-tag">Latent / Video</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="aui-card__foot">
+                <div class="aui-card__info">
+                  <h3 class="aui-card__title" data-en="The Survey &amp; Catalogue" data-zh="领域综述与文献目录">
+                    The Survey &amp; Catalogue
+                  </h3>
+                  <p
+                    class="aui-card__desc"
+                    data-en="A structured field map organized around the locus of world dynamics: hand-written, predicted, programmatic, hybrid, or learned."
+                    data-zh="围绕世界动力学决定权梳理领域版图：手写引擎、语言预测、可执行代码、混合动力学与神经学习模型。"
+                  >
+                    A structured field map organized around the locus of world dynamics: hand-written, predicted,
+                    programmatic, hybrid, or learned.
+                  </p>
+                </div>
+                <a
+                  class="aui-card__action"
+                  href="https://github.com/MichaelCao0/Awesome-Code-World-Model"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Open Awesome-Code-World-Model catalogue"
+                  title="Read the catalogue"
+                >
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M4.5 11.5L11.5 4.5M11.5 4.5H5.8M11.5 4.5V10.2"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </article>
+
+            <!-- Work 02: PWM-Arena -->
+            <article class="aui-card work-card" data-category="benchmark">
+              <div class="aui-card__stage">
+                <span class="stage-badge stage-badge--pro">
+                  <span aria-hidden="true">⚡</span>
+                  <span data-en="02 · Benchmark" data-zh="02 · 评测基准">02 · Benchmark</span>
+                </span>
+                <!-- Mini UI Preview: Trace Waterfall (AffectUI style) -->
+                <div class="mini-ui mini-ui--waterfall" aria-hidden="true">
+                  <div class="mini-ui__bar">
+                    <span class="mini-ui__dot mini-ui__dot--blue"></span>
+                    <span class="mini-ui__label">PWM-Arena · Minecraft</span>
+                    <span class="mini-live-pill">Live</span>
+                  </div>
+                  <div class="mini-metrics">
+                    <div>
+                      <small>SCENARIOS</small>
+                      <strong>S01–S24</strong>
+                    </div>
+                    <div>
+                      <small>ROLES</small>
+                      <strong>P · D · R</strong>
+                    </div>
+                    <div>
+                      <small>METRIC</small>
+                      <strong>Strict Pair</strong>
+                    </div>
+                  </div>
+                  <div class="mini-waterfall-rows">
+                    <div class="mini-wf-row">
+                      <span class="mini-wf-name">Branch A (Edited)</span>
+                      <span class="mini-wf-bar"><i style="width: 78%"></i></span>
+                      <span class="mini-wf-ok">PASS</span>
+                    </div>
+                    <div class="mini-wf-row">
+                      <span class="mini-wf-name">Branch B (Control)</span>
+                      <span class="mini-wf-bar mini-wf-bar--alt"><i style="width: 62%"></i></span>
+                      <span class="mini-wf-ok">PASS</span>
+                    </div>
+                    <div class="mini-wf-row">
+                      <span class="mini-wf-name">Engine Readout</span>
+                      <span class="mini-wf-bar mini-wf-bar--green"><i style="width: 92%"></i></span>
+                      <span class="mini-wf-ok">1/1</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="aui-card__foot">
+                <div class="aui-card__info">
+                  <h3 class="aui-card__title">PWM-Arena</h3>
+                  <p
+                    class="aui-card__desc"
+                    data-en="An evaluation ground for programmatic worlds. Starting from Minecraft: test whether an executable world keeps its rules, state, and interaction loop intact."
+                    data-zh="程序化世界的评测场。从 Minecraft 出发，检验可执行世界能否在反事实规则干预下保持规则、状态与观测闭环一致。"
+                  >
+                    An evaluation ground for programmatic worlds. Starting from Minecraft: test whether an executable
+                    world keeps its rules, state, and interaction loop intact.
+                  </p>
+                </div>
+                <a
+                  class="aui-card__action"
+                  href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Explore PWM-Arena"
+                  title="Explore PWM-Arena"
+                >
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M4.5 11.5L11.5 4.5M11.5 4.5H5.8M11.5 4.5V10.2"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </article>
+
+            <!-- Work 03: The Method -->
+            <article class="aui-card work-card" data-category="method">
+              <div class="aui-card__stage">
+                <span class="stage-badge stage-badge--neutral" data-en="03 · Next" data-zh="03 · 推进中">03 · Next</span>
+                <!-- Mini UI Preview: Agent Tree (AffectUI style) -->
+                <div class="mini-ui mini-ui--tree" aria-hidden="true">
+                  <div class="mini-ui__bar">
+                    <span class="mini-ui__dot mini-ui__dot--amber"></span>
+                    <span class="mini-ui__label">Code-Agent Loop</span>
+                    <span class="mini-ui__meta">v0 · Core</span>
+                  </div>
+                  <div class="mini-tree-node mini-tree-node--root">
+                    <div class="mini-tree-top">
+                      <strong>World Builder Agent</strong>
+                      <span class="mini-run-tag">Synthesizing</span>
+                    </div>
+                    <p>Induce, execute &amp; refine runnable world rules</p>
+                  </div>
+                  <div class="mini-tree-children">
+                    <div class="mini-tree-branch">
+                      <code>step()</code>
+                      <span>State &amp; dynamics</span>
+                    </div>
+                    <div class="mini-tree-branch">
+                      <code>test()</code>
+                      <span>Trace verification</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="aui-card__foot">
+                <div class="aui-card__info">
+                  <h3 class="aui-card__title" data-en="The Method" data-zh="方法系统（The Method）">The Method</h3>
+                  <p
+                    class="aui-card__desc"
+                    data-en="A code-agent-facing system for building, inspecting, and improving program world models. Full release follows as the executable core takes shape."
+                    data-zh="面向 Code Agent 的程序世界模型构建、检查与迭代系统。随着可执行核心成形，方法主页与代码将陆续公开。"
+                  >
+                    A code-agent-facing system for building, inspecting, and improving program world models. Full
+                    release follows as the executable core takes shape.
+                  </p>
+                </div>
+                <span
+                  class="aui-card__soon"
+                  data-en="Soon"
+                  data-zh="即将发布"
+                  aria-label="Details coming soon"
+                  >Soon</span
+                >
+              </div>
+            </article>
+          </div>
+
+          <!-- Calm Workstream Ledger (AffectUI Agent-Inbox inspired index for growing works) -->
+          <div class="ledger" aria-label="Research workstream index">
+            <div class="ledger__head">
+              <span class="ledger__title" data-en="Program index &amp; artifacts" data-zh="研究计划目录与公开产物"
+                >Program index &amp; artifacts</span
+              >
+              <span
+                class="ledger__hint"
+                data-en="Designed to grow as new environments, benchmarks, and papers ship"
+                data-zh="随新环境、评测集与论文发布持续扩展"
+                >Designed to grow as new environments, benchmarks, and papers ship</span
+              >
+            </div>
+
+            <a
+              class="ledger-row"
+              data-category="survey"
+              href="https://github.com/MichaelCao0/Awesome-Code-World-Model"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="ledger-row__id">01.A</span>
+              <strong class="ledger-row__name" data-en="Awesome-Code-World-Model" data-zh="Awesome-Code-World-Model 文献目录"
+                >Awesome-Code-World-Model</strong
+              >
+              <span
+                class="ledger-row__detail"
+                data-en="Living bibliography across L0 engines, L1 next-state LMs, L2 code worlds, L3 hybrids &amp; L4 neural dynamics"
+                data-zh="覆盖 L0 原生引擎、L1 状态预测 LM、L2 代码世界、L3 混合模型与 L4 神经动力学的开源文献库"
+                >Living bibliography across L0 engines, L1 next-state LMs, L2 code worlds, L3 hybrids &amp; L4 neural
+                dynamics</span
+              >
+              <span class="status-chip status-chip--green" data-en="Public Repo ↗" data-zh="开源仓库 ↗"
+                >Public Repo ↗</span
+              >
+            </a>
+
+            <a
+              class="ledger-row"
+              data-category="benchmark"
+              href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="ledger-row__id">02.A</span>
+              <strong class="ledger-row__name" data-en="PWM-Arena · Minecraft Suite" data-zh="PWM-Arena · Minecraft 评测集"
+                >PWM-Arena · Minecraft Suite</strong
+              >
+              <span
+                class="ledger-row__detail"
+                data-en="Counterfactual A/B rule-editing scenarios decomposing Perception (P), Dynamics (D), and Rendering (R)"
+                data-zh="基于反事实 A/B 规则编辑场景，解耦评测感知接地（P）、动力学执行（D）与视觉渲染回读（R）"
+                >Counterfactual A/B rule-editing scenarios decomposing Perception (P), Dynamics (D), and Rendering
+                (R)</span
+              >
+              <span class="status-chip status-chip--blue" data-en="Interactive Arena ↗" data-zh="在线评测场 ↗"
+                >Interactive Arena ↗</span
+              >
+            </a>
+
+            <div class="ledger-row ledger-row--static" data-category="method">
+              <span class="ledger-row__id">03.A</span>
+              <strong
+                class="ledger-row__name"
+                data-en="Executable World Synthesis &amp; Verification"
+                data-zh="可执行世界构建与验证方法"
+                >Executable World Synthesis &amp; Verification</strong
+              >
+              <span
+                class="ledger-row__detail"
+                data-en="Code-agent loop for inducing explicit world programs, testing consequences, and closing observation alignment"
+                data-zh="面向 Code Agent 的世界程序归纳、后果推演与观测对齐闭环系统"
+                >Code-agent loop for inducing explicit world programs, testing consequences, and closing observation
+                alignment</span
+              >
+              <span class="status-chip status-chip--muted" data-en="In Development" data-zh="研发推进中"
+                >In Development</span
+              >
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="section frame-section" id="frame">
-        <div class="section-intro"><p class="eyebrow"><span class="eyebrow-line"></span><span data-en="A shared frame" data-zh="统一框架">A shared frame</span></p><h2 data-en="Find the <em>authority</em> before naming the model." data-zh="在命名模型之前，先找到<em>谁拥有决定权</em>。">Find the <em>authority</em> before naming the model.</h2></div>
-        <div class="spectrum" role="list" aria-label="World model spectrum">
-          <div class="spectrum-item" role="listitem"><span class="spectrum-level">L0</span><strong data-en="Hand-written" data-zh="手写引擎">Hand-written</strong><small data-en="Engine rules" data-zh="引擎规则">Engine rules</small></div>
-          <div class="spectrum-item" role="listitem"><span class="spectrum-level">L1</span><strong data-en="Next-state LM" data-zh="状态预测 LM">Next-state LM</strong><small data-en="Prompted state" data-zh="提示式状态">Prompted state</small></div>
-          <div class="spectrum-item active" role="listitem"><span class="spectrum-level">L2</span><strong data-en="Code" data-zh="代码">Code</strong><small data-en="Program runs" data-zh="程序执行">Program runs</small></div>
-          <div class="spectrum-item hybrid" role="listitem"><span class="spectrum-level">L3</span><strong data-en="Hybrid" data-zh="混合">Hybrid</strong><small data-en="Shared dynamics" data-zh="共享动力学">Shared dynamics</small></div>
-          <div class="spectrum-item" role="listitem"><span class="spectrum-level">L4</span><strong data-en="Learned" data-zh="学习模型">Learned</strong><small data-en="Neural dynamics" data-zh="神经动力学">Neural dynamics</small></div>
+      <!-- SECTION 2: INTERACTIVE EXECUTABLE WORLD INSPECTOR (AffectUI Screens Showcase style) -->
+      <section class="lp-section" id="inspector">
+        <div class="lp-container">
+          <div class="section-head">
+            <h2
+              class="lp-lead"
+              data-en="A model becomes a world model<br />when its consequences can run again"
+              data-zh="当模型的后果可以被再次执行，<br />它才真正成为世界模型"
+            >
+              A model becomes a world model<br />when its consequences can run again
+            </h2>
+            <p
+              class="lp-sub"
+              data-en="Trigger actions against an explicit world state, inspect counterfactual A/B rule edits, or explore how PWM-Arena separates state transitions from pixel rendering."
+              data-zh="亲自对显式世界状态施加动作干预、对比反事实 A/B 规则分支，或查看 PWM-Arena 如何将状态推演与像素渲染解耦。"
+            >
+              Trigger actions against an explicit world state, inspect counterfactual A/B rule edits, or explore how
+              PWM-Arena separates state transitions from pixel rendering.
+            </p>
+          </div>
+
+          <div class="lp-tabs" role="tablist" aria-label="Interactive world inspector views">
+            <button class="lp-tab screen-tab is-active" type="button" role="tab" aria-selected="true" data-screen="loop">
+              <span data-en="01 · Runnable Program Loop" data-zh="01 · 可执行状态闭环">01 · Runnable Program Loop</span>
+            </button>
+            <button class="lp-tab screen-tab" type="button" role="tab" aria-selected="false" data-screen="arena">
+              <span data-en="02 · Counterfactual A/B Pair" data-zh="02 · 反事实 A/B 规则对">02 · Counterfactual A/B Pair</span>
+            </button>
+            <button class="lp-tab screen-tab" type="button" role="tab" aria-selected="false" data-screen="pdr">
+              <span data-en="03 · P / D / R Architecture" data-zh="03 · P / D / R 职责解耦">03 · P / D / R Architecture</span>
+            </button>
+          </div>
+
+          <!-- Application Shell Frame -->
+          <div class="app-shell">
+            <!-- Panel 1: Runnable Program Loop -->
+            <div class="screen-panel is-active" data-screen-panel="loop">
+              <div class="app-grid">
+                <!-- Left Sidebar: Interventions -->
+                <aside class="app-sidebar">
+                  <div class="app-pane-head">
+                    <span class="app-pane-title" data-en="Interventions (a_t)" data-zh="动作干预 (a_t)"
+                      >Interventions (a_t)</span
+                    >
+                    <span class="mono-tag" id="sim-tick">tick = 00</span>
+                  </div>
+                  <p
+                    class="app-sidebar__hint"
+                    data-en="Click an action to execute world.step(s_t, a_t) and verify state persistence:"
+                    data-zh="点击下方动作执行 world.step(s_t, a_t)，验证状态持久性与规则门控："
+                  >
+                    Click an action to execute world.step(s_t, a_t) and verify state persistence:
+                  </p>
+                  <div class="sim-actions">
+                    <button class="sim-action-btn" type="button" data-sim-action="take_key">
+                      <code>pickup("brass_key")</code>
+                      <small data-en="Acquire key into inventory" data-zh="拾取钥匙进入背包状态">Acquire key into inventory</small>
+                    </button>
+                    <button class="sim-action-btn" type="button" data-sim-action="unlock_door">
+                      <code>activate("iron_door")</code>
+                      <small data-en="Requires has_key == true" data-zh="前置条件：has_key == true">Requires has_key == true</small>
+                    </button>
+                    <button class="sim-action-btn" type="button" data-sim-action="toggle_lamp">
+                      <code>toggle("redstone_lamp")</code>
+                      <small data-en="Flip room illumination rule" data-zh="切换房间红石灯状态">Flip room illumination rule</small>
+                    </button>
+                    <button class="sim-action-btn" type="button" data-sim-action="pan_away">
+                      <code>camera.pan("away")</code>
+                      <small data-en="Occlude room &amp; test memory" data-zh="移开相机视野，测试遮挡记忆">Occlude room &amp; test memory</small>
+                    </button>
+                    <button class="sim-action-btn sim-action-btn--ghost" type="button" data-sim-action="reset">
+                      <code>world.reset()</code>
+                      <small data-en="Restore initial s_0" data-zh="重置回初始状态 s_0">Restore initial s_0</small>
+                    </button>
+                  </div>
+                </aside>
+
+                <!-- Center Pane: Executable Program & Trace -->
+                <div class="app-main">
+                  <div class="app-pane-head">
+                    <span class="app-pane-title">world_program.py</span>
+                    <span class="status-chip status-chip--green" id="sim-status-pill" data-en="Ready · Deterministic" data-zh="就绪 · 确定性执行"
+                      >Ready · Deterministic</span
+                    >
+                  </div>
+                  <pre class="code-box" aria-label="Executable world step function"><code><span class="kw">def</span> <span class="fn">step</span>(state, action):
+    s = state.clone()
+    <span class="kw">if</span> action == <span class="str">"pickup(brass_key)"</span>:
+        s.has_key, s.key_on_floor = <span class="bool">True</span>, <span class="bool">False</span>
+    <span class="kw">elif</span> action == <span class="str">"activate(iron_door)"</span>:
+        <span class="cm"># Gate rule: door only opens when key is held</span>
+        <span class="kw">if</span> s.has_key:
+            s.door_open = <span class="kw">not</span> s.door_open
+    <span class="kw">elif</span> action == <span class="str">"toggle(redstone_lamp)"</span>:
+        s.lamp_on = <span class="kw">not</span> s.lamp_on
+    <span class="kw">elif</span> action == <span class="str">"camera.pan(away)"</span>:
+        s.camera_occluded = <span class="kw">not</span> s.camera_occluded
+    s.tick += <span class="num">1</span>
+    <span class="kw">return</span> s, render(s)</code></pre>
+
+                  <div class="sim-call-bar">
+                    <span class="mono-muted" data-en="Latest call:" data-zh="最近调用：">Latest call:</span>
+                    <code id="sim-code-call">s_0 = world.init()</code>
+                  </div>
+
+                  <div class="sim-trace" id="sim-trace-list" aria-live="polite">
+                    <div class="trace-entry">
+                      <span class="trace-tick">t=00</span>
+                      <span data-en="Initialized explicit state s_0; iron_door locked." data-zh="初始化显式状态 s_0；铁门处于闭合门控状态。"
+                        >Initialized explicit state s_0; iron_door locked.</span
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right Pane: Explicit State + Rendered Readout -->
+                <div class="app-inspector">
+                  <div class="app-pane-head">
+                    <span class="app-pane-title" data-en="State &amp; Render" data-zh="显式状态与渲染视图"
+                      >State &amp; Render</span
+                    >
+                    <span class="mono-tag">s<sub>t</sub> + render(s<sub>t</sub>)</span>
+                  </div>
+
+                  <div class="room-stage" id="sim-room">
+                    <div class="room-stage__cam" id="sim-room-cam">camera: room_view</div>
+                    <div class="room-stage__objects">
+                      <div class="room-obj" id="sim-room-key">
+                        <span class="room-obj__icon">🔑</span>
+                        <small data-en="Key: floor" data-zh="钥匙：地面">Key: floor</small>
+                      </div>
+                      <div class="room-obj" id="sim-room-door">
+                        <span class="room-obj__icon">🚪</span>
+                        <small data-en="Door: closed" data-zh="铁门：关闭">Door: closed</small>
+                      </div>
+                      <div class="room-obj" id="sim-room-lamp">
+                        <span class="room-obj__icon">💡</span>
+                        <small data-en="Lamp: off" data-zh="红石灯：灭">Lamp: off</small>
+                      </div>
+                    </div>
+                    <div class="room-occluded-banner" id="sim-occluded-banner" hidden>
+                      <span data-en="Camera panned away — visual pixels show wall, yet s_t persists intact below." data-zh="视野已移开 — 像素画面仅见墙壁，但下方显式状态 s_t 完整保留。"
+                        >Camera panned away — visual pixels show wall, yet s_t persists intact below.</span
+                      >
+                    </div>
+                  </div>
+
+                  <pre class="json-box" id="sim-json-state">{
+  "tick": 0,
+  "has_key": false,
+  "door_open": false,
+  "lamp_on": false,
+  "camera": "room_view"
+}</pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 2: Counterfactual A/B Pair -->
+            <div class="screen-panel" data-screen-panel="arena" hidden>
+              <div class="arena-panel">
+                <div class="arena-toolbar">
+                  <div>
+                    <strong
+                      class="arena-toolbar__title"
+                      data-en="Counterfactual Rule Intervention (Strict Pair)"
+                      data-zh="反事实规则编辑检验（Strict Pair 配对评测）"
+                      >Counterfactual Rule Intervention (Strict Pair)</strong
+                    >
+                    <p
+                      class="arena-toolbar__sub"
+                      data-en="Identical initial scene &amp; agent action sequence — only the underlying world rule changes. Models pass Strict Pair only when BOTH Branch A and Branch B match engine state."
+                      data-zh="完全相同的初始场景与动作序列，仅修改底层世界规则。模型必须同时答对编辑分支 A 与对照分支 B 才能通过 Strict Pair。"
+                    >
+                      Identical initial scene &amp; agent action sequence — only the underlying world rule changes.
+                      Models pass Strict Pair only when BOTH Branch A and Branch B match engine state.
+                    </p>
+                  </div>
+                  <div class="segmented-switch" role="group" aria-label="Select rule branch">
+                    <button class="arena-mode-btn is-active" type="button" data-arena-mode="default">
+                      <span data-en="Branch B · Control" data-zh="分支 B · 默认规则">Branch B · Control</span>
+                    </button>
+                    <button class="arena-mode-btn" type="button" data-arena-mode="edited">
+                      <span data-en="Branch A · Rule Edited" data-zh="分支 A · 规则重绑定">Branch A · Rule Edited</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="arena-columns">
+                  <div class="arena-box">
+                    <div class="app-pane-head">
+                      <span class="app-pane-title" data-en="Active Rule Specification" data-zh="当前生效规则契约"
+                        >Active Rule Specification</span
+                      >
+                      <span class="status-chip status-chip--blue" id="arena-branch-status">Branch B · Standard</span>
+                    </div>
+                    <pre class="code-box" id="arena-rule-code"><code># Standard binding (Control Branch B)
+on_event("pull_lever_north"):
+    set_state("oak_door", open=True)
+    set_state("trapdoor", open=False)</code></pre>
+                  </div>
+
+                  <div class="arena-box">
+                    <div class="app-pane-head">
+                      <span class="app-pane-title" data-en="System Outcomes under Same Action" data-zh="同一动作下的各范式表现"
+                        >System Outcomes under Same Action</span
+                      >
+                      <span class="mono-tag">action = pull_lever_north</span>
+                    </div>
+                    <div class="verdict-table" id="arena-verdicts">
+                      <div class="verdict-row">
+                        <div>
+                          <strong>Prior-memorized Video / LM</strong>
+                          <small data-en="Relies on pretraining co-occurrence" data-zh="依赖预训练视觉/常识共现先验"
+                            >Relies on pretraining co-occurrence</small
+                          >
+                        </div>
+                        <span class="status-chip status-chip--green" id="arena-prior-verdict">Matches Control ✓</span>
+                      </div>
+                      <div class="verdict-row">
+                        <div>
+                          <strong>Program World Model (L2 / L3)</strong>
+                          <small data-en="Executes active rule contract on s_t" data-zh="在 s_t 上执行当前生效的程序规则"
+                            >Executes active rule contract on s_t</small
+                          >
+                        </div>
+                        <span class="status-chip status-chip--green" id="arena-pwm-verdict">Executes Rule ✓</span>
+                      </div>
+                      <div class="verdict-row verdict-row--summary">
+                        <div>
+                          <strong data-en="Strict Pair Score (A ∧ B)" data-zh="Strict Pair 联合得分 (A ∧ B)"
+                            >Strict Pair Score (A ∧ B)</strong
+                          >
+                          <small id="arena-pair-note" data-en="Switch to Branch A (Rule Edited) to see where non-executable priors fail." data-zh="切换到「分支 A · 规则重绑定」，查看非可执行先验为何失效。"
+                            >Switch to Branch A (Rule Edited) to see where non-executable priors fail.</small
+                          >
+                        </div>
+                        <span class="mono-tag">Oracle 1.0 · Trivial 0.0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 3: P / D / R Responsibility Split -->
+            <div class="screen-panel" data-screen-panel="pdr" hidden>
+              <div class="pdr-grid">
+                <div class="pdr-card">
+                  <div class="pdr-card__top">
+                    <span class="pdr-letter">P</span>
+                    <span class="mono-tag" data-en="Perception &amp; Grounding" data-zh="感知与程序接地"
+                      >Perception &amp; Grounding</span
+                    >
+                  </div>
+                  <h4 data-en="Observations → Explicit State &amp; Rules" data-zh="观测流 → 显式状态与规则表示">
+                    Observations → Explicit State &amp; Rules
+                  </h4>
+                  <p
+                    data-en="Parse visual observations and interaction history into structured entities, state variables, and executable rule hypotheses."
+                    data-zh="从观测画面与交互轨迹中解析出结构化实体、状态变量与可执行的规则假设。"
+                  >
+                    Parse visual observations and interaction history into structured entities, state variables, and
+                    executable rule hypotheses.
+                  </p>
+                  <code class="pdr-sig">(o<sub>0:t</sub>, a<sub>0:t-1</sub>) → (s<sub>t</sub>, W)</code>
+                </div>
+
+                <div class="pdr-card pdr-card--focus">
+                  <div class="pdr-card__top">
+                    <span class="pdr-letter">D</span>
+                    <span class="stage-badge stage-badge--pro" data-en="Core Dynamics" data-zh="动力学核心"
+                      >Core Dynamics</span
+                    >
+                  </div>
+                  <h4 data-en="State + Action + Edit → Next State" data-zh="状态 + 动作 + 规则编辑 → 下一状态">
+                    State + Action + Edit → Next State
+                  </h4>
+                  <p
+                    data-en="Compute deterministic or hybrid consequences under priorities, scheduled events, revocations, and out-of-view persistence."
+                    data-zh="在规则优先级、定时挂起事件、规则撤销与视野外持久性约束下计算下一状态后果。"
+                  >
+                    Compute deterministic or hybrid consequences under priorities, scheduled events, revocations, and
+                    out-of-view persistence.
+                  </p>
+                  <code class="pdr-sig">W.step(s<sub>t</sub>, a<sub>t</sub>, edit<sub>t</sub>) → s<sub>t+1</sub></code>
+                </div>
+
+                <div class="pdr-card">
+                  <div class="pdr-card__top">
+                    <span class="pdr-letter">R</span>
+                    <span class="mono-tag" data-en="Rendering &amp; Readout" data-zh="条件渲染与状态回读"
+                      >Rendering &amp; Readout</span
+                    >
+                  </div>
+                  <h4 data-en="Authoritative State → Aligned Pixels" data-zh="权威状态 → 一致的视觉画面">
+                    Authoritative State → Aligned Pixels
+                  </h4>
+                  <p
+                    data-en="Render state transitions into visual frames without corrupting underlying state facts — scored by reading visible state back out."
+                    data-zh="将权威状态转移渲染为视觉帧且不篡改底层事实，通过视觉状态回读检验观测与状态对齐。"
+                  >
+                    Render state transitions into visual frames without corrupting underlying state facts — scored by
+                    reading visible state back out.
+                  </p>
+                  <code class="pdr-sig">render(s<sub>t+1</sub>) → ô<sub>t+1</sub> ↔ readout(ô<sub>t+1</sub>)</code>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <p class="frame-note" data-en="Our center of gravity is L2 and L3. The neighboring levels are here to make the boundary legible." data-zh="我们的重点是 L2 与 L3。相邻层级的作用，是让边界变得清晰。">Our center of gravity is L2 and L3. The neighboring levels are here to make the boundary legible.</p>
       </section>
 
-      <section class="closing-band">
-        <div class="section closing-inner"><div><p class="eyebrow light-eyebrow"><span class="eyebrow-line"></span><span data-en="The next state is a test" data-zh="下一状态就是测试">The next state is a test</span></p><h2 data-en="Build worlds that can answer back." data-zh="构建能够回应的世界。">Build worlds that can answer back.</h2></div><a class="button button-light" href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft" target="_blank" rel="noreferrer" data-en="Go to PWM-Arena ↗" data-zh="前往 PWM-Arena ↗">Go to PWM-Arena ↗</a></div>
+      <!-- SECTION 3: WORLD MODEL SPECTRUM L0-L4 -->
+      <section class="lp-section" id="frame">
+        <div class="lp-container">
+          <div class="section-head">
+            <h2
+              class="lp-lead"
+              data-en="Find the authority<br />before naming the model"
+              data-zh="在命名模型之前，<br />先看谁拥有状态决定权"
+            >
+              Find the authority<br />before naming the model
+            </h2>
+            <p
+              class="lp-sub"
+              data-en="L0–L4 are not capability ranks or a chronological timeline — they locate who decides s_t+1. Our center of gravity sits at L2 (Code) and L3 (Hybrid)."
+              data-zh="L0–L4 并非能力高低或时间演进阶段，而是刻画「谁决定下一状态 s_t+1」。本计划的重心聚焦于 L2（代码世界模型）与 L3（混合世界模型）。"
+            >
+              L0–L4 are not capability ranks or a chronological timeline — they locate who decides s_t+1. Our center of
+              gravity sits at L2 (Code) and L3 (Hybrid).
+            </p>
+          </div>
+
+          <!-- 5-Column Interactive Spectrum Grid -->
+          <div class="spectrum-grid" role="tablist" aria-label="World model paradigm spectrum">
+            <button class="spec-card" type="button" role="tab" aria-selected="false" data-level="L0">
+              <div class="spec-card__head">
+                <span class="spec-lvl">L0</span>
+                <span class="spec-chip" data-en="Simulator" data-zh="原生模拟器">Simulator</span>
+              </div>
+              <strong class="spec-card__title" data-en="Native Engine" data-zh="手写原生引擎">Native Engine</strong>
+              <p class="spec-card__desc" data-en="Human-authored scene &amp; physics simulator" data-zh="人工编写的场景、几何与物理引擎">
+                Human-authored scene &amp; physics simulator
+              </p>
+              <code class="spec-card__formula">Engine(s<sub>t</sub>, a<sub>t</sub>)</code>
+            </button>
+
+            <button class="spec-card" type="button" role="tab" aria-selected="false" data-level="L1">
+              <div class="spec-card__head">
+                <span class="spec-lvl">L1</span>
+                <span class="spec-chip" data-en="Prompted" data-zh="提示预测">Prompted</span>
+              </div>
+              <strong class="spec-card__title" data-en="Next-state LM" data-zh="状态预测 LM">Next-state LM</strong>
+              <p class="spec-card__desc" data-en="LLM directly predicts symbolic state updates" data-zh="大模型直接预测文本或符号状态更新">
+                LLM directly predicts symbolic state updates
+              </p>
+              <code class="spec-card__formula">LLM(s<sub>t</sub>, a<sub>t</sub>)</code>
+            </button>
+
+            <button class="spec-card spec-card--focus is-selected" type="button" role="tab" aria-selected="true" data-level="L2">
+              <div class="spec-card__head">
+                <span class="spec-lvl">L2</span>
+                <span class="spec-chip spec-chip--focus" data-en="Focus" data-zh="核心重心">Focus</span>
+              </div>
+              <strong class="spec-card__title" data-en="Code World Model" data-zh="代码世界模型">Code World Model</strong>
+              <p class="spec-card__desc" data-en="Executable world program synthesized &amp; run" data-zh="由智能体生成/维护、运行时执行的世界程序">
+                Executable world program synthesized &amp; run
+              </p>
+              <code class="spec-card__formula">Program.step(s<sub>t</sub>, a<sub>t</sub>)</code>
+            </button>
+
+            <button class="spec-card spec-card--focus" type="button" role="tab" aria-selected="false" data-level="L3">
+              <div class="spec-card__head">
+                <span class="spec-lvl">L3</span>
+                <span class="spec-chip spec-chip--focus" data-en="Focus" data-zh="核心重心">Focus</span>
+              </div>
+              <strong class="spec-card__title" data-en="Hybrid World Model" data-zh="混合世界模型">Hybrid World Model</strong>
+              <p class="spec-card__desc" data-en="Shared authority: code rules + neural models" data-zh="可执行代码机制与神经渲染/学习动力学协同">
+                Shared authority: code rules + neural models
+              </p>
+              <code class="spec-card__formula">Code ⊕ Neural(s<sub>t</sub>, a<sub>t</sub>)</code>
+            </button>
+
+            <button class="spec-card" type="button" role="tab" aria-selected="false" data-level="L4">
+              <div class="spec-card__head">
+                <span class="spec-lvl">L4</span>
+                <span class="spec-chip" data-en="Latent / Video" data-zh="隐空间/视频">Latent / Video</span>
+              </div>
+              <strong class="spec-card__title" data-en="Neural World Model" data-zh="神经世界模型">Neural World Model</strong>
+              <p class="spec-card__desc" data-en="Learned video or latent dynamics dominate" data-zh="由端到端学习的隐状态或视频动力学主导演化">
+                Learned video or latent dynamics dominate
+              </p>
+              <code class="spec-card__formula">f<sub>θ</sub>(z<sub>t</sub>, a<sub>t</sub>)</code>
+            </button>
+          </div>
+
+          <!-- Interactive Selected Paradigm Inspector -->
+          <div class="spec-detail" id="spec-detail" aria-live="polite">
+            <div class="spec-detail__top">
+              <div class="spec-detail__heading">
+                <span class="stage-badge stage-badge--pro" id="spec-detail-badge">L2 · Center of Gravity</span>
+                <h3 id="spec-detail-title">Code World Model</h3>
+              </div>
+              <span class="mono-muted" data-en="Click any level L0–L4 above to inspect" data-zh="点击上方任一层级 L0–L4 查看详情"
+                >Click any level L0–L4 above to inspect</span
+              >
+            </div>
+
+            <div class="spec-detail__cols">
+              <div class="spec-detail__cell">
+                <small data-en="TRANSITION AUTHORITY" data-zh="状态转移决定权">TRANSITION AUTHORITY</small>
+                <p id="spec-detail-authority">
+                  Executable world program (generated or maintained by an agent, executed deterministically by a
+                  runtime).
+                </p>
+              </div>
+              <div class="spec-detail__cell">
+                <small data-en="STATE &amp; REPRESENTATIVE FAMILIES" data-zh="状态表征与代表工作簇"
+                  >STATE &amp; REPRESENTATIVE FAMILIES</small
+                >
+                <p id="spec-detail-repr">
+                  Explicit world state + executable rules, procedures, and events.
+                </p>
+                <div class="chip-row" id="spec-detail-systems">
+                  <span class="mini-tag">WorldCoder</span>
+                  <span class="mini-tag">Code World Model</span>
+                  <span class="mini-tag">Programmable WM</span>
+                </div>
+              </div>
+              <div class="spec-detail__cell">
+                <small data-en="STRENGTHS &amp; TRADE-OFFS" data-zh="优势与典型局限">STRENGTHS &amp; TRADE-OFFS</small>
+                <p class="spec-pro" id="spec-detail-pros">
+                  ✓ Interpretable, inspectable, persistent state, verifiable planning &amp; counterfactuals.
+                </p>
+                <p class="spec-con" id="spec-detail-cons">
+                  ✕ Inducing complex open-world dynamics purely from raw pixels remains challenging.
+                </p>
+              </div>
+            </div>
+
+            <!-- Dual Trade-off Axis Bars -->
+            <div class="axis-bars" aria-hidden="true">
+              <div class="axis-bar">
+                <span class="axis-bar__label" data-en="Executable Control &amp; Verifiability" data-zh="可执行控制与可验证性"
+                  >Executable Control &amp; Verifiability</span
+                >
+                <div class="axis-bar__track axis-bar__track--control">
+                  <span data-en="Higher (L0–L2)" data-zh="更高 (L0–L2)">Higher (L0–L2)</span>
+                  <span data-en="Lower (L4)" data-zh="更低 (L4)">Lower (L4)</span>
+                </div>
+              </div>
+              <div class="axis-bar">
+                <span class="axis-bar__label" data-en="Learned Generative Freedom" data-zh="学习式生成自由度"
+                  >Learned Generative Freedom</span
+                >
+                <div class="axis-bar__track axis-bar__track--freedom">
+                  <span data-en="Lower (L0)" data-zh="更低 (L0)">Lower (L0)</span>
+                  <span data-en="Higher (L3–L4)" data-zh="更高 (L3–L4)">Higher (L3–L4)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: DRAGGABLE BEFORE / AFTER COMPARISON (AffectUI .lp-ba Split Slider) -->
+      <section class="lp-section" id="idea">
+        <div class="lp-container">
+          <div class="section-head">
+            <h2
+              class="lp-lead"
+              data-en="What does code<br />actually own in a world?"
+              data-zh="在一个世界里，<br />代码究竟负责什么？"
+            >
+              What does code<br />actually own in a world?
+            </h2>
+            <p
+              class="lp-sub"
+              data-en="A rendered frame can look plausible while the next action starts from the wrong place. Drag the divider to compare pixel-only continuation with an executable program world."
+              data-zh="单帧画面可以看起来逼真合理，但下一次交互却从错误的状态出发。拖动分界滑块，对比纯像素推演与可执行程序世界。"
+            >
+              A rendered frame can look plausible while the next action starts from the wrong place. Drag the divider
+              to compare pixel-only continuation with an executable program world.
+            </p>
+          </div>
+
+          <div class="ba-wrapper">
+            <div class="ba-stage" id="ba-stage" style="--split: 50%">
+              <!-- Base Right Layer: With Program World Model -->
+              <div class="ba-layer ba-layer--after">
+                <div class="ba-window">
+                  <div class="ba-window__top ba-window__top--after">
+                    <span class="ba-title" data-en="Executable Program World (L2 / L3)" data-zh="可执行程序世界 (L2 / L3)"
+                      >Executable Program World (L2 / L3)</span
+                    >
+                    <span class="status-chip status-chip--green" data-en="State Persisted ✓" data-zh="状态持久一致 ✓"
+                      >State Persisted ✓</span
+                    >
+                  </div>
+                  <div class="ba-window__body">
+                    <div class="ba-timeline">
+                      <div class="ba-step">
+                        <span class="mono-tag">t = 04</span>
+                        <strong data-en="Place 3 emeralds in chest" data-zh="向箱子放入 3 颗绿宝石"
+                          >Place 3 emeralds in chest</strong
+                        >
+                        <code>chest.items = 3</code>
+                      </div>
+                      <div class="ba-step">
+                        <span class="mono-tag">t = 05..22</span>
+                        <strong data-en="Turn 180° &amp; explore hallway" data-zh="转身 180° 离开视野探索走廊"
+                          >Turn 180° &amp; explore hallway</strong
+                        >
+                        <code>obs = occluded · state intact</code>
+                      </div>
+                      <div class="ba-step ba-step--good">
+                        <span class="mono-tag">t = 23</span>
+                        <strong data-en="Return &amp; open chest → 3 emeralds" data-zh="返回打开箱子 → 仍为 3 颗绿宝石"
+                          >Return &amp; open chest → 3 emeralds</strong
+                        >
+                        <code>world.step() verified exact count</code>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Clipped Left Layer: Pixel-Only / Unverified Continuation -->
+              <div class="ba-layer ba-layer--before">
+                <div class="ba-window ba-window--muted">
+                  <div class="ba-window__top">
+                    <div class="ba-dots"><i></i><i></i><i></i></div>
+                    <span
+                      class="ba-title"
+                      data-en="Plausible Pixels without Executable State"
+                      data-zh="无显式可执行状态的纯外观续写"
+                      >Plausible Pixels without Executable State</span
+                    >
+                    <span class="status-chip status-chip--danger" data-en="State Drift ✕" data-zh="状态漂移 ✕"
+                      >State Drift ✕</span
+                    >
+                  </div>
+                  <div class="ba-window__body">
+                    <div class="ba-timeline">
+                      <div class="ba-step">
+                        <span class="mono-tag">t = 04</span>
+                        <strong data-en="Place 3 emeralds in chest" data-zh="向箱子放入 3 颗绿宝石"
+                          >Place 3 emeralds in chest</strong
+                        >
+                        <code>frame looks crisp (FVD low)</code>
+                      </div>
+                      <div class="ba-step">
+                        <span class="mono-tag">t = 05..22</span>
+                        <strong data-en="Turn 180° &amp; explore hallway" data-zh="转身 180° 离开视野探索走廊"
+                          >Turn 180° &amp; explore hallway</strong
+                        >
+                        <code>context leaves attention window</code>
+                      </div>
+                      <div class="ba-step ba-step--bad">
+                        <span class="mono-tag">t = 23</span>
+                        <strong data-en="Return &amp; open chest → empty / mutated" data-zh="返回打开箱子 → 物品消失或错乱"
+                          >Return &amp; open chest → empty / mutated</strong
+                        >
+                        <code>no program ever stored consequence</code>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Divider Line + Handle -->
+              <div class="ba-divider" aria-hidden="true">
+                <div class="ba-knob">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M5.5 4.5L2 8L5.5 11.5M10.5 4.5L14 8L10.5 11.5"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <input
+                class="ba-range"
+                id="ba-range"
+                type="range"
+                min="10"
+                max="90"
+                value="50"
+                aria-label="Comparison slider between unverified continuation and executable program world"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: 3-COLUMN BENTO PRINCIPLES (AffectUI .lp-bento style) -->
+      <section class="lp-section" id="principles">
+        <div class="lp-container">
+          <div class="section-head">
+            <h2
+              class="lp-lead"
+              data-en="Built around three<br />operational invariants"
+              data-zh="围绕三条可操作的<br />系统不变量构建"
+            >
+              Built around three<br />operational invariants
+            </h2>
+          </div>
+
+          <div class="bento-grid">
+            <!-- Tile 1 -->
+            <article class="bento-tile">
+              <div class="bento-tile__stage" aria-hidden="true">
+                <div class="bento-widget">
+                  <div class="bento-widget__head">
+                    <span>&gt;_ rule_check</span>
+                    <span class="mono-muted">zsh</span>
+                  </div>
+                  <div class="bento-widget__body mono-block">
+                    <div><span class="mono-muted">$</span> python verify_world.py</div>
+                    <div class="text-ok">✓ override_priority: pass</div>
+                    <div class="text-ok">✓ cancel_pending: pass</div>
+                  </div>
+                </div>
+              </div>
+              <h3 class="bento-tile__title" data-en="Rules that run" data-zh="可实际运行的规则">Rules that run</h3>
+              <p
+                class="bento-tile__desc"
+                data-en="World laws are written as executable code rather than hidden exclusively inside black-box weights — inspectable, editable, and unit-testable."
+                data-zh="世界规律以可执行代码显式表达，而非完全埋藏于黑盒权重中——可检查、可运行时编辑、可单元测试。"
+              >
+                World laws are written as executable code rather than hidden exclusively inside black-box weights —
+                inspectable, editable, and unit-testable.
+              </p>
+            </article>
+
+            <!-- Tile 2 -->
+            <article class="bento-tile">
+              <div class="bento-tile__stage" aria-hidden="true">
+                <div class="bento-widget">
+                  <div class="bento-widget__head">
+                    <span>state_store.json</span>
+                    <span class="mono-muted">s_t</span>
+                  </div>
+                  <div class="bento-widget__body">
+                    <div class="bento-kv">
+                      <span>furnace.fuel</span>
+                      <span class="mini-tag">12 → 11</span>
+                    </div>
+                    <div class="bento-kv">
+                      <span>smelt_progress</span>
+                      <span class="mini-tag mini-tag--focus">100% · Iron</span>
+                    </div>
+                    <div class="bento-kv">
+                      <span>visibility</span>
+                      <span class="mono-muted">out_of_view</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h3 class="bento-tile__title" data-en="State that persists" data-zh="跨视野持久的状态">State that persists</h3>
+              <p
+                class="bento-tile__desc"
+                data-en="Objects, inventories, and scheduled timers continue evolving coherently even when the camera looks away for dozens of steps."
+                data-zh="即便相机移开数十步，实体、容器与定时事件依然在显式状态空间中自洽演化，不会因离开视野而遗忘。"
+              >
+                Objects, inventories, and scheduled timers continue evolving coherently even when the camera looks away
+                for dozens of steps.
+              </p>
+            </article>
+
+            <!-- Tile 3 -->
+            <article class="bento-tile">
+              <div class="bento-tile__stage" aria-hidden="true">
+                <div class="bento-widget">
+                  <div class="bento-widget__head">
+                    <span>observation_align</span>
+                    <span class="mono-muted">P ↔ R</span>
+                  </div>
+                  <div class="bento-widget__body">
+                    <div class="align-pill-row">
+                      <span class="mini-tag">s<sub>t+1</sub>: open</span>
+                      <span>→</span>
+                      <span class="mini-tag">render(s<sub>t+1</sub>)</span>
+                    </div>
+                    <div class="align-bar">
+                      <i style="width: 100%"></i>
+                    </div>
+                    <small class="text-ok">readout(frame) == state.door_open</small>
+                  </div>
+                </div>
+              </div>
+              <h3 class="bento-tile__title" data-en="Observations that align" data-zh="与状态严格对齐的观测">
+                Observations that align
+              </h3>
+              <p
+                class="bento-tile__desc"
+                data-en="Visual rendering is grounded in authoritative program state so what an agent sees matches the world it can act upon next."
+                data-zh="视觉渲染锚定于权威程序状态，使智能体所见画面与下一步可交互的真实状态严格一致。"
+              >
+                Visual rendering is grounded in authoritative program state so what an agent sees matches the world it
+                can act upon next.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLOSING CTA & QUICK CLONE PILL -->
+      <section class="lp-section lp-section--closing" id="closing">
+        <div class="lp-container">
+          <div class="closing-card">
+            <span class="hero-pill__badge">NEXT STATE = TEST</span>
+            <h2
+              class="lp-lead"
+              data-en="Build worlds that can answer back."
+              data-zh="构建能够用执行结果回应的世界。"
+            >
+              Build worlds that can answer back.
+            </h2>
+            <p
+              class="lp-sub"
+              data-en="Start with the literature catalogue or test models on counterfactual programmatic worlds in PWM-Arena."
+              data-zh="从领域文献目录出发，或在 PWM-Arena 的反事实程序化世界中检验模型。"
+            >
+              Start with the literature catalogue or test models on counterfactual programmatic worlds in PWM-Arena.
+            </p>
+
+            <div class="cmd-pill" role="group" aria-label="Clone catalogue repository">
+              <code id="copy-cmd-text">git clone https://github.com/MichaelCao0/Awesome-Code-World-Model.git</code>
+              <button class="cmd-pill__btn" id="copy-cmd-btn" type="button" aria-label="Copy command">
+                <span id="copy-cmd-label" data-en="Copy" data-zh="复制">Copy</span>
+              </button>
+            </div>
+
+            <div class="lp-hero__actions">
+              <a
+                class="btn btn--primary"
+                href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft"
+                target="_blank"
+                rel="noreferrer"
+                data-en="Go to PWM-Arena ↗"
+                data-zh="前往 PWM-Arena ↗"
+                >Go to PWM-Arena ↗</a
+              >
+              <a
+                class="btn btn--secondary"
+                href="https://github.com/MichaelCao0/Awesome-Code-World-Model"
+                target="_blank"
+                rel="noreferrer"
+                data-en="Browse Survey Catalogue ↗"
+                data-zh="浏览文献目录 ↗"
+                >Browse Survey Catalogue ↗</a
+              >
+            </div>
+          </div>
+        </div>
       </section>
     </main>
 
-    <footer class="site-footer"><span>PROGRAM WORLD MODEL / 2026</span><span data-en="Executable worlds · open research" data-zh="可执行世界 · 开放研究">Executable worlds · open research</span><a href="#top" data-en="Back to top ↑" data-zh="回到顶部 ↑">Back to top ↑</a></footer>
+    <!-- CLEAN AFFECTUI-STYLE MULTI-COLUMN FOOTER -->
+    <footer class="lp-footer">
+      <div class="lp-footer__inner">
+        <div class="lp-footer__brand">
+          <a class="brand" href="#top">
+            <svg class="brand__mark" width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <rect x="7" y="1" width="5" height="5" rx="1" fill="currentColor" />
+              <rect x="12" y="6" width="5" height="5" rx="1" fill="currentColor" />
+              <rect x="1" y="6" width="5" height="5" rx="1" fill="currentColor" />
+              <rect x="6" y="12" width="6" height="5" rx="1" fill="currentColor" />
+            </svg>
+            <span class="brand__name">Program World Model</span>
+          </a>
+          <p
+            class="lp-footer__tagline"
+            data-en="Open research on executable world models, counterfactual benchmarks, and code-agent synthesis."
+            data-zh="聚焦可执行世界模型、反事实评测基准与 Code-Agent 世界构建的开放研究计划。"
+          >
+            Open research on executable world models, counterfactual benchmarks, and code-agent synthesis.
+          </p>
+          <span class="lp-footer__copy">PROGRAM WORLD MODEL · 2026</span>
+        </div>
+
+        <div class="lp-footer__cols">
+          <div class="lp-footer__col">
+            <strong data-en="Workstream" data-zh="系列工作">Workstream</strong>
+            <a
+              href="https://github.com/MichaelCao0/Awesome-Code-World-Model"
+              target="_blank"
+              rel="noreferrer"
+              data-en="The Survey ↗"
+              data-zh="领域综述 ↗"
+              >The Survey ↗</a
+            >
+            <a
+              href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft"
+              target="_blank"
+              rel="noreferrer"
+              data-en="PWM-Arena ↗"
+              data-zh="PWM-Arena ↗"
+              >PWM-Arena ↗</a
+            >
+            <a href="#work" data-en="The Method (Soon)" data-zh="方法系统（即将发布）">The Method (Soon)</a>
+          </div>
+
+          <div class="lp-footer__col">
+            <strong data-en="Sections" data-zh="页面导航">Sections</strong>
+            <a href="#inspector" data-en="World Inspector" data-zh="可执行闭环演示">World Inspector</a>
+            <a href="#frame" data-en="L0–L4 Spectrum" data-zh="L0–L4 范式谱系">L0–L4 Spectrum</a>
+            <a href="#idea" data-en="Pixel vs. Program" data-zh="像素与程序对比">Pixel vs. Program</a>
+            <a href="#principles" data-en="Core Invariants" data-zh="核心不变量">Core Invariants</a>
+          </div>
+
+          <div class="lp-footer__col">
+            <strong data-en="Open Source" data-zh="开源链接">Open Source</strong>
+            <a
+              href="https://github.com/MichaelCao0/program-world-models.github.io"
+              target="_blank"
+              rel="noreferrer"
+              data-en="Homepage Repo ↗"
+              data-zh="主页源码仓库 ↗"
+              >Homepage Repo ↗</a
+            >
+            <a
+              href="https://github.com/MichaelCao0/Awesome-Code-World-Model"
+              target="_blank"
+              rel="noreferrer"
+              data-en="Catalogue Repo ↗"
+              data-zh="文献目录仓库 ↗"
+              >Catalogue Repo ↗</a
+            >
+            <a href="#top" data-en="Back to top ↑" data-zh="回到顶部 ↑">Back to top ↑</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
     <script src="script.js"></script>
   </body>
 </html>
