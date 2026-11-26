@@ -1,60 +1,36 @@
 (() => {
   const root = document.documentElement;
-  const header = document.getElementById('site-header');
-  const langBtn = document.getElementById('lang-switch');
-  const metaTheme = document.getElementById('meta-theme-color');
 
   // ---------------------------------------------------------------------------
-  // 1. Sticky Navbar Hairline on Scroll + Dismissible Banner
+  // 1. Cross-Site URL Params & Shell-Synced Language State
   // ---------------------------------------------------------------------------
-  const syncScrollState = () => {
-    if (header) header.setAttribute('data-scrolled', String(window.scrollY > 8));
-  };
-  syncScrollState();
-  window.addEventListener('scroll', syncScrollState, { passive: true });
+  const urlParams = new URLSearchParams(window.location.search);
+  let currentLang = window.PWM_SHELL
+    ? window.PWM_SHELL.lang
+    : urlParams.get('lang') === 'zh'
+    ? 'zh'
+    : urlParams.get('lang') === 'en'
+    ? 'en'
+    : (localStorage.getItem('pwm-language') === 'zh' || localStorage.getItem('cwm_lang') === 'zh' ? 'zh' : 'en');
+  let currentLevel = ['L0', 'L1', 'L2', 'L3', 'L4'].includes(urlParams.get('level')) ? urlParams.get('level') : 'L2';
+  let currentArenaMode = 'default';
 
-  const banner = document.getElementById('offer-banner');
-  const dismissBtn = document.getElementById('dismiss-banner');
-  if (banner && localStorage.getItem('pwm-banner-dismissed') === '1') {
-    banner.hidden = true;
-  }
-  if (banner && dismissBtn) {
-    dismissBtn.addEventListener('click', () => {
-      banner.hidden = true;
-      localStorage.setItem('pwm-banner-dismissed', '1');
-    });
-  }
-
-  // ---------------------------------------------------------------------------
-  // 2. Light / Dark Theme Segmented Switch
-  // ---------------------------------------------------------------------------
-  const themeButtons = document.querySelectorAll('.theme-btn[data-theme-set]');
-  const applyTheme = (theme) => {
-    const resolved = theme === 'dark' ? 'dark' : 'light';
-    root.setAttribute('data-theme', resolved);
-    themeButtons.forEach((btn) => {
-      btn.setAttribute('aria-pressed', String(btn.dataset.themeSet === resolved));
-    });
-    if (metaTheme) {
-      metaTheme.setAttribute('content', resolved === 'dark' ? '#0c0c0d' : '#ffffff');
+  const syncAtlasLinks = () => {
+    const specLink = document.getElementById('spec-atlas-link');
+    const specLabel = document.getElementById('spec-atlas-label');
+    if (specLink) {
+      specLink.href = `./survey/?layer=${currentLevel}#paradigms`;
     }
-    localStorage.setItem('pwm-theme', resolved);
+    if (specLabel) {
+      specLabel.textContent = currentLang === 'zh'
+        ? `在 01 · 综述图谱子页中深入查看 ${currentLevel} →`
+        : `Inspect ${currentLevel} in 01 · Survey Atlas →`;
+    }
   };
-
-  const savedTheme = localStorage.getItem('pwm-theme');
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
-
-  themeButtons.forEach((btn) => {
-    btn.addEventListener('click', () => applyTheme(btn.dataset.themeSet));
-  });
 
   // ---------------------------------------------------------------------------
   // 3. Bilingual Language Switch (EN / 中文)
   // ---------------------------------------------------------------------------
-  let currentLang = localStorage.getItem('pwm-language') === 'zh' ? 'zh' : 'en';
-  let currentLevel = 'L2';
-  let currentArenaMode = 'default';
 
   const SPECTRUM_DATA = {
     L0: {
@@ -170,6 +146,7 @@
     document.getElementById('spec-detail-cons').textContent = entry.cons;
     const sysWrap = document.getElementById('spec-detail-systems');
     sysWrap.innerHTML = entry.systems.map((s) => `<span class="mini-tag">${s}</span>`).join('');
+    syncAtlasLinks();
   };
 
   const renderArenaMode = () => {
@@ -221,7 +198,26 @@ on_event(<span class="str">"pull_lever_north"</span>):
     has_key: false,
     door_open: false,
     lamp_on: false,
-    camera_occluded: false
+    camera_occluded: false,
+    status: 'ready'
+  };
+
+  const SIM_STATUS_META = {
+    ready: {
+      cls: 'status-chip status-chip--green',
+      en: 'Ready · Deterministic',
+      zh: '就绪 · 确定性执行'
+    },
+    executed: {
+      cls: 'status-chip status-chip--green',
+      en: 'Executed · Trace Verified',
+      zh: '已执行 · 状态更新'
+    },
+    blocked: {
+      cls: 'status-chip status-chip--danger',
+      en: 'Gate Blocked · No Key',
+      zh: '规则拦截 · 缺钥匙'
+    }
   };
 
   const renderSimRoom = () => {
@@ -234,8 +230,17 @@ on_event(<span class="str">"pull_lever_north"</span>):
     const occBanner = document.getElementById('sim-occluded-banner');
     const jsonEl = document.getElementById('sim-json-state');
     const tickEl = document.getElementById('sim-tick');
+    const statusEl = document.getElementById('sim-status-pill');
 
     if (!roomEl) return;
+
+    if (statusEl) {
+      const st = SIM_STATUS_META[simState.status] || SIM_STATUS_META.ready;
+      statusEl.className = st.cls;
+      statusEl.dataset.en = st.en;
+      statusEl.dataset.zh = st.zh;
+      statusEl.textContent = zh ? st.zh : st.en;
+    }
 
     tickEl.textContent = `tick = ${String(simState.tick).padStart(2, '0')}`;
     roomEl.classList.toggle('is-lit', simState.lamp_on);
@@ -282,24 +287,41 @@ on_event(<span class="str">"pull_lever_north"</span>):
       el.innerHTML = isZh ? el.dataset.zh : el.dataset.en;
     });
 
-    if (langBtn) {
-      langBtn.textContent = isZh ? 'EN' : '中';
-      langBtn.setAttribute('aria-pressed', String(isZh));
-    }
     document.title = isZh
       ? 'Program World Model｜可执行世界模型开放研究计划'
       : 'Program World Model · Executable Worlds & Open Research';
-    localStorage.setItem('pwm-language', currentLang);
+    if (!window.PWM_SHELL) {
+      localStorage.setItem('pwm-language', currentLang);
+    }
 
     renderSpectrumDetail();
     renderArenaMode();
     renderSimRoom();
+    syncAtlasLinks();
   };
 
-  setLanguage(currentLang);
-  if (langBtn) {
-    langBtn.addEventListener('click', () => setLanguage(currentLang === 'zh' ? 'en' : 'zh'));
+  setLanguage(window.PWM_SHELL ? window.PWM_SHELL.lang : currentLang);
+  if (window.PWM_SHELL) {
+    window.PWM_SHELL.onChange((sh) => {
+      if (sh.lang !== currentLang) {
+        setLanguage(sh.lang);
+      } else {
+        syncAtlasLinks();
+      }
+    });
   }
+
+  // Clickable work cards open their sub-page directly
+  document.querySelectorAll('.work-card').forEach((card) => {
+    const link = card.querySelector('.aui-card__action');
+    if (link) {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('a, button')) return;
+        window.location.href = link.getAttribute('href');
+      });
+    }
+  });
 
   // ---------------------------------------------------------------------------
   // 4. Works Filter Tabs (#work)
@@ -355,20 +377,26 @@ on_event(<span class="str">"pull_lever_north"</span>):
     if (!simTraceEl) return;
     const entry = document.createElement('div');
     entry.className = 'trace-entry';
-    const msg = currentLang === 'zh' ? zhMsg : enMsg;
-    entry.innerHTML = `<span class="trace-tick">t=${String(simState.tick).padStart(2, '0')}</span><span>${msg}</span>`;
+    const tickSpan = document.createElement('span');
+    tickSpan.className = 'trace-tick';
+    tickSpan.textContent = `t=${String(simState.tick).padStart(2, '0')}`;
+    const msgSpan = document.createElement('span');
+    msgSpan.setAttribute('data-en', enMsg);
+    msgSpan.setAttribute('data-zh', zhMsg);
+    msgSpan.textContent = currentLang === 'zh' ? zhMsg : enMsg;
+    entry.appendChild(tickSpan);
+    entry.appendChild(msgSpan);
     simTraceEl.prepend(entry);
     while (simTraceEl.children.length > 5) {
       simTraceEl.removeChild(simTraceEl.lastChild);
     }
+    simState.status = blocked ? 'blocked' : 'executed';
     if (simStatusEl) {
-      if (blocked) {
-        simStatusEl.className = 'status-chip status-chip--danger';
-        simStatusEl.textContent = currentLang === 'zh' ? '规则拦截 · 缺钥匙' : 'Gate Blocked · No Key';
-      } else {
-        simStatusEl.className = 'status-chip status-chip--green';
-        simStatusEl.textContent = currentLang === 'zh' ? '已执行 · 状态更新' : 'Executed · Trace Verified';
-      }
+      const st = SIM_STATUS_META[simState.status];
+      simStatusEl.className = st.cls;
+      simStatusEl.dataset.en = st.en;
+      simStatusEl.dataset.zh = st.zh;
+      simStatusEl.textContent = currentLang === 'zh' ? st.zh : st.en;
     }
   };
 
@@ -440,6 +468,11 @@ on_event(<span class="str">"pull_lever_north"</span>):
   // 6. Spectrum Interactive Cards (#frame)
   // ---------------------------------------------------------------------------
   const specCards = document.querySelectorAll('.spec-card[data-level]');
+  specCards.forEach((c) => {
+    const selected = c.dataset.level === currentLevel;
+    c.classList.toggle('is-selected', selected);
+    c.setAttribute('aria-selected', String(selected));
+  });
   specCards.forEach((card) => {
     card.addEventListener('click', () => {
       currentLevel = card.dataset.level;
@@ -511,4 +544,26 @@ on_event(<span class="str">"pull_lever_north"</span>):
       observer.observe(el);
     });
   }
+
+  document.querySelectorAll('[role="tablist"]').forEach((tablist) => {
+    tablist.addEventListener('keydown', (e) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+      const tabs = Array.from(tablist.querySelectorAll('[role="tab"]:not([disabled])'));
+      if (!tabs.length) return;
+      const currentTab = e.target.closest('[role="tab"]');
+      const currentIdx = tabs.indexOf(currentTab);
+      if (currentIdx === -1) return;
+      e.preventDefault();
+      let nextIdx = currentIdx;
+      if (e.key === 'ArrowRight') nextIdx = (currentIdx + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') nextIdx = (currentIdx - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') nextIdx = 0;
+      else if (e.key === 'End') nextIdx = tabs.length - 1;
+      const nextTab = tabs[nextIdx];
+      if (nextTab) {
+        nextTab.click();
+        nextTab.focus();
+      }
+    });
+  });
 })();

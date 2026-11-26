@@ -37,13 +37,14 @@
   --danger: #c4320a;
   --danger-soft: rgba(240, 68, 56, 0.11);
 
-  --pro-bg: #fdf2f8;
-  --pro-border: rgba(221, 6, 116, 0.16);
-  --pro-from: #dd0674;
-  --pro-to: #5e3ee0;
+  --pro-bg: #f3f0e6;
+  --pro-border: rgba(150, 138, 108, 0.32);
+  --pro-from: #665d47;
+  --pro-to: #4a4332;
 
-  --banner-bg: #fdf2f8;
-  --banner-border: rgba(221, 6, 116, 0.12);
+  --banner-bg: #f3f0e6;
+  --banner-border: rgba(150, 138, 108, 0.28);
+  --axis-freedom-bg: linear-gradient(90deg, rgba(150, 138, 108, 0.08), rgba(150, 138, 108, 0.24));
 
   --dark-btn-top: #323137;
   --dark-btn-bottom: #201e25;
@@ -99,13 +100,14 @@
   --danger: #f87171;
   --danger-soft: rgba(248, 113, 113, 0.14);
 
-  --pro-bg: rgba(221, 6, 116, 0.15);
-  --pro-border: rgba(244, 114, 182, 0.24);
-  --pro-from: #f472b6;
-  --pro-to: #a78bfa;
+  --pro-bg: rgba(216, 206, 180, 0.12);
+  --pro-border: rgba(216, 206, 180, 0.25);
+  --pro-from: #d8ceb4;
+  --pro-to: #b8ad90;
 
-  --banner-bg: #181219;
-  --banner-border: rgba(244, 114, 182, 0.16);
+  --banner-bg: #1d1b16;
+  --banner-border: rgba(216, 206, 180, 0.20);
+  --axis-freedom-bg: linear-gradient(90deg, rgba(216, 206, 180, 0.11), rgba(216, 206, 180, 0.24));
 
   --dark-btn-top: #f4f4f6;
   --dark-btn-bottom: #dcdce0;
@@ -140,7 +142,7 @@ body {
   font-size: 13px;
   line-height: 1.45;
   transition: background-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 a {
@@ -172,6 +174,10 @@ pre {
 }
 .skip-link:focus {
   top: 12px;
+}
+
+section[id] {
+  scroll-margin-top: 72px;
 }
 
 /* ==========================================================================
@@ -1762,7 +1768,7 @@ a.ledger-row:hover {
   color: var(--text-secondary);
 }
 .axis-bar__track--freedom {
-  background: linear-gradient(90deg, rgba(221, 6, 116, 0.03), rgba(221, 6, 116, 0.2));
+  background: var(--axis-freedom-bg);
   color: var(--text-secondary);
 }
 
@@ -2178,6 +2184,12 @@ html.zh .bento-tile__desc {
   .sim-actions {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 1040px) {
+  section[id] {
+    scroll-margin-top: 112px;
   }
 }
 
