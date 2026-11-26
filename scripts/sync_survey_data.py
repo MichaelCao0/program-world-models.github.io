@@ -59,11 +59,41 @@ FEEDBACK_NOTES = {
         'note_en': 'Coding agent builds an asynchronous Box World Engine exposing persistent variables to a video state renderer (L2).',
         'note_zh': '编码智能体构建异步 Box World 引擎维护持久属性，状态渲染器将其转为交互视频（L2）。',
     },
-    'inclusion_cwm2': {
+    '2611.22925': {
         'paradigm': 'L2',
         'regime': 'I · Multi-Scale Structural Proxy',
         'note_en': 'Upstream engine fixes camera and entity motion in a structural proxy streamed by Invoker-Render (L2).',
         'note_zh': '上游引擎在结构化 proxy 中锁定相机与实体运动，由 Invoker-Render 流式渲染外观（L2）。',
+    },
+    '2611.24869': {
+        'paradigm': 'L3',
+        'regime': 'III · State Writeback',
+        'note_en': 'Executable 3D rule graph coordinates configurable rules and entity states in a closed loop with video generation and perceptual feedback (L3).',
+        'note_zh': '可执行三维规则图在闭环中协调自定义规则、持久实体状态、视频生成与感知反馈（L3 共享动力学）。',
+    },
+    '2609.34221': {
+        'paradigm': 'L2',
+        'regime': 'I · Read-Only Geometric Memory',
+        'note_en': 'Agent-compiled expandable 3D geometry answers read-only depth queries for video synthesis without writeback (L2).',
+        'note_zh': '智能体编译可扩展持久三维几何，以只读深度查询驱动视频生成且禁止渲染反向写回（L2）。',
+    },
+    '2607.18703': {
+        'paradigm': 'L2',
+        'regime': 'I · Real-Time G-Buffer Stream',
+        'note_en': 'Physics engine owns world dynamics and exports structured G-buffers to a 30+ FPS few-step streaming renderer (L2).',
+        'note_zh': '物理引擎持有动力学并导出 G-buffer，交由逾 30 FPS 的少步因果流式渲染器生成画面（L2）。',
+    },
+    '2611.25838': {
+        'paradigm': 'L2',
+        'regime': 'I · Dynamic-Context Proxy Stream',
+        'note_en': 'Game engine evolves world state while ContextRenderer compresses visual history to follow dynamic proxy updates (L2).',
+        'note_zh': '游戏引擎推进权威状态，ContextRenderer 压缩视觉历史以持续跟随动态代理变化（L2）。',
+    },
+    'streaming-cwm': {
+        'paradigm': 'L2',
+        'regime': 'I · Causal Chunk Proxy Stream',
+        'note_en': 'CARLA / CWM code state emits depth and semantic proxies rendered causally in four-step streaming chunks (L2).',
+        'note_zh': 'CARLA / CWM 代码状态导出深度与语义代理，以四步因果分块方式流式渲染视频（L2）。',
     },
 }
 

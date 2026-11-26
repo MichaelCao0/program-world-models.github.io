@@ -1502,12 +1502,13 @@ def run_tier1(
             assert page.locator("#pwmExtraNavSlot #styleToggleBtn").is_visible(), "#styleToggleBtn not visible in #pwmExtraNavSlot"
             assert page.locator("header.navbar").count() == 0, "Duplicate upstream header.navbar still present"
             assert page.locator("#promoBar").count() == 0, "Duplicate upstream #promoBar still present"
-            total_papers = page.evaluate("() => window.CWM_DATA && Array.isArray(window.CWM_DATA.papers) ? window.CWM_DATA.papers.length : -1")
-            assert total_papers == 170, f"Expected 170 papers in window.CWM_DATA, got {total_papers}"
+            cwm_meta = page.evaluate("() => window.CWM_DATA ? { n: (window.CWM_DATA.papers || []).length, total: window.CWM_DATA.total_sources } : null")
+            assert cwm_meta and cwm_meta["n"] == cwm_meta["total"] and cwm_meta["total"] >= 170, f"Unexpected window.CWM_DATA count: {cwm_meta}"
+            total_papers = cwm_meta["total"]
             stat_total = page.locator("#statTotal").inner_text().strip()
-            assert "170" in stat_total, f"Expected #statTotal to show 170, got {stat_total!r}"
+            assert str(total_papers) in stat_total, f"Expected #statTotal to show {total_papers}, got {stat_total!r}"
             monitor.assert_clean("T1-02")
-            return "#pwmExtraNavSlot (#openCmdBtn + #styleToggleBtn), single header, and 170 papers verified"
+            return f"#pwmExtraNavSlot (#openCmdBtn + #styleToggleBtn), single header, and {total_papers} papers verified"
 
         runner.record("Tier 1", "T1-02", t1_02)
 
@@ -1667,7 +1668,8 @@ def run_tier1(
             page.wait_for_timeout(140)
             lane_cnt = page.locator("#resultsCounter").inner_text()
             lane_nums = [int(x) for x in re.findall(r"\d+", lane_cnt)]
-            assert lane_nums and 1 <= lane_nums[0] < 170, f"Clicking #atlasField swimlane header did not filter #library: {lane_cnt!r}"
+            total_src = page.evaluate("() => window.CWM_DATA ? window.CWM_DATA.total_sources : 170")
+            assert lane_nums and 1 <= lane_nums[0] < total_src, f"Clicking #atlasField swimlane header did not filter #library: {lane_cnt!r}"
             page.locator("#resetFiltersTopBtn").click()
             page.wait_for_timeout(80)
             page.evaluate("() => window.scrollTo(0, 0)")
@@ -1775,8 +1777,9 @@ def run_tier1(
         def t1_05() -> str:
             require_route_available(root, "survey/", skip_missing_routes)
             navigate_route(page, monitor, f"{base_url}/survey/")
+            total_src = page.evaluate("() => window.CWM_DATA ? window.CWM_DATA.total_sources : 170")
             counter_txt = page.locator("#resultsCounter").inner_text()
-            assert "170" in counter_txt, f"Expected 170 in #resultsCounter, got {counter_txt!r}"
+            assert str(total_src) in counter_txt, f"Expected {total_src} in #resultsCounter, got {counter_txt!r}"
 
             page.locator("#viewTableBtn").click()
             assert page.locator("#papersContainer table").count() >= 1, "Table view did not render <table>"
@@ -1795,7 +1798,7 @@ def run_tier1(
             page.locator("#closePaperBtn").click()
             assert not dialog.evaluate("el => Boolean(el.open)"), "#paperDialog did not close"
             monitor.assert_clean("T1-05")
-            return "170-paper Cards/Table views and #paperDialog modal verified"
+            return f"{total_src}-paper Cards/Table views and #paperDialog modal verified"
 
         runner.record("Tier 1", "T1-05", t1_05)
 
@@ -2077,8 +2080,11 @@ def run_tier2(
             ctx, pg, mon = new_ctx_page()
             try:
                 navigate_route(pg, mon, f"{base_url}/survey/?sec={sec_val}#library")
+                meta_counts = pg.evaluate("() => ({ total: window.CWM_DATA.total_sources, bench: window.CWM_DATA.group_counts.benchmark })")
                 cnt_txt = pg.locator("#resultsCounter").inner_text()
-                assert "26" in cnt_txt and "170" in cnt_txt, f"Expected 26 of 170 for ?sec={sec_val}, got {cnt_txt!r}"
+                assert str(meta_counts["bench"]) in cnt_txt and str(meta_counts["total"]) in cnt_txt, (
+                    f"Expected {meta_counts['bench']} of {meta_counts['total']} for ?sec={sec_val}, got {cnt_txt!r}"
+                )
                 mon.assert_clean(f"T2-02 ?sec={sec_val}")
             finally:
                 ctx.close()
@@ -2086,14 +2092,15 @@ def run_tier2(
         ctx, pg, mon = new_ctx_page()
         try:
             navigate_route(pg, mon, f"{base_url}/survey/?par=l2#library")
+            meta_counts = pg.evaluate("() => ({ total: window.CWM_DATA.total_sources, bench: window.CWM_DATA.group_counts.benchmark })")
             cnt_txt = pg.locator("#resultsCounter").inner_text()
             nums = [int(x) for x in re.findall(r"\d+", cnt_txt)]
-            assert nums and 1 <= nums[0] < 170, f"Expected filtered count for ?par=l2, got {cnt_txt!r}"
+            assert nums and 1 <= nums[0] < meta_counts["total"], f"Expected filtered count for ?par=l2, got {cnt_txt!r}"
             assert pg.locator('#paradigmFilterGroup [data-par="L2"].active').count() == 1, (
                 "?par=l2 did not activate canonical L2 paradigm filter button"
             )
             mon.assert_clean("T2-02 ?par=l2")
-            return f"?sec=benchmark, ?sec=BENCHMARK (26/170), and ?par=l2 ({nums[0]}/170) verified"
+            return f"?sec=benchmark, ?sec=BENCHMARK ({meta_counts['bench']}/{meta_counts['total']}), and ?par=l2 ({nums[0]}/{meta_counts['total']}) verified"
         finally:
             ctx.close()
 
@@ -2107,9 +2114,10 @@ def run_tier2(
             navigate_route(pg, mon, f"{base_url}/survey/?q=worldcoder")
             q_val = pg.locator("#searchInput").input_value().lower()
             assert q_val == "worldcoder", f"Expected #searchInput='worldcoder', got {q_val!r}"
+            meta_counts = pg.evaluate("() => ({ total: window.CWM_DATA.total_sources, bench: window.CWM_DATA.group_counts.benchmark })")
             cnt_txt = pg.locator("#resultsCounter").inner_text()
             nums = [int(x) for x in re.findall(r"\d+", cnt_txt)]
-            assert nums and 1 <= nums[0] < 170, f"Unexpected filtered count for worldcoder: {cnt_txt!r}"
+            assert nums and 1 <= nums[0] < meta_counts["total"], f"Unexpected filtered count for worldcoder: {cnt_txt!r}"
             assert "worldcoder" in pg.locator("#papersContainer").inner_text().lower(), "WorldCoder missing in results"
 
             # Verify jump-to-library resets active query/section filters cleanly
@@ -2119,7 +2127,9 @@ def run_tier2(
             pg.wait_for_timeout(120)
             assert pg.locator("#searchInput").input_value() == "", "Jump-to-library did not clear #searchInput"
             jump_cnt = pg.locator("#resultsCounter").inner_text()
-            assert "26" in jump_cnt and "170" in jump_cnt, f"Jump-to-library did not reset to 26/170: {jump_cnt!r}"
+            assert str(meta_counts["bench"]) in jump_cnt and str(meta_counts["total"]) in jump_cnt, (
+                f"Jump-to-library did not reset to {meta_counts['bench']}/{meta_counts['total']}: {jump_cnt!r}"
+            )
             mon.assert_clean("T2-03")
             return f"?q=worldcoder ({cnt_txt.strip()}) and jump-to-library reset ({jump_cnt.strip()}) verified"
         finally:
@@ -2204,10 +2214,11 @@ def run_tier2(
             assert re.search(r"\b0\b", zero_txt), f"Expected 0 matches, got {zero_txt!r}"
             pg.locator("#resetFiltersTopBtn").click()
             pg.wait_for_timeout(100)
+            total_src = pg.evaluate("() => window.CWM_DATA ? window.CWM_DATA.total_sources : 170")
             restored = pg.locator("#resultsCounter").inner_text()
-            assert "170" in restored, f"Reset failed to restore 170, got {restored!r}"
+            assert str(total_src) in restored, f"Reset failed to restore {total_src}, got {restored!r}"
             mon.assert_clean("T2-06")
-            return "0-match query and reset-filters restoration to 170 verified"
+            return f"0-match query and reset-filters restoration to {total_src} verified"
         finally:
             ctx.close()
 

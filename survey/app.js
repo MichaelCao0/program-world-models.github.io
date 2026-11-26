@@ -257,7 +257,7 @@
       anchors: [
         { label: 'Oneira (Writeback)', id: '2610.01614' },
         { label: 'UniState', id: null },
-        { label: 'WorldRuler', id: null },
+        { label: 'WorldRuler', id: '2611.24869' },
         { label: 'GameWM (Candidate)', id: '2611.19247' },
       ],
     },
@@ -393,7 +393,7 @@
         { method: 'Programmable WM (PWM)', id: '2609.10540', upstream: 'Engine 3D OBBs', cond: 'Projected 3D maps', role: 'Motion completion', fb: 'Appearance memory' },
         { method: 'GameWM', id: '2611.19247', upstream: 'Game engine', cond: 'Depth / semantic proxy', role: 'Motion completion', fb: 'Visual history' },
         { method: 'BoxWorld', id: '2610.36371', upstream: 'Async. engine', cond: '2D boxes & status', role: 'State rendering', fb: 'Visual history' },
-        { method: 'CWM 2.0 (Invoker-Render)', id: 'invoker-render', upstream: 'Structured scene', cond: 'Multi-scale proxy', role: 'Motion completion', fb: 'Visual history' },
+        { method: 'CWM 2.0 (Invoker-Render)', id: '2611.22925', upstream: 'Structured scene', cond: 'Multi-scale proxy', role: 'Motion completion', fb: 'Visual history' },
         { method: 'AgentGarten', id: '2610.12374', upstream: 'Code worlds', cond: 'Depth / surface normals', role: 'State rendering (36.5 fps)', fb: 'Action-mediated' },
       ],
     },
@@ -412,7 +412,7 @@
         { method: 'CoDeR', id: '2609.26458', upstream: 'Three.js whitebox', cond: 'Whitebox & depth', role: 'Appearance painting', fb: 'Surface color memory' },
         { method: 'UniState', id: null, upstream: '3D latent memory', cond: '3D latents & edits', role: 'Motion & contact', fb: 'State writeback (L3)' },
         { method: 'Oneira', id: '2610.01614', upstream: 'Agent world table', cond: 'Box-edit proxy', role: 'Motion & new objects', fb: 'State writeback (L3)' },
-        { method: 'WorldRuler', id: null, upstream: '3D rule graph', cond: 'Geometry & masks', role: 'Local attribute control', fb: 'State writeback (L3)' },
+        { method: 'WorldRuler', id: '2611.24869', upstream: '3D rule graph', cond: 'Geometry & masks', role: 'Local attribute control', fb: 'State writeback (L3)' },
       ],
     },
   ];
