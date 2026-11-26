@@ -3,23 +3,36 @@
   'use strict';
 
   const DATA = window.CWM_DATA || { total_sources: 0, literature_cutoff: '', sections: [], papers: [], section_counts: {}, group_counts: {} };
-  const PAPERS_BY_ID = Object.fromEntries(DATA.papers.map((p) => [p.id, p]));
+  const EXTRA = window.CWM_EXTRA || { extra_refs: [], system_matrix: [] };
+  const EXTRA_REFS = Array.isArray(EXTRA.extra_refs) ? EXTRA.extra_refs : [];
+  const SYSTEM_MATRIX = Array.isArray(EXTRA.system_matrix) ? EXTRA.system_matrix : [];
+  const ALL_PAPERS = [...DATA.papers, ...EXTRA_REFS];
+  const TOTAL_SURVEY_WORKS = ALL_PAPERS.length;
+  const PAPERS_BY_ID = Object.fromEntries(ALL_PAPERS.map((p) => [p.id, p]));
   const SHELL = window.PWM_SHELL || null;
 
   const URL_PARAMS = new URLSearchParams(window.location.search);
   const VALID_LAYERS = new Set(['L0', 'L1', 'L2', 'L3', 'L4']);
   const RAW_LAYER = (URL_PARAMS.get('layer') || '').trim().toUpperCase();
-  const VALID_SECTIONS = new Set(['all', 'worldcoder', 'code_as_world', 'vibeworlding', 'gui', 'benchmark', 'survey']);
+  const VALID_SECTIONS = new Set(['all', 'worldcoder', 'code_as_world', 'vibeworlding', 'gui', 'benchmark', 'survey', 'survey_ref']);
   const VALID_PARADIGMS = new Map([
     ['all', 'all'],
+    ['l0', 'L0'],
+    ['l1', 'L1'],
     ['l2', 'L2'],
     ['l3', 'L3'],
+    ['l4', 'L4'],
+    ['unlabeled', 'Unlabeled'],
+    ['context', 'Context'],
     ['eval-l2', 'Eval-L2'],
     ['eval-l4', 'Eval-L4'],
     ['gui', 'GUI'],
   ]);
+  const EXTRA_ONLY_PARADIGMS = new Set(['L0', 'L1', 'L4', 'Unlabeled', 'Context']);
   const RAW_SEC = (URL_PARAMS.get('sec') || '').trim().toLowerCase();
   const RAW_PAR = (URL_PARAMS.get('par') || '').trim().toLowerCase();
+  const RAW_SCOPE = (URL_PARAMS.get('scope') || '').trim().toLowerCase();
+  const INIT_PAR = VALID_PARADIGMS.get(RAW_PAR) || 'all';
 
   const STATE = {
     lang: SHELL
@@ -33,12 +46,15 @@
     activeCase: 'caseA',
     activeFrameworkTab: 'obs',
     openChapter: 2,
+    matrixFilter: 'all',
+    matrixQuery: '',
+    corpusScope: (RAW_SCOPE === 'all' || RAW_SEC === 'survey_ref' || EXTRA_ONLY_PARADIGMS.has(INIT_PAR)) ? 'all' : 'core',
     viewMode: 'cards',
     sort: 'newest',
     search: URL_PARAMS.get('q') || '',
     sectionFilter: VALID_SECTIONS.has(RAW_SEC) ? RAW_SEC : 'all',
     benchmarkSubFilter: 'all',
-    paradigmFilter: VALID_PARADIGMS.get(RAW_PAR) || 'all',
+    paradigmFilter: INIT_PAR,
     roleFilter: 'all',
     depthFilter: 'all',
     yearFilter: 'all',
@@ -57,7 +73,7 @@
       heroTitle: 'Worlds written as executable code.',
       heroSub: `Uniting model-based agents that induce programs for planning with generative visual worlds driven by authoritative code state—organized across a 5-layer transition spectrum and ${DATA.total_sources} verified sources.`,
       heroPrimaryCta: `Browse ${DATA.total_sources} papers`,
-      heroSecondaryCta: 'Inspect L0–L4 spectrum',
+      heroSecondaryCta: 'L0–L4 System Matrix',
       stat_sources: 'Curated sources',
       stat_paradigms: 'Transition paradigms',
       stat_families: 'Core families + suites',
@@ -79,9 +95,16 @@
       oEyebrow: 'Survey Architecture · Sections 5, 7 & Manuscript Map',
       oTitle: 'Observation contracts & evidence obligations',
       oDesc: 'Inspect how upstream state compiles into visual conditioning interfaces, what each benchmark obligation does (and does not) establish, and the 9-chapter survey blueprint.',
-      libEyebrow: 'Structured Literature Corpus',
-      libTitle: `Explore all ${DATA.total_sources} verified sources`,
-      libDesc: 'Filter by transition paradigm, code-substrate family, benchmark target, code role, and review depth.',
+      mEyebrow: 'Cross-Paradigm Synthesis · L0–L4 Master Matrix',
+      mTitle: 'Compare representative systems across L0–L4',
+      mDesc: 'Filter across hand-written engines (L0), direct LLM predictors (L1), agent-built code world models (L2), shared code+learned dynamics (L3), learned neural world models (L4), and real-time streaming systems. Click any system to inspect its record and BibTeX.',
+      matrixSearchPlaceholder: 'Search system, executor, state, Π(s_t), feedback...',
+      libEyebrow: 'Unified Literature Hub · Core Catalogue + L0–L4 References',
+      libTitle: `Explore all ${DATA.total_sources} core sources (${TOTAL_SURVEY_WORKS} survey works)`,
+      libDesc: 'Search across all L0–L4 paradigms, 3 code-substrate families, benchmarks, GUI worlds, and full-survey comparators.',
+      masterSearchPlaceholder: `Master search across L0–L4 systems, ${DATA.total_sources} core papers + ${EXTRA_REFS.length} survey comparators, authors, arXiv IDs, tags...`,
+      scopeCoreLabel: `Core (${DATA.total_sources})`,
+      scopeAllLabel: `All L0–L4 (${TOTAL_SURVEY_WORKS})`,
       reset_filters: 'Reset filters',
       export_bibtex: 'Export filtered BibTeX',
       sort_newest: 'Newest first',
@@ -90,7 +113,7 @@
       view_cards: 'Cards',
       view_table: 'Table',
       searchPlaceholder: 'Filter title, alias, author, tag...',
-      cmdPlaceholder: `Jump to L0–L4 paradigm, family, or search ${DATA.total_sources} papers...`,
+      cmdPlaceholder: `Jump to L0–L4 paradigm, system matrix, or search ${TOTAL_SURVEY_WORKS} works...`,
     },
     zh: {
       search_short: '检索...',
@@ -103,7 +126,7 @@
       heroTitle: '以可执行代码构建交互世界。',
       heroSub: `汇合“面向规划的程序归纳智能体”与“由权威代码状态驱动的生成式视觉世界”两大脉络——围绕 L0–L4 五层状态转移范式与三类代码载体框架，系统梳理 ${DATA.total_sources} 篇核实文献。`,
       heroPrimaryCta: `浏览 ${DATA.total_sources} 篇文献`,
-      heroSecondaryCta: '探索 L0–L4 五层范式',
+      heroSecondaryCta: 'L0–L4 系统总表',
       stat_sources: '核实文献记录',
       stat_paradigms: '状态转移范式',
       stat_families: '核心主线 + 外围分组',
@@ -125,9 +148,16 @@
       oEyebrow: '综述核心图表 · 第 5 章观测契约、第 7 章评测义务与章节蓝图',
       oTitle: '观测条件接口与评测证据链',
       oDesc: '对比上游状态如何编译为视觉渲染条件（表 1 三种反馈机制）、五项评测义务各自能证明与不能证明的边界（表 2），以及 9 章综述全文结构。',
-      libEyebrow: '结构化双语文献库',
-      libTitle: `交互检索全部 ${DATA.total_sources} 篇核实来源`,
-      libDesc: '支持按 L0–L4 范式视角、三类主线、评测靶点、代码职责与核查深度多维筛选及一键导出 BibTeX。',
+      mEyebrow: '跨范式全景对比 · L0–L4 代表系统矩阵',
+      mTitle: '一表横跨 L0–L4 全谱系代表系统',
+      mDesc: '支持按手写引擎（L0）、提示词直推（L1）、代码世界模型（L2）、共享状态写回（L3）、纯学习神经世界模型（L4）及实时流式系统快速筛选；点击任意系统即可查看详情与复制 BibTeX。',
+      matrixSearchPlaceholder: '检索系统名、执行器、权威状态、条件接口 Π(s_t) 或反馈路径...',
+      libEyebrow: '统一文献检索台 · 核心目录 + L0–L4 综述全谱系引用',
+      libTitle: `全量交互检索（${DATA.total_sources} 篇核心 + ${EXTRA_REFS.length} 篇 L0–L4 对照）`,
+      libDesc: '支持一键切换核心目录或综述全量引用，按 L0–L4 五层范式、三类主线、评测靶点与代码职责联合检索并导出 BibTeX。',
+      masterSearchPlaceholder: `总检索：输入 L0–L4 任意系统、标题、别名、作者、arXiv 编号或标签（共 ${TOTAL_SURVEY_WORKS} 篇）...`,
+      scopeCoreLabel: `核心目录 (${DATA.total_sources})`,
+      scopeAllLabel: `全谱系 L0–L4 (${TOTAL_SURVEY_WORKS})`,
       reset_filters: '重置筛选',
       export_bibtex: '导出当前筛选 BibTeX',
       sort_newest: '按日期最新排序',
@@ -136,7 +166,7 @@
       view_cards: '卡片视图',
       view_table: '紧凑表格',
       searchPlaceholder: '搜索标题、方法别名、作者、标签...',
-      cmdPlaceholder: `跳转 L0–L4 范式、三类主线或检索 ${DATA.total_sources} 篇论文...`,
+      cmdPlaceholder: `跳转 L0–L4 范式、系统矩阵或检索 ${TOTAL_SURVEY_WORKS} 篇工作...`,
     },
   };
 
@@ -165,10 +195,10 @@
       highlightIdx: 2,
       metrics: [98, 8, 98, 35, 96],
       anchors: [
-        { label: 'MuJoCo', id: null },
-        { label: 'Unity', id: null },
-        { label: 'Unreal Engine', id: null },
-        { label: 'DOOM Engine', id: null },
+        { label: 'MuJoCo', id: 'ref_todorov2012mujoco' },
+        { label: 'Unity', id: 'ref_juliani2018unity' },
+        { label: 'Isaac Gym', id: 'ref_makoviychuk2021isaacgym' },
+        { label: 'DOOM Engine', id: 'ref_kempka2016vizdoom' },
       ],
     },
     {
@@ -194,8 +224,8 @@
       highlightIdx: 2,
       metrics: [38, 88, 45, 30, 22],
       anchors: [
-        { label: 'RAP', id: null },
-        { label: 'ByteSized32-State-Prediction', id: null },
+        { label: 'RAP', id: 'ref_hao2023rap' },
+        { label: 'ByteSized32-State-Prediction', id: 'ref_wang2024bytesized32' },
         { label: 'GlobeBench (Eval)', id: '2610.22708' },
       ],
     },
@@ -229,6 +259,7 @@
         { label: 'Programmable WM', id: '2609.10540' },
         { label: 'State World Models', id: '2610.26811' },
         { label: 'AgentGarten', id: '2610.12374' },
+        { label: 'Zing-1.0', id: '2611.27336' },
         { label: 'VibeWorlding', id: '2608.15265' },
       ],
     },
@@ -256,7 +287,7 @@
       metrics: [72, 86, 82, 94, 68],
       anchors: [
         { label: 'Oneira (Writeback)', id: '2610.01614' },
-        { label: 'UniState', id: null },
+        { label: 'UniState', id: 'ref_jeong2026unistate' },
         { label: 'WorldRuler', id: '2611.24869' },
         { label: 'GameWM (Candidate)', id: '2611.19247' },
       ],
@@ -284,9 +315,10 @@
       highlightIdx: 1,
       metrics: [20, 95, 42, 96, 74],
       anchors: [
-        { label: 'GameNGen', id: null },
-        { label: 'PlayGen2', id: null },
-        { label: 'MASS', id: null },
+        { label: 'GameNGen', id: 'ref_valevski2024gamengen' },
+        { label: 'PlayGen2', id: 'ref_zhang2026playgen2' },
+        { label: 'MASS', id: 'ref_cai2026mass' },
+        { label: 'Genie', id: 'ref_bruce2024genie' },
         { label: 'FlipTest (Eval)', id: '2611.19822' },
         { label: 'WorldProbe (Eval)', id: '2610.39721' },
       ],
@@ -395,14 +427,15 @@
         { method: 'BoxWorld', id: '2610.36371', upstream: 'Async. engine', cond: '2D boxes & status', role: 'State rendering', fb: 'Visual history' },
         { method: 'CWM 2.0 (Invoker-Render)', id: '2611.22925', upstream: 'Structured scene', cond: 'Multi-scale proxy', role: 'Motion completion', fb: 'Visual history' },
         { method: 'AgentGarten', id: '2610.12374', upstream: 'Code worlds', cond: 'Depth / surface normals', role: 'State rendering (36.5 fps)', fb: 'Action-mediated' },
+        { method: 'Zing-1.0', id: '2611.27336', upstream: 'Rule engine', cond: 'Synced proxy chunks', role: 'Block-causal DiT stream', fb: 'Action-mediated' },
       ],
     },
     {
       group_en: 'II. Learned Explicit-State Rendering (Neural Dynamics · L4)',
       group_zh: 'II. 显式结构化状态的神经动力学渲染（L4 对照）',
       rows: [
-        { method: 'MASS', id: null, upstream: 'Learned typed state', cond: 'Camera-local tensor', role: 'Feed-forward RGB', fb: 'None' },
-        { method: 'PlayGen2', id: null, upstream: 'Learned 3D grid', cond: 'Depth / semantic maps', role: 'State rendering', fb: 'Visual history' },
+        { method: 'MASS', id: 'ref_cai2026mass', upstream: 'Learned typed state', cond: 'Camera-local tensor', role: 'Feed-forward RGB', fb: 'None' },
+        { method: 'PlayGen2', id: 'ref_zhang2026playgen2', upstream: 'Learned 3D grid', cond: 'Depth / semantic maps', role: 'State rendering', fb: 'Visual history' },
       ],
     },
     {
@@ -410,7 +443,7 @@
       group_zh: 'III. 观测到世界状态的反馈注册与写回（L2 外观回写 / L3 状态写回）',
       rows: [
         { method: 'CoDeR', id: '2609.26458', upstream: 'Three.js whitebox', cond: 'Whitebox & depth', role: 'Appearance painting', fb: 'Surface color memory' },
-        { method: 'UniState', id: null, upstream: '3D latent memory', cond: '3D latents & edits', role: 'Motion & contact', fb: 'State writeback (L3)' },
+        { method: 'UniState', id: 'ref_jeong2026unistate', upstream: '3D latent memory', cond: '3D latents & edits', role: 'Motion & contact', fb: 'State writeback (L3)' },
         { method: 'Oneira', id: '2610.01614', upstream: 'Agent world table', cond: 'Box-edit proxy', role: 'Motion & new objects', fb: 'State writeback (L3)' },
         { method: 'WorldRuler', id: '2611.24869', upstream: '3D rule graph', cond: 'Geometry & masks', role: 'Local attribute control', fb: 'State writeback (L3)' },
       ],
@@ -607,7 +640,8 @@
       'heroPrimaryCta', 'heroSecondaryCta', 'pEyebrow', 'pTitle', 'pDesc',
       'axisLeft', 'axisRight', 'cEyebrow', 'cTitle', 'cDesc',
       'cmpLeftBadge', 'cmpHint', 'cmpRightBadge', 'fEyebrow', 'fTitle', 'fDesc',
-      'oEyebrow', 'oTitle', 'oDesc', 'libEyebrow', 'libTitle', 'libDesc',
+      'oEyebrow', 'oTitle', 'oDesc', 'mEyebrow', 'mTitle', 'mDesc',
+      'libEyebrow', 'libTitle', 'libDesc',
     ];
     ids.forEach((id) => {
       const el = document.getElementById(id);
@@ -616,6 +650,18 @@
 
     const searchInputEl = document.getElementById('searchInput');
     if (searchInputEl) searchInputEl.placeholder = t('searchPlaceholder');
+
+    const masterSearchEl = document.getElementById('masterSearchInput');
+    if (masterSearchEl) masterSearchEl.placeholder = t('masterSearchPlaceholder');
+
+    const matrixSearchEl = document.getElementById('matrixSearchInput');
+    if (matrixSearchEl) matrixSearchEl.placeholder = t('matrixSearchPlaceholder');
+
+    const scopeCoreBtn = document.getElementById('scopeCoreBtn');
+    if (scopeCoreBtn) scopeCoreBtn.textContent = t('scopeCoreLabel');
+
+    const scopeAllBtn = document.getElementById('scopeAllBtn');
+    if (scopeAllBtn) scopeAllBtn.textContent = t('scopeAllLabel');
 
     const cmdInputEl = document.getElementById('cmdInput');
     if (cmdInputEl) cmdInputEl.placeholder = t('cmdPlaceholder');
@@ -685,9 +731,10 @@
       </div>
     `).join('');
 
-    const jumpBtn = (cur.id === 'L2' || cur.id === 'L3')
-      ? `<button type="button" class="pill-btn primary" data-filter-paradigm="${cur.id}">${zh ? `在文献库中筛选 ${cur.id} 相关论文 →` : `Filter ${cur.id} papers in library →`}</button>`
-      : '';
+    const jumpBtn = `<div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button type="button" class="pill-btn primary" data-filter-paradigm="${cur.id}">${zh ? `在文献库中筛选 ${cur.id} 相关工作 →` : `Filter ${cur.id} works in library →`}</button>
+      <button type="button" class="pill-btn" data-jump-matrix="${cur.id}">${zh ? `在系统矩阵对比 ${cur.id} →` : `Compare ${cur.id} in matrix →`}</button>
+    </div>`;
 
     stage.innerHTML = `
       <div>
@@ -715,7 +762,7 @@
           </div>
         </div>
         <div style="margin-bottom:12px;">
-          <div style="font-size:11.5px;color:var(--aui-muted);margin-bottom:6px;">${zh ? '代表性系统与基准（点击蓝框条目查看文献详情）：' : 'Representative systems & anchors (click corpus entries to inspect):'}</div>
+          <div style="font-size:11.5px;color:var(--aui-muted);margin-bottom:6px;">${zh ? '代表性系统与基准（点击条目查看文献详情与 BibTeX）：' : 'Representative systems & anchors (click entries to inspect record & BibTeX):'}</div>
           <div class="anchor-row">${anchorsHtml}</div>
         </div>
         ${jumpBtn}
@@ -750,9 +797,20 @@
       btn.addEventListener('click', () => {
         const val = btn.getAttribute('data-filter-paradigm');
         clearFilterState();
-        STATE.paradigmFilter = val === 'L3' ? 'L3' : 'L2';
+        STATE.paradigmFilter = val;
+        if (EXTRA_ONLY_PARADIGMS.has(val) || val === 'L3') {
+          STATE.corpusScope = 'all';
+        }
         renderLibrary();
         document.getElementById('library').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+    stage.querySelectorAll('[data-jump-matrix]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        STATE.matrixFilter = btn.getAttribute('data-jump-matrix');
+        renderSystemMatrix();
+        const mEl = document.getElementById('matrix');
+        if (mEl) mEl.scrollIntoView({ behavior: 'smooth' });
       });
     });
 
@@ -1129,10 +1187,131 @@
     }
   }
 
+  // Render Section 4.5: GenRender-Style L0-L4 Master System Comparison Matrix
+  function renderSystemMatrix() {
+    const pillsEl = document.getElementById('matrixPills');
+    const theadEl = document.getElementById('matrixThead');
+    const tbodyEl = document.getElementById('matrixTbody');
+    const cntEl = document.getElementById('matrixCounter');
+    if (!pillsEl || !theadEl || !tbodyEl) return;
+
+    const zh = STATE.lang === 'zh';
+    const counts = { all: SYSTEM_MATRIX.length, rt: 0 };
+    SYSTEM_MATRIX.forEach((s) => {
+      counts[s.paradigm] = (counts[s.paradigm] || 0) + 1;
+      if (s.realtime) counts.rt += 1;
+    });
+
+    const pillDefs = [
+      { id: 'all', label: zh ? '全部系统' : 'All Systems', cnt: counts.all },
+      { id: 'L0', label: zh ? 'L0 · 手写引擎' : 'L0 · Engines', cnt: counts.L0 || 0 },
+      { id: 'L1', label: zh ? 'L1 · 提示词直推' : 'L1 · Next-State LM', cnt: counts.L1 || 0 },
+      { id: 'L2', label: zh ? 'L2 · 代码世界模型' : 'L2 · Code WM', cnt: counts.L2 || 0 },
+      { id: 'L3', label: zh ? 'L3 · 共享/写回' : 'L3 · Shared / Writeback', cnt: counts.L3 || 0 },
+      { id: 'L4', label: zh ? 'L4 · 神经世界模型' : 'L4 · Neural WM', cnt: counts.L4 || 0 },
+      { id: 'Unlabeled', label: zh ? '无标签对照' : 'Unlabeled', cnt: counts.Unlabeled || 0 },
+      { id: 'rt', label: zh ? '⚡ 实时 / 流式' : '⚡ Real-Time / Stream', cnt: counts.rt },
+    ];
+
+    pillsEl.innerHTML = pillDefs.map((p) => `
+      <button type="button" class="mpill ${STATE.matrixFilter === p.id ? 'active' : ''}" data-mfilter="${p.id}">
+        <span>${escapeHtml(p.label)}</span>
+        <span class="mpill-cnt">${p.cnt}</span>
+      </button>
+    `).join('');
+
+    pillsEl.querySelectorAll('[data-mfilter]').forEach((b) => {
+      b.addEventListener('click', () => {
+        STATE.matrixFilter = b.getAttribute('data-mfilter');
+        renderSystemMatrix();
+      });
+    });
+
+    theadEl.innerHTML = `
+      <tr>
+        <th>${zh ? '代表系统' : 'System'}</th>
+        <th>${zh ? '范式' : 'Paradigm'}</th>
+        <th>${zh ? '转移执行器 F' : 'Transition Executor'}</th>
+        <th>${zh ? '权威状态表示 s_t' : 'Authoritative State'}</th>
+        <th>${zh ? '观测条件接口 Π(s_t)' : 'Condition Π(s_t)'}</th>
+        <th>${zh ? '反馈路径' : 'Feedback Path'}</th>
+        <th>${zh ? '运行速率' : 'Mode / Speed'}</th>
+      </tr>
+    `;
+
+    const mq = STATE.matrixQuery.trim().toLowerCase();
+    const rows = SYSTEM_MATRIX.filter((s) => {
+      if (STATE.matrixFilter === 'rt') {
+        if (!s.realtime) return false;
+      } else if (STATE.matrixFilter !== 'all' && s.paradigm !== STATE.matrixFilter) {
+        return false;
+      }
+      if (mq) {
+        const pRec = PAPERS_BY_ID[s.id];
+        const hay = [
+          s.name, s.id, s.paradigm, s.executor_en, s.executor_zh,
+          s.state_en, s.state_zh, s.cond_en, s.cond_zh, s.fb_en, s.fb_zh, s.speed,
+          pRec ? `${pRec.title} ${pRec.authors.join(' ')} ${pRec.tags.join(' ')}` : '',
+        ].join(' ').toLowerCase();
+        if (!hay.includes(mq)) return false;
+      }
+      return true;
+    });
+
+    if (cntEl) {
+      cntEl.textContent = `${rows.length} / ${SYSTEM_MATRIX.length}`;
+    }
+
+    if (!rows.length) {
+      tbodyEl.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align:center;padding:24px;color:var(--aui-muted);">
+            ${zh ? '无匹配系统，请清空矩阵检索词或切换上方标签。' : 'No matching systems in matrix. Try clearing the matrix filter.'}
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const parBadge = (par) => {
+      if (par === 'L2' || par === 'L3') return 'sand';
+      if (par === 'L0') return 'teal';
+      if (par === 'L1') return 'amber';
+      if (par === 'L4') return 'blue';
+      return '';
+    };
+
+    tbodyEl.innerHTML = rows.map((s) => {
+      const hasRec = Boolean(PAPERS_BY_ID[s.id]);
+      const sysCell = hasRec
+        ? `<button type="button" class="matrix-sys-btn" data-open-paper="${escapeHtml(s.id)}"><span>${escapeHtml(s.name)}</span><span style="font-size:10.5px;opacity:0.55;">↗</span></button>`
+        : `<strong>${escapeHtml(s.name)}</strong>`;
+      return `
+        <tr>
+          <td style="white-space:nowrap;">${sysCell}</td>
+          <td><span class="badge ${parBadge(s.paradigm)} mono">${escapeHtml(s.paradigm)}</span></td>
+          <td>${escapeHtml(zh ? s.executor_zh : s.executor_en)}</td>
+          <td>${escapeHtml(zh ? s.state_zh : s.state_en)}</td>
+          <td class="mono" style="font-size:11.5px;">${escapeHtml(zh ? s.cond_zh : s.cond_en)}</td>
+          <td>${escapeHtml(zh ? s.fb_zh : s.fb_en)}</td>
+          <td><span class="rt-chip ${s.realtime ? 'is-rt' : ''}">${escapeHtml(s.speed)}</span></td>
+        </tr>
+      `;
+    }).join('');
+
+    tbodyEl.querySelectorAll('[data-open-paper]').forEach((b) => {
+      b.addEventListener('click', () => openPaperModal(b.getAttribute('data-open-paper')));
+    });
+  }
+
   // Filter & Sort Papers
-  function getFilteredPapers() {
+  function getActivePool() {
+    return STATE.corpusScope === 'all' ? ALL_PAPERS : DATA.papers;
+  }
+
+  function filterPaperPool(pool) {
     const q = STATE.search.trim().toLowerCase();
-    const list = DATA.papers.filter((p) => {
+    return pool.filter((p) => {
       if (STATE.sectionFilter !== 'all') {
         if (['worldcoder', 'code_as_world', 'vibeworlding'].includes(STATE.sectionFilter)) {
           if (p.section !== STATE.sectionFilter) return false;
@@ -1169,14 +1348,17 @@
       }
       if (q) {
         const hay = [
-          p.title, p.alias || '', p.id, p.authors.join(' '),
-          p.tags.join(' '), p.summary_en, p.summary_zh,
+          p.title, p.alias || '', p.id, p.citation_key || '', p.authors.join(' '),
+          p.tags.join(' '), p.paradigm || '', p.summary_en, p.summary_zh, p.feedback_regime || '',
         ].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
     });
+  }
 
+  function getFilteredPapers() {
+    const list = filterPaperPool(getActivePool());
     if (STATE.sort === 'oldest') {
       list.sort((a, b) => a.date_sort.localeCompare(b.date_sort) || a.id.localeCompare(b.id));
     } else if (STATE.sort === 'title') {
@@ -1195,6 +1377,11 @@
     if (p.unassigned_group === 'gui') return zh ? '其他 · GUI 世界模型' : 'Other · GUI';
     if (p.unassigned_group === 'benchmark') return zh ? `基准 · ${p.benchmark_target}` : `Benchmark · ${p.benchmark_target}`;
     if (p.unassigned_group === 'survey') return zh ? '相关综述' : 'Related Survey';
+    if (p.unassigned_group === 'survey_ref') {
+      if (p.paradigm === 'Context') return zh ? '综述引用 · 条件渲染上下文' : 'Survey Ref · Context';
+      if (p.paradigm === 'Unlabeled') return zh ? '综述引用 · 无标签对照' : 'Survey Ref · Unlabeled';
+      return zh ? `综述谱系对照 · ${p.paradigm}` : `Survey Ref · ${p.paradigm}`;
+    }
     return 'Other';
   }
 
@@ -1204,21 +1391,97 @@
     if (p.section === 'vibeworlding') return 'teal';
     if (p.unassigned_group === 'benchmark') return 'amber';
     if (p.unassigned_group === 'gui') return 'purple';
+    if (p.unassigned_group === 'survey_ref') {
+      if (p.paradigm === 'L3') return 'sand';
+      if (p.paradigm === 'L0') return 'teal';
+      if (p.paradigm === 'L1') return 'amber';
+      if (p.paradigm === 'L4') return 'blue';
+    }
     return '';
   }
 
-  // Render Sidebar + Paper List
+  // Render Sidebar + Quick L0-L4 Bar + Paper List
   function renderLibrary() {
     const zh = STATE.lang === 'zh';
+    const scopeCoreBtn = document.getElementById('scopeCoreBtn');
+    const scopeAllBtn = document.getElementById('scopeAllBtn');
+    if (scopeCoreBtn && scopeAllBtn) {
+      scopeCoreBtn.classList.toggle('active', STATE.corpusScope === 'core');
+      scopeAllBtn.classList.toggle('active', STATE.corpusScope === 'all');
+    }
 
+    const searchEl = document.getElementById('searchInput');
+    if (searchEl && searchEl.value !== STATE.search) searchEl.value = STATE.search;
+    const masterSearchEl = document.getElementById('masterSearchInput');
+    if (masterSearchEl && masterSearchEl.value !== STATE.search) masterSearchEl.value = STATE.search;
+
+    const quickBar = document.getElementById('quickParadigmBar');
+    if (quickBar) {
+      const pCounts = {};
+      ALL_PAPERS.forEach((p) => {
+        pCounts[p.paradigm] = (pCounts[p.paradigm] || 0) + 1;
+      });
+      const l3Total = ALL_PAPERS.filter((p) => p.paradigm === 'L3' || p.paradigm === 'L2-L3' || p.feedback_regime).length;
+      const isCleanFilters = STATE.sectionFilter === 'all' && STATE.paradigmFilter === 'all' && STATE.roleFilter === 'all' && STATE.depthFilter === 'all' && STATE.yearFilter === 'all';
+      const quickDefs = [
+        { id: 'core_all', label: zh ? '核心目录' : 'Core Corpus', cnt: DATA.total_sources, active: STATE.corpusScope === 'core' && isCleanFilters },
+        { id: 'survey_all', label: zh ? '综述全量' : 'All Survey Works', cnt: TOTAL_SURVEY_WORKS, active: STATE.corpusScope === 'all' && isCleanFilters },
+        { id: 'L0', label: zh ? 'L0 · 手写引擎' : 'L0 · Engines', cnt: pCounts.L0 || 0, active: STATE.paradigmFilter === 'L0' },
+        { id: 'L1', label: zh ? 'L1 · 提示词直推' : 'L1 · Prompted LM', cnt: pCounts.L1 || 0, active: STATE.paradigmFilter === 'L1' },
+        { id: 'L2', label: zh ? 'L2 · 代码世界' : 'L2 · Code WM', cnt: pCounts.L2 || 0, active: STATE.paradigmFilter === 'L2' },
+        { id: 'L3', label: zh ? 'L3 · 共享/写回' : 'L3 · Writeback', cnt: l3Total, active: STATE.paradigmFilter === 'L3' },
+        { id: 'L4', label: zh ? 'L4 · 神经动力学' : 'L4 · Neural WM', cnt: pCounts.L4 || 0, active: STATE.paradigmFilter === 'L4' },
+        { id: 'Unlabeled', label: zh ? '无标签对照' : 'Unlabeled', cnt: pCounts.Unlabeled || 0, active: STATE.paradigmFilter === 'Unlabeled' },
+        { id: 'sec:benchmark', label: zh ? '评测基准' : 'Benchmarks', cnt: DATA.group_counts.benchmark || 0, active: STATE.sectionFilter === 'benchmark' },
+        { id: 'GUI', label: 'GUI', cnt: DATA.group_counts.gui || 0, active: STATE.paradigmFilter === 'GUI' || STATE.sectionFilter === 'gui' },
+        { id: 'Context', label: zh ? '§5 渲染上下文' : '§5 Context', cnt: pCounts.Context || 0, active: STATE.paradigmFilter === 'Context' },
+      ];
+      quickBar.innerHTML = quickDefs.map((q) => `
+        <button type="button" class="mpill ${q.active ? 'active' : ''}" data-qpar="${q.id}">
+          <span>${escapeHtml(q.label)}</span>
+          <span class="mpill-cnt">${q.cnt}</span>
+        </button>
+      `).join('');
+
+      quickBar.querySelectorAll('[data-qpar]').forEach((b) => {
+        b.addEventListener('click', () => {
+          const val = b.getAttribute('data-qpar');
+          const keepSearch = STATE.search;
+          clearFilterState();
+          STATE.search = keepSearch;
+          if (searchEl) searchEl.value = keepSearch;
+          if (masterSearchEl) masterSearchEl.value = keepSearch;
+          if (val === 'core_all') {
+            STATE.corpusScope = 'core';
+          } else if (val === 'survey_all') {
+            STATE.corpusScope = 'all';
+          } else if (val === 'sec:benchmark') {
+            STATE.corpusScope = 'core';
+            STATE.sectionFilter = 'benchmark';
+          } else if (val === 'GUI') {
+            STATE.corpusScope = 'core';
+            STATE.paradigmFilter = 'GUI';
+          } else {
+            STATE.paradigmFilter = val;
+            if (EXTRA_ONLY_PARADIGMS.has(val) || val === 'L3') {
+              STATE.corpusScope = 'all';
+            }
+          }
+          renderLibrary();
+        });
+      });
+    }
+
+    const activeTotal = STATE.corpusScope === 'all' ? TOTAL_SURVEY_WORKS : DATA.total_sources;
     const secOptions = [
-      { id: 'all', label: zh ? '全部文献' : 'All sources', count: DATA.total_sources },
+      { id: 'all', label: zh ? '全部文献' : 'All sources', count: activeTotal },
       { id: 'worldcoder', label: zh ? '01 · 程序化动力学' : '01 · WorldCoder-type', count: DATA.section_counts.worldcoder },
       { id: 'code_as_world', label: zh ? '02 · 白模 + 神经渲染' : '02 · Code-as-World', count: DATA.section_counts.code_as_world },
       { id: 'vibeworlding', label: zh ? '03 · 3D 世界构建' : '03 · VibeWorlding-type', count: DATA.section_counts.vibeworlding },
       { id: 'gui', label: zh ? '其他 · GUI 世界模型' : 'Other · GUI Models', count: DATA.group_counts.gui },
       { id: 'benchmark', label: zh ? '其他 · 评测基准' : 'Other · Benchmarks', count: DATA.group_counts.benchmark },
       { id: 'survey', label: zh ? '相关综述对比' : 'Related Surveys', count: DATA.group_counts.survey },
+      { id: 'survey_ref', label: zh ? '综述 L0–L4 谱系参照' : 'Survey L0–L4 Refs', count: EXTRA_REFS.length },
     ];
 
     let benchSubHtml = '';
@@ -1257,11 +1520,16 @@
 
     const paradigmOptions = [
       { id: 'all', label: zh ? '全部范式视角' : 'All paradigms' },
+      { id: 'L0', label: zh ? 'L0 · 手写物理与游戏引擎' : 'L0 · Hand-Written Engines' },
+      { id: 'L1', label: zh ? 'L1 · 语言模型直接预测状态' : 'L1 · Next-State LM' },
       { id: 'L2', label: zh ? 'L2 · 权威代码世界模型' : 'L2 · Authoritative Code' },
       { id: 'L3', label: zh ? 'L3 / 观测反馈与表 1 锚点' : 'L3 / Writeback & Table 1' },
+      { id: 'L4', label: zh ? 'L4 · 纯学习神经动力学' : 'L4 · Learned Neural WM' },
+      { id: 'Unlabeled', label: zh ? 'Unlabeled · 闭源无标签对照' : 'Unlabeled · Closed Ref' },
       { id: 'Eval-L2', label: zh ? '评测 · 代码世界基准' : 'Eval · Code World Benches' },
       { id: 'Eval-L4', label: zh ? '评测 · 视频模型诊断 (L4)' : 'Eval · Video WM (L4)' },
       { id: 'GUI', label: zh ? 'GUI · 界面预测与软件世界' : 'GUI · Screen & Software' },
+      { id: 'Context', label: zh ? 'Context · §5 条件渲染上下文' : 'Context · §5 Rendering' },
     ];
     document.getElementById('paradigmFilterGroup').innerHTML = `
       <div class="filter-heading">${zh ? 'L0–L4 范式透镜' : 'Paradigm Lens'}</div>
@@ -1292,6 +1560,7 @@
       ['FT', zh ? 'FT · 正文重点核查' : 'FT · Targeted full-text'],
       ['A', zh ? 'A · 摘要与元数据' : 'A · Abstract & metadata'],
       ['M', zh ? 'M · 书目元数据' : 'M · Bibliographic only'],
+      ...(STATE.corpusScope === 'all' ? [['REF', zh ? 'REF · 综述谱系参照' : 'REF · Survey comparator']] : []),
     ];
     document.getElementById('depthFilterGroup').innerHTML = `
       <div class="filter-heading">${zh ? '核查深度' : 'Review Depth'}</div>
@@ -1319,16 +1588,20 @@
 
     // Bind sidebar events
     document.querySelectorAll('[data-sec]').forEach((b) => b.addEventListener('click', () => {
-      STATE.sectionFilter = b.getAttribute('data-sec');
+      const sec = b.getAttribute('data-sec');
+      STATE.sectionFilter = sec;
       STATE.benchmarkSubFilter = 'all';
+      if (sec === 'survey_ref') STATE.corpusScope = 'all';
       renderLibrary();
     }));
     document.querySelectorAll('[data-bsub]').forEach((b) => b.addEventListener('click', () => {
       STATE.benchmarkSubFilter = b.getAttribute('data-bsub');
       renderLibrary();
     }));
-    document.querySelectorAll('[data-par]').forEach((b) => b.addEventListener('click', () => {
-      STATE.paradigmFilter = b.getAttribute('data-par');
+    document.querySelectorAll('#paradigmFilterGroup [data-par]').forEach((b) => b.addEventListener('click', () => {
+      const par = b.getAttribute('data-par');
+      STATE.paradigmFilter = par;
+      if (EXTRA_ONLY_PARADIGMS.has(par)) STATE.corpusScope = 'all';
       renderLibrary();
     }));
     document.querySelectorAll('[data-role]').forEach((b) => b.addEventListener('click', () => {
@@ -1336,7 +1609,9 @@
       renderLibrary();
     }));
     document.querySelectorAll('[data-depth]').forEach((b) => b.addEventListener('click', () => {
-      STATE.depthFilter = b.getAttribute('data-depth');
+      const dp = b.getAttribute('data-depth');
+      STATE.depthFilter = dp;
+      if (dp === 'REF') STATE.corpusScope = 'all';
       renderLibrary();
     }));
     document.querySelectorAll('[data-year]').forEach((b) => b.addEventListener('click', () => {
@@ -1345,21 +1620,38 @@
     }));
 
     const filtered = getFilteredPapers();
-    document.getElementById('resultsCounter').textContent = zh
-      ? `当前显示 ${filtered.length} / ${DATA.total_sources} 篇文献来源`
-      : `Showing ${filtered.length} of ${DATA.total_sources} sources`;
+    if (STATE.corpusScope === 'all') {
+      document.getElementById('resultsCounter').textContent = zh
+        ? `当前显示 ${filtered.length} / ${TOTAL_SURVEY_WORKS} 篇综述引用工作（${DATA.total_sources} 核心 + ${EXTRA_REFS.length} L0–L4 对照）`
+        : `Showing ${filtered.length} of ${TOTAL_SURVEY_WORKS} survey works (${DATA.total_sources} core + ${EXTRA_REFS.length} L0–L4 refs)`;
+    } else {
+      document.getElementById('resultsCounter').textContent = zh
+        ? `当前显示 ${filtered.length} / ${DATA.total_sources} 篇文献来源`
+        : `Showing ${filtered.length} of ${DATA.total_sources} sources`;
+    }
 
     const container = document.getElementById('papersContainer');
     if (!filtered.length) {
+      const extraMatches = STATE.corpusScope === 'core' ? filterPaperPool(EXTRA_REFS).length : 0;
       container.innerHTML = `
         <div style="padding:48px 20px;text-align:center;color:var(--aui-muted);">
           <div style="font-size:15px;font-weight:600;color:var(--aui-ink);margin-bottom:6px;">
-            ${zh ? '没有匹配的文献记录' : 'No matching sources'}
+            ${zh ? '当前范围内没有匹配的文献记录' : 'No matching sources in current scope'}
           </div>
-          <p style="margin:0 0 14px;">${zh ? '请尝试清空搜索词或重置左侧筛选条件。' : 'Try clearing your search query or resetting sidebar filters.'}</p>
-          <button type="button" class="pill-btn primary" id="emptyResetBtn">${zh ? '重置全部筛选' : 'Reset all filters'}</button>
+          <p style="margin:0 0 14px;">${zh ? '请尝试清空搜索词、切换至全谱系 L0–L4 引用，或重置筛选条件。' : 'Try clearing your search query, switching to All L0–L4 Survey Works, or resetting filters.'}</p>
+          <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+            ${extraMatches > 0 ? `<button type="button" class="pill-btn primary" id="emptySwitchAllBtn">${zh ? `查看 L0–L4 综述引用中的 ${extraMatches} 条匹配 →` : `Show ${extraMatches} matching L0–L4 survey ref(s) →`}</button>` : ''}
+            <button type="button" class="pill-btn ${extraMatches > 0 ? '' : 'primary'}" id="emptyResetBtn">${zh ? '重置全部筛选' : 'Reset all filters'}</button>
+          </div>
         </div>
       `;
+      const swBtn = document.getElementById('emptySwitchAllBtn');
+      if (swBtn) {
+        swBtn.addEventListener('click', () => {
+          STATE.corpusScope = 'all';
+          renderLibrary();
+        });
+      }
       document.getElementById('emptyResetBtn').addEventListener('click', resetAllFilters);
       return;
     }
@@ -1382,8 +1674,8 @@
     container.querySelectorAll('[data-tag]').forEach((b) => {
       b.addEventListener('click', () => {
         STATE.search = b.getAttribute('data-tag');
-        const searchEl = document.getElementById('searchInput');
         if (searchEl) searchEl.value = STATE.search;
+        if (masterSearchEl) masterSearchEl.value = STATE.search;
         renderLibrary();
       });
     });
@@ -1569,8 +1861,20 @@
       }
     });
 
-    DATA.papers.forEach((p) => {
-      const text = `${p.title} ${p.alias || ''} ${p.id} ${p.authors.join(' ')} ${p.tags.join(' ')}`.toLowerCase();
+    if (!q || 'matrix table l0 l1 l2 l3 l4 realtime streaming 系统矩阵 对比'.includes(q)) {
+      items.push({
+        kind: 'Matrix',
+        title: zh ? 'L0–L4 代表系统全景对比矩阵' : 'L0–L4 Master System Comparison Matrix',
+        sub: zh ? `对比 ${SYSTEM_MATRIX.length} 个跨范式代表系统与实时流式渲染` : `Compare ${SYSTEM_MATRIX.length} systems across executor, state, Π(s_t) & feedback`,
+        action: () => {
+          const mEl = document.getElementById('matrix');
+          if (mEl) mEl.scrollIntoView({ behavior: 'smooth' });
+        },
+      });
+    }
+
+    ALL_PAPERS.forEach((p) => {
+      const text = `${p.title} ${p.alias || ''} ${p.id} ${p.citation_key || ''} ${p.paradigm || ''} ${p.authors.join(' ')} ${p.tags.join(' ')}`.toLowerCase();
       if (!q || text.includes(q)) {
         items.push({
           kind: p.paradigm,
@@ -1581,7 +1885,7 @@
       }
     });
 
-    const top = items.slice(0, 18);
+    const top = items.slice(0, 20);
     if (STATE.cmdIndex >= top.length) STATE.cmdIndex = 0;
     const listEl = document.getElementById('cmdResults');
     listEl.innerHTML = top.map((it, idx) => `
@@ -1605,6 +1909,7 @@
   }
 
   function clearFilterState() {
+    STATE.corpusScope = 'core';
     STATE.search = '';
     STATE.sectionFilter = 'all';
     STATE.benchmarkSubFilter = 'all';
@@ -1614,6 +1919,8 @@
     STATE.yearFilter = 'all';
     const searchEl = document.getElementById('searchInput');
     if (searchEl) searchEl.value = '';
+    const masterSearchEl = document.getElementById('masterSearchInput');
+    if (masterSearchEl) masterSearchEl.value = '';
   }
 
   function resetAllFilters() {
@@ -1627,6 +1934,7 @@
     renderComparison();
     renderFamilies();
     renderFrameworkSection();
+    renderSystemMatrix();
     renderLibrary();
     if (ATLAS.redraw) ATLAS.redraw();
   }
@@ -1655,9 +1963,10 @@
     const downloadAllBibBtn = document.getElementById('downloadAllBibBtn');
     if (downloadAllBibBtn) {
       downloadAllBibBtn.addEventListener('click', () => {
-        const bib = DATA.papers.map((p) => p.bibtex).join('\n\n') + '\n';
-        downloadTextFile('code-world-models.bib', bib);
-        showToast(STATE.lang === 'zh' ? `已下载全部 ${DATA.total_sources} 篇 BibTeX` : `Downloaded full ${DATA.total_sources}-paper BibTeX`);
+        const pool = STATE.corpusScope === 'all' ? ALL_PAPERS : DATA.papers;
+        const bib = pool.map((p) => p.bibtex).join('\n\n') + '\n';
+        downloadTextFile(STATE.corpusScope === 'all' ? 'code-world-models-full-survey.bib' : 'code-world-models.bib', bib);
+        showToast(STATE.lang === 'zh' ? `已下载全部 ${pool.length} 篇 BibTeX` : `Downloaded ${pool.length}-entry BibTeX`);
       });
     }
 
@@ -1683,11 +1992,50 @@
       });
     }
 
+    const matrixSearchInput = document.getElementById('matrixSearchInput');
+    if (matrixSearchInput) {
+      matrixSearchInput.addEventListener('input', (e) => {
+        STATE.matrixQuery = e.target.value;
+        renderSystemMatrix();
+      });
+    }
+
     const searchInput = document.getElementById('searchInput');
+    const masterSearchInput = document.getElementById('masterSearchInput');
     if (searchInput) {
       if (STATE.search) searchInput.value = STATE.search;
       searchInput.addEventListener('input', (e) => {
         STATE.search = e.target.value;
+        if (masterSearchInput) masterSearchInput.value = STATE.search;
+        renderLibrary();
+      });
+    }
+    if (masterSearchInput) {
+      if (STATE.search) masterSearchInput.value = STATE.search;
+      masterSearchInput.addEventListener('input', (e) => {
+        STATE.search = e.target.value;
+        if (searchInput) searchInput.value = STATE.search;
+        if (STATE.search.trim()) {
+          STATE.corpusScope = 'all';
+        }
+        renderLibrary();
+      });
+    }
+
+    const scopeCoreBtn = document.getElementById('scopeCoreBtn');
+    const scopeAllBtn = document.getElementById('scopeAllBtn');
+    if (scopeCoreBtn) {
+      scopeCoreBtn.addEventListener('click', () => {
+        STATE.corpusScope = 'core';
+        if (STATE.sectionFilter === 'survey_ref') STATE.sectionFilter = 'all';
+        if (EXTRA_ONLY_PARADIGMS.has(STATE.paradigmFilter)) STATE.paradigmFilter = 'all';
+        if (STATE.depthFilter === 'REF') STATE.depthFilter = 'all';
+        renderLibrary();
+      });
+    }
+    if (scopeAllBtn) {
+      scopeAllBtn.addEventListener('click', () => {
+        STATE.corpusScope = 'all';
         renderLibrary();
       });
     }
@@ -1732,6 +2080,8 @@
 
     const openCmdBtn = document.getElementById('openCmdBtn');
     if (openCmdBtn) openCmdBtn.addEventListener('click', openCmd);
+    const masterCmdTrigger = document.getElementById('masterCmdTrigger');
+    if (masterCmdTrigger) masterCmdTrigger.addEventListener('click', openCmd);
 
     const closeCmdBtn = document.getElementById('closeCmdBtn');
     if (closeCmdBtn && cmdDialog) closeCmdBtn.addEventListener('click', () => cmdDialog.close());

@@ -62,12 +62,12 @@
     {
       id: 'survey',
       num: '01',
-      badge: '200',
+      badge: '201',
       href: `${basePrefix}/survey/`,
       en: 'Survey & Atlas',
       zh: '综述与图谱',
-      desc_en: 'Interactive chronological dot atlas, L0–L4 spectrum, observation & evaluation tables.',
-      desc_zh: '200 篇时间轴文献点阵、L0–L4 范式对比、观测契约与评测义务检索台。',
+      desc_en: 'Interactive chronological dot atlas, L0–L4 system matrix, observation & evaluation tables.',
+      desc_zh: '201 篇时间轴文献点阵、L0–L4 系统对比矩阵与全谱系检索台。',
     },
     {
       id: 'arena',
@@ -204,11 +204,11 @@
     const cta = document.getElementById('pwmTopbarCta');
     if (lead && cta) {
       if (pageId === 'survey') {
-        lead.textContent = zh ? '子站 01 · 代码世界模型综述与 200 篇实时点阵图谱' : 'Work 01 · Code World Models Survey & 200-Paper Dot Atlas';
+        lead.textContent = zh ? '子站 01 · 代码世界模型综述与 201 篇实时点阵图谱' : 'Work 01 · Code World Models Survey & 201-Paper Dot Atlas';
         cta.textContent = zh ? '继续查看 02 · PWM-Arena 评测基准 →' : 'Next: Open 02 · PWM-Arena Benchmark →';
       } else {
         lead.textContent = zh ? '开放研究计划 · 覆盖综述图谱、反事实基准与智能体方法三个子站' : 'Unified Research Portal · Survey Atlas, PWM-Arena & Agent Method';
-        cta.textContent = zh ? '点开 01 · 综述与 200 篇点阵图谱子页 →' : 'Open 01 · Survey & 200-Paper Dot Atlas →';
+        cta.textContent = zh ? '点开 01 · 综述与 201 篇点阵图谱子页 →' : 'Open 01 · Survey & 201-Paper Dot Atlas →';
       }
     }
 

@@ -61,7 +61,7 @@ BANNED_PINK_RGBS = {
 
 ROUTE_REQUIRED_FILES: Dict[str, List[str]] = {
     "": ["index.html", "styles.css", "script.js", "shared/shell.css", "shared/shell.js"],
-    "survey/": ["survey/index.html", "survey/styles.css", "survey/app.js", "survey/data.js"],
+    "survey/": ["survey/index.html", "survey/styles.css", "survey/app.js", "survey/data.js", "survey/extra_refs.js"],
     "arena/": ["arena/index.html", "arena/arena.js"],
     "method/": ["method/index.html", "method/method.js"],
 }
@@ -1017,7 +1017,7 @@ def run_static_checks(
         all_warnings: List[str] = []
         for f in files:
             rel = str(f.relative_to(root))
-            is_data = rel == "survey/data.js"
+            is_data = rel in ("survey/data.js", "survey/extra_refs.js")
             v, w = scan_text_for_pink(f.read_text(encoding="utf-8", errors="replace"), rel, is_data_js=is_data)
             all_violations.extend(v)
             all_warnings.extend(w)
@@ -1797,8 +1797,20 @@ def run_tier1(
             assert len(modal_txt.strip()) > 30 and "@" in modal_txt, "Paper modal missing summary or BibTeX"
             page.locator("#closePaperBtn").click()
             assert not dialog.evaluate("el => Boolean(el.open)"), "#paperDialog did not close"
+
+            # Verify L0-L4 Master System Matrix & L0-L4 Unified Search Pills
+            assert page.locator("#matrixTable tbody tr").count() >= 25, "Expected >=25 rows in #matrixTable"
+            page.locator('#matrixPills [data-mfilter="L0"]').click()
+            assert 1 <= page.locator("#matrixTable tbody tr").count() <= 8, "L0 filter in #matrixPills did not narrow #matrixTable"
+            page.locator('#matrixPills [data-mfilter="all"]').click()
+
+            page.locator('#quickParadigmBar [data-qpar="L0"]').click()
+            assert "mujoco" in page.locator("#papersContainer").inner_text().lower(), "Quick L0 filter did not surface MuJoCo in #papersContainer"
+            page.locator("#resetFiltersTopBtn").click()
+            assert str(total_src) in page.locator("#resultsCounter").inner_text(), "Reset after L0 filter did not restore core count"
+
             monitor.assert_clean("T1-05")
-            return f"{total_src}-paper Cards/Table views and #paperDialog modal verified"
+            return f"{total_src}-paper Cards/Table views, #matrixTable L0-L4 filter, unified L0-L4 search, and #paperDialog verified"
 
         runner.record("Tier 1", "T1-05", t1_05)
 

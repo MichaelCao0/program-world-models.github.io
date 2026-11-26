@@ -95,6 +95,12 @@ FEEDBACK_NOTES = {
         'note_en': 'CARLA / CWM code state emits depth and semantic proxies rendered causally in four-step streaming chunks (L2).',
         'note_zh': 'CARLA / CWM 代码状态导出深度与语义代理，以四步因果分块方式流式渲染视频（L2）。',
     },
+    '2611.27336': {
+        'paradigm': 'L2',
+        'regime': 'I · Action-Mediated Proxy Stream',
+        'note_en': 'Executable game rule engine maintains world state and emits synchronized proxy chunks rendered causally by a block-causal DiT (L2).',
+        'note_zh': '可执行游戏规则引擎维护权威状态并生成同步代理分块，由分块因果 DiT 流式渲染画面（L2）。',
+    },
 }
 
 

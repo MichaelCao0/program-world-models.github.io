@@ -2,10 +2,10 @@
 window.CWM_DATA = {
   "updated_on": "2026-11-26",
   "literature_cutoff": "2026-11-26",
-  "total_sources": 200,
+  "total_sources": 201,
   "section_counts": {
     "worldcoder": 50,
-    "code_as_world": 30,
+    "code_as_world": 31,
     "vibeworlding": 45
   },
   "group_counts": {
@@ -28,7 +28,7 @@ window.CWM_DATA = {
       "description_en": "Code keeps persistent state and rules over a whitebox/proxy world; a generative renderer supplies appearance.",
       "title_zh": "Code-as-World-type · 白模世界 + 生成式渲染",
       "description_zh": "代码维护白模/proxy 世界的持久状态与规则，由生成式渲染器补全外观。",
-      "count": 30
+      "count": 31
     },
     {
       "id": "vibeworlding",
@@ -246,6 +246,77 @@ window.CWM_DATA = {
       "feedback_note_en": null,
       "feedback_note_zh": null,
       "bibtex": "@misc{cwm_2611_30226,\n  title = {{VeriWorld: A Verifiable Visual SWE-Bench for Spatial Reasoning in 3D Environments}},\n  author = {Yan Zheng and ShengYun Peng and Xuyao Liang and Xiaoyan Cong and Nuo Chen and Bangya Liu and Zihan Wang and Wenyan Cong and Zhiwen Fan and Zhangyang Wang},\n  year = {2026},\n  eprint = {2611.30226},\n  archivePrefix = {arXiv},\n  url = {https://arxiv.org/abs/2611.30226},\n}"
+    },
+    {
+      "id": "2611.27336",
+      "citation_key": "zhang2026zing",
+      "title": "Zing-1.0: A Playable World System Built on Controllable Rendering",
+      "alias": "Zing-1.0",
+      "authors": [
+        "Wenbo Zhang",
+        "Guoli Zhang",
+        "Xuewen Yu",
+        "Xueliang Yang",
+        "Jiangqiao Yan",
+        "Teng Xia",
+        "Xinmiao Wu",
+        "Zeyang Tian",
+        "Haoze Sun",
+        "Jinghui Niu",
+        "Hongli Ning",
+        "Zhiyuan Liu",
+        "Xinna Liu",
+        "Weimin Liu",
+        "Jialin Liu",
+        "Tianpeng Li",
+        "Kejun Li",
+        "Jun Li",
+        "Jiawen Li",
+        "Yirong He",
+        "Haoyuan Guo",
+        "Bosheng Gong",
+        "Junhao Gao",
+        "Xiaoxiao Fu",
+        "Xuezhi Chen",
+        "Shengdong Chen",
+        "Mingyang Chen",
+        "Diying Chen",
+        "Yinglun Chai",
+        "Yiwen Cai"
+      ],
+      "year": 2026,
+      "date_sort": "2026-11-20",
+      "date_display": "2026-11-20",
+      "source_url": "https://arxiv.org/abs/2611.27336",
+      "arxiv_id": "2611.27336",
+      "doi": null,
+      "source_type": "paper",
+      "section": "code_as_world",
+      "unassigned_group": null,
+      "benchmark_target": null,
+      "scope": "core",
+      "code_roles": [
+        "transition",
+        "observation"
+      ],
+      "tags": [
+        "proxy-rendering",
+        "streaming-video",
+        "action-mediated"
+      ],
+      "review_depth": "abstract",
+      "review_badge": "A",
+      "summary_en": "An executable engine resolves player actions under world rules and emits proxy video to a block-causal streaming renderer synchronized with simulation updates.",
+      "summary_zh": "Zing-1.0 由可执行引擎按世界规则解析玩家动作并生成代理视频，交由与仿真更新同步的分块因果流式渲染器生成可玩画面。",
+      "evidence_notes": "Cited in Survey §5 for block-causal rendering synchronized to simulation updates and action-mediated feedback.",
+      "comparison_en": null,
+      "comparison_zh": null,
+      "related_ids": [],
+      "paradigm": "L2",
+      "feedback_regime": "I · Action-Mediated Proxy Stream",
+      "feedback_note_en": "Executable game rule engine maintains world state and emits synchronized proxy chunks rendered causally by a block-causal DiT (L2).",
+      "feedback_note_zh": "可执行游戏规则引擎维护权威状态并生成同步代理分块，由分块因果 DiT 流式渲染画面（L2）。",
+      "bibtex": "@misc{zhang2026zing,\n  title = {{Zing-1.0: A Playable World System Built on Controllable Rendering}},\n  author = {Wenbo Zhang and Guoli Zhang and Xuewen Yu and Xueliang Yang and Jiangqiao Yan and Teng Xia and Xinmiao Wu and Zeyang Tian and Haoze Sun and Jinghui Niu and Hongli Ning and Zhiyuan Liu and Xinna Liu and Weimin Liu and Jialin Liu and Tianpeng Li and Kejun Li and Jun Li and Jiawen Li and Yirong He and Haoyuan Guo and Bosheng Gong and Junhao Gao and Xiaoxiao Fu and Xuezhi Chen and Shengdong Chen and Mingyang Chen and Diying Chen and Yinglun Chai and Yiwen Cai},\n  year = {2026},\n  eprint = {2611.27336},\n  archivePrefix = {arXiv},\n  url = {https://arxiv.org/abs/2611.27336},\n}"
     },
     {
       "id": "2611.25838",
