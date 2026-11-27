@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" id="meta-theme-color" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Crect width='20' height='20' rx='5' fill='%230f0f10'/%3E%3Crect x='4' y='4' width='5' height='5' rx='1' fill='%23ffffff'/%3E%3Crect x='11' y='4' width='5' height='5' rx='1' fill='%23ffffff'/%3E%3Crect x='4' y='11' width='5' height='5' rx='1' fill='%23ffffff' opacity='0.35'/%3E%3Crect x='11' y='11' width='5' height='5' rx='1' fill='%23ffffff'/%3E%3C/svg%3E" />
-    <title>03 · Executable World Synthesis &amp; Verification · Program World Model</title>
+    <title>03 · Modeling Method (In Progress) · Program World Model</title>
     <meta
       name="description"
-      content="Executable World Synthesis & Verification (In Active Development): interactive pwm-state-v1 world.step(s_t, a_t) sandbox and three-stage Code-Agent world-building loop."
+      content="03 · Modeling Method (In Progress) — Program World Model open research program."
     />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Noto+Sans+SC:wght@400;500;600&amp;display=swap"
       rel="stylesheet"
     />
 
@@ -29,525 +29,68 @@
     <div id="pwm-shell-header"></div>
 
     <main id="main" tabindex="-1">
-      <!-- HERO + IN ACTIVE DEVELOPMENT DISCLOSURE -->
-      <section class="method-hero" id="top">
+      <section class="wip-stage" id="top">
         <div class="lp-container">
-          <div class="method-hero__inner">
+          <div class="wip-card">
             <div class="hero-pill">
-              <span class="hero-pill__badge" data-en="03 · AGENT METHOD" data-zh="03 · 智能体方法">03 · AGENT METHOD</span>
-              <span
-                data-en="In Active Development · Reference Sandbox Live"
-                data-zh="积极研发中 · 参考沙箱已上线"
-                >In Active Development · Reference Sandbox Live</span
-              >
+              <span class="hero-pill__badge" data-en="03 · METHOD" data-zh="03 · 建模方法">03 · METHOD</span>
+              <span data-en="In Progress" data-zh="In Progress · 推进中">In Progress</span>
             </div>
 
             <h1
-              class="method-hero__title"
-              data-en="03 · Executable World Synthesis &amp; Verification"
-              data-zh="03 · 可执行世界构建与验证"
+              class="wip-title"
+              data-en="03 · Modeling Method"
+              data-zh="03 · 程序世界模型方法"
             >
-              03 · Executable World Synthesis &amp; Verification
+              03 · Modeling Method
             </h1>
 
             <p
-              class="lp-hero__sub method-hero__sub"
-              data-en="We are developing a Code-Agent workflow that induces explicit state schemas and runnable rules, verifies them under counterfactual edits, and aligns proxy-conditioned visual renderers without corrupting underlying state."
-              data-zh="我们正在构建面向 Code Agent 的世界建模工作流：归纳显式状态契约与可执行规则、在反事实编辑下验证不变量，并实现不篡改底层状态的代理条件视觉渲染对齐。"
+              class="wip-sub"
+              data-en="This workstream is currently in progress. Methodology, technical specifications, and open-source code will be published here upon release."
+              data-zh="该项研究工作当前正在推进中（In Progress）。具体技术方案、系统架构与开源代码将于完成后在此公开。"
             >
-              We are developing a Code-Agent workflow that induces explicit state schemas and runnable rules, verifies
-              them under counterfactual edits, and aligns proxy-conditioned visual renderers without corrupting
-              underlying state.
+              This workstream is currently in progress. Methodology, technical specifications, and open-source code
+              will be published here upon release.
             </p>
 
-            <div class="lp-hero__actions">
-              <a
-                class="btn btn--primary"
-                href="#sandbox"
-                data-en="Launch world.step() Sandbox ↓"
-                data-zh="体验 world.step() 交互沙箱 ↓"
-                >Launch world.step() Sandbox ↓</a
-              >
-              <a
-                class="btn btn--secondary"
-                href="../survey/?layer=L2#paradigms"
-                data-en="Inspect L2 Foundations →"
-                data-zh="查看 L2 理论基础 →"
-                >Inspect L2 Foundations →</a
-              >
-              <a
-                class="btn btn--secondary"
-                href="../arena/"
-                data-en="Open 02 · PWM-Arena →"
-                data-zh="进入 02 · PWM-Arena →"
-                >Open 02 · PWM-Arena →</a
-              >
-            </div>
-
-            <div class="method-disclosure" role="note" aria-label="Development status notice">
-              <div class="method-disclosure__head">
-                <span class="method-sand-pill" data-en="In Active Development" data-zh="积极研发中 (In Active Development)"
-                  >In Active Development</span
+            <div class="wip-notice" role="status" aria-live="polite">
+              <div class="wip-notice__head">
+                <span class="wip-sand-pill" data-en="STATUS · IN PROGRESS" data-zh="当前状态 · IN PROGRESS"
+                  >STATUS · IN PROGRESS</span
                 >
                 <span
-                  class="method-disclosure__title"
-                  data-en="Live Browser Reference Interpreter vs. Unreleased Code-Agent Stack"
-                  data-zh="当前浏览器端参考解释器 vs. 研发中的自动化 Code-Agent 系统"
-                  >Live Browser Reference Interpreter vs. Unreleased Code-Agent Stack</span
+                  class="wip-notice__meta"
+                  data-en="Public release pending"
+                  data-zh="待正式发布后公开细节"
+                  >Public release pending</span
                 >
               </div>
               <p
-                class="method-disclosure__body"
-                data-en="This page pairs an executable browser-side pwm-state-v1 reference interpreter (live below) with our three-stage Code-Agent synthesis specification. Automated synthesis agents, search/verification recipes, and empirical benchmark numbers remain under active development — no preliminary scores, paper claims, or release dates are asserted here."
-                data-zh="本页将浏览器端可运行的 pwm-state-v1 参考解释器（下方实时交互）与三阶段 Code-Agent 世界构建架构说明结合展示。全自动世界合成智能体、搜索与验证策略以及基准实验分数仍在积极研发中——本页不预填任何未验证的分数、论文条目或发布日期。"
+                class="wip-notice__body"
+                data-en="Currently under active preparation — no specific architectural details, experimental claims, or release dates are disclosed at this stage. In the meantime, you can explore L2 &amp; L3 code world model literature in our Survey &amp; Catalogue."
+                data-zh="当前处于研发推进阶段，暂不披露具体方法细节、实验指标或发布时间。在此期间，欢迎前往「01 · 综述与图谱」浏览 L2 与 L3 代码世界模型相关文献。"
               >
-                This page pairs an executable browser-side <code>pwm-state-v1</code> reference interpreter (live below)
-                with our three-stage Code-Agent synthesis specification. Automated synthesis agents, search/verification
-                recipes, and empirical benchmark numbers remain under active development — no preliminary scores, paper
-                claims, or release dates are asserted here.
+                Currently under active preparation — no specific architectural details, experimental claims, or release
+                dates are disclosed at this stage. In the meantime, you can explore L2 &amp; L3 code world model
+                literature in our Survey &amp; Catalogue.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <!-- SECTION 2: INTERACTIVE world.step(s_t, a_t) PROGRAM SANDBOX -->
-      <section class="lp-section method-section" id="sandbox">
-        <div class="lp-container">
-          <div class="section-head method-section-head">
-            <div>
-              <div class="method-kicker" data-en="LIVE REFERENCE INTERPRETER · PWM-STATE-V1" data-zh="实时参考解释器 · PWM-STATE-V1">
-                LIVE REFERENCE INTERPRETER · PWM-STATE-V1
-              </div>
-              <h2
-                class="lp-lead"
-                data-en="Executable world.step(s_t, a_t) Sandbox"
-                data-zh="可执行 world.step(s_t, a_t) 程序沙箱"
-              >
-                Executable world.step(s_t, a_t) Sandbox
-              </h2>
-              <p
-                class="lp-sub"
-                data-en="Execute agent actions, apply live runtime rule patches (single_open v1 ↔ double_lock v2, revoke/restore), schedule pending timers, and test out-of-view occlusion persistence over a deterministic pwm-state-v1 tick pipeline."
-                data-zh="在确定性 pwm-state-v1 单步执行管线上施加智能体动作、进行运行时规则热更（single_open v1 ↔ double_lock v2、撤销/恢复）、调度挂起定时事件并验证跨遮挡状态持久性。"
-              >
-                Execute agent actions, apply live runtime rule patches (single_open v1 ↔ double_lock v2, revoke/restore),
-                schedule pending timers, and test out-of-view occlusion persistence over a deterministic
-                <code>pwm-state-v1</code> tick pipeline.
-              </p>
-            </div>
-          </div>
-
-          <div class="app-shell method-sandbox-shell">
-            <!-- Top Rule-Patch & Pipeline Status Bar -->
-            <div class="method-patch-toolbar">
-              <div class="method-patch-toolbar__left">
-                <span class="mono-tag" id="method-tick-badge">tick = 00</span>
-                <span class="method-patch-label" data-en="Live Rule Patch (door_gate):" data-zh="运行时规则热更 (door_gate)："
-                  >Live Rule Patch (<code>door_gate</code>):</span
-                >
-                <div class="segmented-switch" role="group" aria-label="door_gate rule mode">
-                  <button
-                    class="arena-mode-btn is-active"
-                    type="button"
-                    id="method-mode-single"
-                    data-rule-mode="single_open"
-                  >
-                    v1 · single_open (1 pull)
-                  </button>
-                  <button class="arena-mode-btn" type="button" id="method-mode-double" data-rule-mode="double_lock">
-                    v2 · double_lock (2 pulls)
-                  </button>
-                </div>
-              </div>
-
-              <div class="method-patch-toolbar__right">
-                <button class="btn btn--sm btn--secondary" type="button" id="method-revoke-btn">
-                  revoke("door_gate")
-                </button>
-                <span class="status-chip status-chip--green" id="method-patch-status">door_gate: active · v1</span>
-              </div>
-            </div>
-
-            <div class="method-app-grid">
-              <!-- Left Pane: Interventions & Occlusion Controls -->
-              <aside class="app-sidebar">
-                <div class="app-pane-head">
-                  <span class="app-pane-title" data-en="Interventions (a_t)" data-zh="动作与控制干预 (a_t)"
-                    >Interventions (a_t)</span
-                  >
-                  <span class="mono-tag">step()</span>
-                </div>
-                <p
-                  class="app-sidebar__hint"
-                  data-en="Pipeline: meta-edit → due pending → action → active rules → once → tick+1"
-                  data-zh="单步管线：元编辑 → 到期挂起事件 → 动作 → 激活规则 → once 消费 → tick+1"
-                >
-                  Pipeline: meta-edit → due pending → action → active rules → once → tick+1
-                </p>
-                <div class="sim-actions" id="method-actions">
-                  <button class="sim-action-btn" type="button" data-sim-action="pickup_key">
-                    <code>pickup("brass_key")</code>
-                    <small data-en="on_floor (visible) → held (ui)" data-zh="地面钥匙 (visible) → 背包持有 (ui)"
-                      >on_floor (visible) → held (ui)</small
-                    >
-                  </button>
-                  <button class="sim-action-btn" type="button" data-sim-action="pull_lever">
-                    <code>pull("lever_L2")</code>
-                    <small data-en="Increments pull_count &amp; evaluates door_gate" data-zh="递增拉杆计数并触发 door_gate 规则"
-                      >Increments pull_count &amp; evaluates door_gate</small
-                    >
-                  </button>
-                  <button class="sim-action-btn" type="button" data-sim-action="interact_door">
-                    <code>interact("iron_door")</code>
-                    <small data-en="Checks held key + required_pulls" data-zh="校验持有钥匙与所需拉杆次数"
-                      >Checks held key + required_pulls</small
-                    >
-                  </button>
-                  <button class="sim-action-btn" type="button" data-sim-action="toggle_lamp">
-                    <code>toggle("redstone_lamp")</code>
-                    <small data-en="Triggers lamp_relay (priority 5)" data-zh="触发 lamp_relay（优先级 5）"
-                      >Triggers lamp_relay (priority 5)</small
-                    >
-                  </button>
-                  <button class="sim-action-btn" type="button" data-sim-action="schedule_pulse">
-                    <code>schedule("lamp_pulse", +2)</code>
-                    <small data-en="Enqueues hidden pending event (+2 ticks)" data-zh="写入 hidden 延迟事件队列（+2 步后触发）"
-                      >Enqueues hidden pending event (+2 ticks)</small
-                    >
-                  </button>
-                  <button class="sim-action-btn" type="button" id="method-pan-btn" data-sim-action="camera_pan">
-                    <code id="method-pan-code">camera.pan(180°)</code>
-                    <small id="method-pan-desc">Occlude room view &amp; snapshot baseline</small>
-                  </button>
-                  <button
-                    class="sim-action-btn method-offscreen-btn"
-                    type="button"
-                    id="method-offscreen-btn"
-                    data-sim-action="offscreen_mutate"
-                    disabled
-                  >
-                    <code>offscreen.mutate("toggle_lamp")</code>
-                    <small id="method-offscreen-desc">Enable by panning 180° away first</small>
-                  </button>
-                  <button class="sim-action-btn sim-action-btn--ghost" type="button" data-sim-action="reset">
-                    <code>world.reset()</code>
-                    <small data-en="Restore canonical s_0 (tick = 0)" data-zh="恢复初始规范状态 s_0 (tick = 0)"
-                      >Restore canonical s_0 (tick = 0)</small
-                    >
-                  </button>
-                </div>
-              </aside>
-
-              <!-- Center Pane: Executable Rules + Causal Trace Waterfall -->
-              <div class="app-main">
-                <div class="app-pane-head">
-                  <span class="app-pane-title" data-en="Executable Rule Kernel &amp; Patch Diff" data-zh="可执行规则内核与热更差异"
-                    >Executable Rule Kernel &amp; Patch Diff</span
-                  >
-                  <span class="mono-tag" id="method-kernel-meta">door_gate@v1 · prio 10</span>
-                </div>
-
-                <pre class="code-box method-code-box" id="method-code-box" aria-label="Live pwm-state-v1 rule kernel"></pre>
-
-                <div class="sim-call-bar">
-                  <span class="mono-muted" data-en="Latest step:" data-zh="最近执行：">Latest step:</span>
-                  <code id="method-sim-call">s_0 = world.init(schema="pwm-state-v1")</code>
-                </div>
-
-                <div class="method-trace-head">
-                  <span class="app-pane-title" data-en="Causal Trace Waterfall" data-zh="因果轨迹瀑布流"
-                    >Causal Trace Waterfall</span
-                  >
-                  <div class="method-obs-legend">
-                    <span class="method-obs-tag method-obs-tag--visible">visible</span>
-                    <span class="method-obs-tag method-obs-tag--ui">ui</span>
-                    <span class="method-obs-tag method-obs-tag--hidden">hidden</span>
-                  </div>
-                </div>
-
-                <div class="method-trace-wrap" role="region" aria-label="Causal trace waterfall log">
-                  <div class="method-trace-cols" id="method-trace-cols"></div>
-                  <div class="method-trace" id="method-trace-list" aria-live="polite"></div>
-                </div>
-              </div>
-
-              <!-- Right Pane: Visual Frustum + Occlusion Check + Authoritative JSON -->
-              <div class="app-inspector">
-                <div class="app-pane-head">
-                  <span class="app-pane-title" data-en="Frustum Readout &amp; pwm-state-v1" data-zh="视锥渲染读数与 pwm-state-v1 状态"
-                    >Frustum Readout &amp; pwm-state-v1</span
-                  >
-                  <span class="mono-tag">Π(s<sub>t</sub>, v<sub>t</sub>)</span>
-                </div>
-
-                <div class="room-stage" id="method-room"></div>
-
-                <div class="method-occlusion-card" id="method-occlusion-status"></div>
-
-                <div class="method-json-head">
-                  <span class="mono-muted" data-en="Authoritative State (pwm-state-v1)" data-zh="权威状态 (pwm-state-v1)"
-                    >Authoritative State (pwm-state-v1)</span
-                  >
-                  <button class="cmd-pill__btn method-copy-btn" type="button" id="method-copy-json">Copy JSON</button>
-                </div>
-
-                <pre class="json-box method-json-box" id="method-json-state" aria-label="Live pwm-state-v1 JSON"></pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 3: THREE-STAGE CODE-AGENT WORLD-BUILDING LOOP -->
-      <section class="lp-section method-section" id="loop">
-        <div class="lp-container">
-          <div class="section-head">
-            <div class="method-kicker" data-en="METHOD ARCHITECTURE · THREE-STAGE LOOP" data-zh="方法架构 · 三阶段闭环">
-              METHOD ARCHITECTURE · THREE-STAGE LOOP
-            </div>
-            <h2
-              class="lp-lead"
-              data-en="Three-Stage Code-Agent World-Building Loop"
-              data-zh="三阶段 Code-Agent 世界构建闭环"
-            >
-              Three-Stage Code-Agent World-Building Loop
-            </h2>
-            <p
-              class="lp-sub"
-              data-en="Each stage separates authoritative transition code from visual rendering, enforces Ch. 7 evaluation obligations, and connects directly to L2 survey foundations and PWM-Arena counterfactual verification."
-              data-zh="每个阶段将权威状态转移代码与视觉渲染分离，对应第 7 章可检验评测义务，并与 L2 综述基础及 PWM-Arena 反事实评测直接相连。"
-            >
-              Each stage separates authoritative transition code from visual rendering, enforces Ch. 7 evaluation
-              obligations, and connects directly to L2 survey foundations and PWM-Arena counterfactual verification.
-            </p>
-          </div>
-
-          <div class="method-loop-grid" role="tablist" aria-label="Three-stage Code-Agent synthesis loop">
-            <button
-              class="method-stage-card is-active"
-              type="button"
-              role="tab"
-              aria-selected="true"
-              data-stage="01"
-            >
-              <div class="method-stage-card__top">
-                <span class="method-stage-num">STAGE 01</span>
-                <span class="method-sand-pill" data-en="Obligation 1" data-zh="评测义务 1">Obligation 1</span>
-              </div>
-              <h3 class="method-stage-card__title" data-en="Induce State &amp; Rules" data-zh="状态契约与规则归纳">
-                Induce State &amp; Rules
-              </h3>
-              <code class="method-stage-card__formula">(o₀:t, a₀:t-1) → (s_t, W₀)</code>
-              <p
-                class="method-stage-card__desc"
-                data-en="Synthesize typed pwm-state-v1 entities, explicit params, and deterministic step(s_t, a_t) transitions from interaction traces."
-                data-zh="从交互轨迹与规格描述中归纳带类型的 pwm-state-v1 实体、显式 params 参数及确定性 step(s_t, a_t) 规则。"
-              >
-                Synthesize typed <code>pwm-state-v1</code> entities, explicit <code>params</code>, and deterministic
-                <code>step(s_t, a_t)</code> transitions from interaction traces.
-              </p>
-            </button>
-
-            <button
-              class="method-stage-card"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              data-stage="02"
-            >
-              <div class="method-stage-card__top">
-                <span class="method-stage-num">STAGE 02</span>
-                <span class="method-sand-pill" data-en="Obligations 2 &amp; 5" data-zh="评测义务 2 &amp; 5">Obligations 2 &amp; 5</span>
-              </div>
-              <h3
-                class="method-stage-card__title"
-                data-en="Counterfactual &amp; Invariant Verification"
-                data-zh="反事实与不变量验证"
-              >
-                Counterfactual &amp; Invariant Verification
-              </h3>
-              <code class="method-stage-card__formula">W.step(s_t, a_t, edit_t) ⊢ A ∧ B</code>
-              <p
-                class="method-stage-card__desc"
-                data-en="Verify patched rules, priority overrides, pending schedules, and out-of-view persistence across paired A/B streams."
-                data-zh="在成对 A/B 干预流下验证规则热更、优先级覆写、挂起事件调度与跨遮挡状态持久性。"
-              >
-                Verify patched rules, priority overrides, pending schedules, and out-of-view persistence across paired A/B
-                streams.
-              </p>
-            </button>
-
-            <button
-              class="method-stage-card"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              data-stage="03"
-            >
-              <div class="method-stage-card__top">
-                <span class="method-stage-num">STAGE 03</span>
-                <span class="method-sand-pill" data-en="Obligation 3" data-zh="评测义务 3">Obligation 3</span>
-              </div>
-              <h3
-                class="method-stage-card__title"
-                data-en="Proxy-Conditioned Rendering Alignment"
-                data-zh="代理条件渲染与回读对齐"
-              >
-                Proxy-Conditioned Rendering Alignment
-              </h3>
-              <code class="method-stage-card__formula">Π(s_t+1, v_t) → ô_t+1 ↔ s_t+1</code>
-              <p
-                class="method-stage-card__desc"
-                data-en="Condition visual/neural renderers on one-way state proxies and calibrate readouts over visible fields without state writeback."
-                data-zh="以单向状态代理驱动视觉/神经渲染器，并在 visible 字段上校准回读，杜绝像素反写污染状态。"
-              >
-                Condition visual/neural renderers on one-way state proxies and calibrate readouts over visible fields
-                without state writeback.
-              </p>
-            </button>
-          </div>
-
-          <div class="method-stage-inspector" id="method-stage-inspector" aria-live="polite"></div>
-        </div>
-      </section>
-
-      <!-- SECTION 4: SCOPE LEDGER & CLOSING CTA -->
-      <section class="lp-section lp-section--closing" id="invariants">
-        <div class="lp-container">
-          <div class="section-head">
-            <div class="method-kicker" data-en="RESEARCH TRANSPARENCY · SCOPE LEDGER" data-zh="研究透明度 · 当前范围台账">
-              RESEARCH TRANSPARENCY · SCOPE LEDGER
-            </div>
-            <h2
-              class="lp-lead"
-              data-en="What Is Live Today vs. In Active Development"
-              data-zh="当前已可验证部分 vs. 积极研发部分"
-            >
-              What Is Live Today vs. In Active Development
-            </h2>
-          </div>
-
-          <div class="ledger">
-            <div class="ledger__head">
-              <span class="ledger__title" data-en="M3 Component Status Ledger" data-zh="M3 组件状态台账"
-                >M3 Component Status Ledger</span
-              >
-              <span
-                class="ledger__hint"
-                data-en="Zero fabricated scores, citations, or release dates"
-                data-zh="严格区分实时参考沙箱与未发布研究组件"
-                >Zero fabricated scores, citations, or release dates</span
-              >
-            </div>
-
-            <div class="ledger-row">
-              <span class="ledger-row__id">M3.1</span>
-              <span class="ledger-row__name" data-en="pwm-state-v1 Reference Interpreter" data-zh="pwm-state-v1 参考解释器"
-                >pwm-state-v1 Reference Interpreter</span
-              >
-              <span
-                class="ledger-row__detail"
-                data-en="Deterministic browser-side tick pipeline (meta-edit → pending → action → rules → once → tick+1) with visible/ui/hidden routing."
-                data-zh="浏览器端确定性单步管线（元编辑 → 挂起事件 → 动作 → 规则 → once → tick+1）与 visible/ui/hidden 可观测路由。"
-                >Deterministic browser-side tick pipeline (meta-edit → pending → action → rules → once → tick+1) with
-                visible/ui/hidden routing.</span
-              >
-              <span class="status-chip status-chip--green" data-en="Live in Sandbox" data-zh="沙箱实时可运行"
-                >Live in Sandbox</span
-              >
-            </div>
-
-            <div class="ledger-row">
-              <span class="ledger-row__id">M3.2</span>
-              <span class="ledger-row__name" data-en="Live Patching &amp; Occlusion Check" data-zh="运行时热更与遮挡校验"
-                >Live Patching &amp; Occlusion Check</span
-              >
-              <span
-                class="ledger-row__detail"
-                data-en="Mid-run set_rule (v1 ↔ v2), revoke/restore, and 180° camera pan off-screen mutation persistence verification."
-                data-zh="运行中规则热更（v1 ↔ v2）、撤销/恢复，以及 180° 移开视角后的离屏状态持久性校验。"
-                >Mid-run set_rule (v1 ↔ v2), revoke/restore, and 180° camera pan off-screen mutation persistence
-                verification.</span
-              >
-              <span class="status-chip status-chip--green" data-en="Live in Sandbox" data-zh="沙箱实时可运行"
-                >Live in Sandbox</span
-              >
-            </div>
-
-            <div class="ledger-row">
-              <span class="ledger-row__id">M3.3</span>
-              <span class="ledger-row__name" data-en="Code-Agent Synthesis &amp; Repair Loop" data-zh="Code-Agent 自动合成与修复闭环"
-                >Code-Agent Synthesis &amp; Repair Loop</span
-              >
-              <span
-                class="ledger-row__detail"
-                data-en="Automated trace-to-program induction, counterexample-guided rule repair, and twin-contrast verification harness."
-                data-zh="从交互轨迹自动归纳可执行世界程序、反例驱动规则修复及孪生对照验证流水线。"
-                >Automated trace-to-program induction, counterexample-guided rule repair, and twin-contrast verification
-                harness.</span
-              >
-              <span class="method-sand-pill" data-en="In Active Development" data-zh="积极研发中"
-                >In Active Development</span
-              >
-            </div>
-
-            <div class="ledger-row">
-              <span class="ledger-row__id">M3.4</span>
-              <span class="ledger-row__name" data-en="Proxy-Conditioned Renderer Alignment" data-zh="代理条件视觉渲染对齐"
-                >Proxy-Conditioned Renderer Alignment</span
-              >
-              <span
-                class="ledger-row__detail"
-                data-en="One-way Π(s_{t+1}, v_t) → R_θ rendering alignment and view-aware readout calibration over frame-bound fields."
-                data-zh="面向帧绑定可见字段的单向 Π(s_{t+1}, v_t) → R_θ 条件渲染对齐与视角感知回读校准。"
-                >One-way Π(s_{t+1}, v_t) → R_θ rendering alignment and view-aware readout calibration over frame-bound
-                fields.</span
-              >
-              <span class="method-sand-pill" data-en="In Active Development" data-zh="积极研发中"
-                >In Active Development</span
-              >
-            </div>
-          </div>
-
-          <div class="closing-card method-closing">
-            <span class="hero-pill__badge" data-en="CONNECTED PORTAL ROUTES" data-zh="关联研究路线">CONNECTED PORTAL ROUTES</span>
-            <h2
-              class="lp-lead"
-              data-en="Ground synthesis in the taxonomy and counterfactual benchmark."
-              data-zh="将方法研发锚定于范式谱系与反事实评测基准。"
-            >
-              Ground synthesis in the taxonomy and counterfactual benchmark.
-            </h2>
-            <p
-              class="lp-sub"
-              data-en="Explore L2 Agent-built world models in the Survey Atlas or inspect counterfactual A/B test tracks in PWM-Arena."
-              data-zh="前往综述图谱查看 L2 范式文献基础，或在 PWM-Arena 中检视成对反事实 A/B 评测赛道。"
-            >
-              Explore L2 Agent-built world models in the Survey Atlas or inspect counterfactual A/B test tracks in
-              PWM-Arena.
-            </p>
-            <div class="lp-hero__actions">
+            <div class="wip-actions">
               <a
                 class="btn btn--primary"
                 href="../survey/?layer=L2#paradigms"
-                data-en="01 · Survey L2 Foundations →"
-                data-zh="01 · 查看综述 L2 范式 →"
-                >01 · Survey L2 Foundations →</a
-              >
-              <a
-                class="btn btn--secondary"
-                href="../arena/"
-                data-en="02 · PWM-Arena Benchmark →"
-                data-zh="02 · PWM-Arena 评测基准 →"
-                >02 · PWM-Arena Benchmark →</a
+                data-en="Explore L2 / L3 Literature in 01 · Survey →"
+                data-zh="前往 01 · 综述查看 L2 / L3 文献 →"
+                >Explore L2 / L3 Literature in 01 · Survey →</a
               >
               <a
                 class="btn btn--secondary"
                 href="../"
-                data-en="← Portal Overview"
-                data-zh="← 返回研究总览"
-                >← Portal Overview</a
+                data-en="← Back to Overview"
+                data-zh="← 返回总览主页"
+                >← Back to Overview</a
               >
             </div>
           </div>
@@ -571,50 +114,29 @@
           </a>
           <p
             class="lp-footer__tagline"
-            data-en="Open research on executable world models, counterfactual benchmarks, and code-agent synthesis."
-            data-zh="聚焦可执行世界模型、反事实评测基准与 Code-Agent 世界构建的开放研究计划。"
+            data-en="Open research on executable world models, benchmarks, and modeling methods."
+            data-zh="围绕可执行世界模型、评测基准与建模方法展开的开放研究计划。"
           >
-            Open research on executable world models, counterfactual benchmarks, and code-agent synthesis.
+            Open research on executable world models, benchmarks, and modeling methods.
           </p>
-          <span class="lp-footer__copy">PROGRAM WORLD MODEL · 03 AGENT METHOD</span>
+          <span class="lp-footer__copy">PROGRAM WORLD MODEL · 2026</span>
         </div>
 
         <div class="lp-footer__cols">
           <div class="lp-footer__col">
-            <strong data-en="Portal Routes" data-zh="站点路线">Portal Routes</strong>
-            <a href="../" data-en="00 · Portal Overview →" data-zh="00 · 研究总览主页 →">00 · Portal Overview →</a>
-            <a href="../survey/?layer=L2#paradigms" data-en="01 · Survey &amp; L2 Atlas →" data-zh="01 · 综述与 L2 图谱 →">01 · Survey &amp; L2 Atlas →</a>
-            <a href="../arena/" data-en="02 · PWM-Arena Benchmark →" data-zh="02 · PWM-Arena 评测基准 →">02 · PWM-Arena Benchmark →</a>
-            <a href="../method/" data-en="03 · Agent Synthesis Method" data-zh="03 · 智能体合成方法">03 · Agent Synthesis Method</a>
+            <strong data-en="Sub-pages" data-zh="研究子页面">Sub-pages</strong>
+            <a href="../" data-en="Overview →" data-zh="总览主页 →">Overview →</a>
+            <a href="../survey/" data-en="01 · Survey &amp; Dot Atlas →" data-zh="01 · 综述与点阵图谱 →">01 · Survey &amp; Dot Atlas →</a>
+            <a href="../arena/" data-en="02 · Benchmark (In Progress) →" data-zh="02 · 评测基准（In Progress） →">02 · Benchmark (In Progress) →</a>
           </div>
-
           <div class="lp-footer__col">
-            <strong data-en="On This Page" data-zh="本页导航">On This Page</strong>
-            <a href="#top" data-en="Overview &amp; Status" data-zh="概述与状态说明">Overview &amp; Status</a>
-            <a href="#sandbox" data-en="world.step() Sandbox" data-zh="world.step() 沙箱">world.step() Sandbox</a>
-            <a href="#loop" data-en="Three-Stage Loop" data-zh="三阶段闭环">Three-Stage Loop</a>
-            <a href="#invariants" data-en="Scope Ledger" data-zh="研究范围台账">Scope Ledger</a>
-          </div>
-
-          <div class="lp-footer__col">
-            <strong data-en="Open Source" data-zh="开源仓库">Open Source</strong>
-            <a
-              href="https://github.com/MichaelCao0/program-world-models.github.io"
-              target="_blank"
-              rel="noreferrer"
-              data-en="Homepage Repo ↗"
-              data-zh="主页源码仓库 ↗"
-              >Homepage Repo ↗</a
+            <strong data-en="Open Source" data-zh="开源链接">Open Source</strong>
+            <a href="https://github.com/FreedomIntelligence/Awesome-Code-World-Model" target="_blank" rel="noopener"
+              >Awesome-Code-World-Model ↗</a
             >
-            <a
-              href="https://github.com/FreedomIntelligence/Awesome-Code-World-Model"
-              target="_blank"
-              rel="noreferrer"
-              data-en="Catalogue Repo ↗"
-              data-zh="文献目录仓库 ↗"
-              >Catalogue Repo ↗</a
+            <a href="https://github.com/MichaelCao0/program-world-models.github.io" target="_blank" rel="noopener"
+              >Portal Source ↗</a
             >
-            <a href="#top" data-en="Back to top ↑" data-zh="回到顶部 ↑">Back to top ↑</a>
           </div>
         </div>
       </div>

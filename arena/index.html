@@ -11,9 +11,9 @@
     />
     <meta
       name="description"
-      content="02 · PWM-Arena — Counterfactual runtime rule-editing benchmark and decoupled P · D · R evaluation architecture for Program World Models."
+      content="02 · Evaluation Benchmark (In Progress) — Program World Model open research program."
     />
-    <title>02 · PWM-Arena · Counterfactual Benchmark &amp; P · D · R</title>
+    <title>02 · Evaluation Benchmark (In Progress) · Program World Model</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -30,454 +30,68 @@
     <div id="pwm-shell-header"></div>
 
     <main id="main" tabindex="-1">
-      <!-- HERO -->
-      <section class="arena-hero" id="top">
-        <div class="arena-container">
-          <div class="arena-hero__inner">
+      <section class="wip-stage" id="top">
+        <div class="lp-container">
+          <div class="wip-card">
             <div class="hero-pill">
-              <span
-                class="hero-pill__badge"
-                data-en="02 · BENCHMARK"
-                data-zh="02 · 评测基准"
-                >02 · BENCHMARK</span
-              >
-              <span
-                data-en="Development Preview · Schema v1 · No Ranking"
-                data-zh="开发预览 · 状态契约 v1 · 不设排名"
-                >Development Preview · Schema v1 · No Ranking</span
-              >
+              <span class="hero-pill__badge" data-en="02 · BENCHMARK" data-zh="02 · 评测基准">02 · BENCHMARK</span>
+              <span data-en="In Progress" data-zh="In Progress · 推进中">In Progress</span>
             </div>
 
             <h1
-              class="arena-hero__title"
-              data-en="PWM-Arena: Counterfactual Rule-Editing &amp; Decoupled P · D · R"
-              data-zh="PWM-Arena：反事实规则编辑与解耦 P · D · R 评测基准"
+              class="wip-title"
+              data-en="02 · Evaluation Benchmark"
+              data-zh="02 · 程序世界模型评测基准"
             >
-              PWM-Arena: Counterfactual Rule-Editing &amp; Decoupled P · D · R
+              02 · Evaluation Benchmark
             </h1>
 
             <p
-              class="arena-hero__sub"
-              data-en="Testing whether world models genuinely obey runtime rule edits across paired Branch A (Edited) vs Branch B (Control) trajectories, separating symbolic state dynamics (P+D), conditioned rendering &amp; readout (R), and closed-loop pixel models (E) over the unified pwm-state-v1 contract."
-              data-zh="通过成对的「分支 A（规则编辑）」与「分支 B（对照）」轨迹，检验世界模型是否真正服从运行时规则修改；并基于统一的 pwm-state-v1 契约，将符号状态动力学（P+D）、条件渲染与读出（R）及端到端像素闭环（E）解耦评测。"
+              class="wip-sub"
+              data-en="This workstream is currently in progress. Benchmark tasks, evaluation protocols, and open-source code will be published here upon release."
+              data-zh="该项研究工作当前正在推进中（In Progress）。评测任务集、评测协议与相关代码将于完成后在此公开。"
             >
-              Testing whether world models genuinely obey runtime rule edits across paired Branch A (Edited) vs Branch B (Control) trajectories, separating symbolic state dynamics (P+D), conditioned rendering &amp; readout (R), and closed-loop pixel models (E) over the unified pwm-state-v1 contract.
+              This workstream is currently in progress. Benchmark tasks, evaluation protocols, and open-source code
+              will be published here upon release.
             </p>
 
-            <div class="arena-hero__actions">
-              <a
-                class="btn btn--primary"
-                href="#workbench"
-                data-en="Launch Counterfactual Workbench ↓"
-                data-zh="进入反事实评测工作台 ↓"
-                >Launch Counterfactual Workbench ↓</a
-              >
-              <a
-                class="btn btn--secondary"
-                href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-en="Minecraft Base Set S01–S24 (jz-jimmy) ↗"
-                data-zh="Minecraft 基础集 S01–S24 原页 ↗"
-                >Minecraft Base Set S01–S24 (jz-jimmy) ↗</a
-              >
-              <a
-                class="btn btn--secondary"
-                href="../survey/?sec=benchmark#library"
-                data-en="Benchmark Papers in Survey →"
-                data-zh="查看综述基准文献库 →"
-                >Benchmark Papers in Survey →</a
-              >
-            </div>
-
-            <!-- Grounded Audit Honesty Callout -->
-            <div class="arena-audit-notice" role="note">
-              <div class="arena-audit-notice__head">
-                <span
-                  class="mono-tag arena-sand-tag"
-                  data-en="AUDIT BASELINE · 2026-11-16"
-                  data-zh="基准审计现状 · 2026-11-16"
-                  >AUDIT BASELINE · 2026-11-16</span
+            <div class="wip-notice" role="status" aria-live="polite">
+              <div class="wip-notice__head">
+                <span class="wip-sand-pill" data-en="STATUS · IN PROGRESS" data-zh="当前状态 · IN PROGRESS"
+                  >STATUS · IN PROGRESS</span
                 >
                 <span
-                  class="arena-audit-notice__status"
-                  data-en="stage: development-preview · is_benchmark_release: false"
-                  data-zh="阶段：development-preview · 非正式榜单发布"
-                  >stage: development-preview · is_benchmark_release: false</span
+                  class="wip-notice__meta"
+                  data-en="Public release pending"
+                  data-zh="待正式发布后公开细节"
+                  >Public release pending</span
                 >
               </div>
               <p
-                class="arena-audit-notice__body"
-                data-en="Base set S01–S24 comprises 24 single-instance tasks (20 paired + 4 single-branch; 73 checkpoints; 132 checkpoint×branch units; 923 oracle fields). Because 77.2% of fields never change, 16/24 tasks involve unbound or occluded state, and R-track readout currently has 0/110 certified annotator×class rows (median κ = 0.0; 352-query human packet pending), no comparative model ranking is published until scale (≥400 instances) and readout certification (≥59 clusters/class) are complete."
-                data-zh="当前基础集 S01–S24 包含 24 个单实例任务（20 配对 + 4 单分支，73 个检查点、132 个检查点×分支单元、923 个字段）。鉴于 77.2% 字段全程不变、16/24 任务含未绑定或遮挡状态，且 R 轨读出层仅 0/110 认证通过（中位 κ = 0.0，352 条人类盲标待完成），在完成样本扩容（≥400 实例）与读出认证（每类 ≥59 簇）前，本页不给出任何模型排名。"
+                class="wip-notice__body"
+                data-en="Currently on hold for internal iteration — no specific task designs, datasets, or evaluation results are disclosed at this stage. In the meantime, you can browse existing benchmarks across the field in our Survey &amp; Catalogue."
+                data-zh="当前处于内部打磨与推进阶段，暂不披露具体任务设计、数据集细节或评测结果。在此期间，欢迎前往「01 · 综述与图谱」浏览领域现有的评测基准文献。"
               >
-                Base set S01–S24 comprises 24 single-instance tasks (20 paired + 4 single-branch; 73 checkpoints; 132 checkpoint×branch units; 923 oracle fields). Because 77.2% of fields never change, 16/24 tasks involve unbound or occluded state, and R-track readout currently has 0/110 certified annotator×class rows (median κ = 0.0; 352-query human packet pending), no comparative model ranking is published until scale (≥400 instances) and readout certification (≥59 clusters/class) are complete.
-              </p>
-              <div class="arena-stat-strip">
-                <div class="arena-stat-pill">
-                  <strong>24 / 73 / 923</strong>
-                  <span data-en="Tasks / Checkpoints / Fields" data-zh="任务 / 检查点 / 字段">Tasks / Checkpoints / Fields</span>
-                </div>
-                <div class="arena-stat-pill">
-                  <strong>77.2%</strong>
-                  <span data-en="Unchanged baseline fields (713/923)" data-zh="全程不变字段占比 (713/923)">Unchanged baseline fields (713/923)</span>
-                </div>
-                <div class="arena-stat-pill">
-                  <strong>20 / 20 vs 0</strong>
-                  <span data-en="Strict Pair: Oracle vs 4 trivial baselines" data-zh="Strict Pair：Oracle vs 4 个平庸基线">Strict Pair: Oracle vs 4 trivial baselines</span>
-                </div>
-                <div class="arena-stat-pill">
-                  <strong>0 / 110</strong>
-                  <span data-en="Certified annotator×class rows" data-zh="已认证标注器×类别组合">Certified annotator×class rows</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- IN-PAGE ANCHOR BAR -->
-      <nav class="arena-anchor-strip" aria-label="Arena sections">
-        <div class="arena-container arena-anchor-strip__inner">
-          <div class="arena-anchor-links">
-            <a href="#workbench" data-en="01 · Counterfactual A/B Workbench" data-zh="01 · 反事实 A/B 工作台">01 · Counterfactual A/B Workbench</a>
-            <a href="#pdr" data-en="02 · P · D · R Architecture" data-zh="02 · P · D · R 三轨架构">02 · P · D · R Architecture</a>
-            <a href="#contract" data-en="03 · pwm-state-v1 Contract" data-zh="03 · pwm-state-v1 契约">03 · pwm-state-v1 Contract</a>
-            <a href="#tracks" data-en="04 · PD · R · E Track Specs" data-zh="04 · PD · R · E 轨道细则">04 · PD · R · E Track Specs</a>
-          </div>
-          <div class="arena-anchor-meta">
-            <span class="mono-muted">schema: pwm-state-v1</span>
-          </div>
-        </div>
-      </nav>
-
-      <!-- SECTION 1: INTERACTIVE COUNTERFACTUAL A/B WORKBENCH -->
-      <section class="arena-section" id="workbench">
-        <div class="arena-container">
-          <div class="section-head">
-            <div class="arena-kicker-row">
-              <span class="stage-badge stage-badge--pro" data-en="LIVE DETERMINISTIC ENGINE" data-zh="确定性规则引擎实跑">LIVE DETERMINISTIC ENGINE</span>
-              <span class="mono-muted" data-en="4 Rule-Edit Archetypes · Strict Pair (A ∧ B)" data-zh="4 类规则编辑原型 · Strict Pair (A ∧ B)">4 Rule-Edit Archetypes · Strict Pair (A ∧ B)</span>
-            </div>
-            <h2
-              class="lp-lead"
-              data-en="Counterfactual A/B Runtime Rule-Editing Workbench"
-              data-zh="反事实 A/B 运行时规则编辑评测工作台"
-            >
-              Counterfactual A/B Runtime Rule-Editing Workbench
-            </h2>
-            <p
-              class="lp-sub"
-              data-en="Every candidate is evaluated by a live deterministic pwm-state-v1 interpreter across paired Branch A (Edited) and Branch B (Control) runs. Switch archetypes, scrub ticks, test trivial baselines or domain failure traps, and inspect how obs visibility tags route fields between P+D and R denominators."
-              data-zh="工作台内置确定性 pwm-state-v1 规则解释器，实时运行成对的分支 A（编辑）与分支 B（对照）。可切换 4 类原型、拖动时间刻、对比平庸基线与领域陷阱，并按 obs 可见性标签过滤 P+D 与 R 轨计分分母。"
-            >
-              Every candidate is evaluated by a live deterministic pwm-state-v1 interpreter across paired Branch A (Edited) and Branch B (Control) runs. Switch archetypes, scrub ticks, test trivial baselines or domain failure traps, and inspect how obs visibility tags route fields between P+D and R denominators.
-            </p>
-          </div>
-
-          <!-- Dynamic Workbench Mount (never add data-en/data-zh on this container) -->
-          <div id="arenaWorkbenchRoot"></div>
-        </div>
-      </section>
-
-      <!-- SECTION 2: P · D · R ARCHITECTURE -->
-      <section class="arena-section arena-section--tint" id="pdr">
-        <div class="arena-container">
-          <div class="section-head">
-            <div class="arena-kicker-row">
-              <span class="stage-badge stage-badge--neutral" data-en="ATTRIBUTION ARCHITECTURE" data-zh="误差归因架构">ATTRIBUTION ARCHITECTURE</span>
-              <span class="mono-muted" data-en="P · Programmability · D · Dynamics · R · Rendering · E · End-to-End" data-zh="P · 可编程控制 · D · 动力学 · R · 渲染读出 · E · 像素闭环">P · Programmability · D · Dynamics · R · Rendering · E · End-to-End</span>
-            </div>
-            <h2
-              class="lp-lead"
-              data-en="P · D · R Three-Track Decoupled Evaluation"
-              data-zh="P · D · R 三轨解耦评测架构"
-            >
-              P · D · R Three-Track Decoupled Evaluation
-            </h2>
-            <p
-              class="lp-sub"
-              data-en="Hybrid world models separate a symbolic rule/state engine from a neural renderer, while code world models output state without pixels and pixel simulators output video without explicit state. Decoupling around pwm-state-v1 attributes semantic failures (P+D), materialization failures (R), and closed-loop drift (E / P→D→R)."
-              data-zh="混合世界模型本身分离状态引擎与神经渲染器；代码世界模型输出无像素的符号状态，像素生成器输出无符号状态的视频。围绕 pwm-state-v1 解耦评测，可将错误清晰归因为语义错误（P+D）、物化渲染错误（R）或闭环/接口残差（E 与 P→D→R）。"
-            >
-              Hybrid world models separate a symbolic rule/state engine from a neural renderer, while code world models output state without pixels and pixel simulators output video without explicit state. Decoupling around pwm-state-v1 attributes semantic failures (P+D), materialization failures (R), and closed-loop drift (E / P→D→R).
-            </p>
-          </div>
-
-          <div class="arena-pdr-cards">
-            <article class="pdr-card pdr-card--focus">
-              <div class="pdr-card__top">
-                <span class="pdr-letter">P</span>
-                <span class="status-chip status-chip--muted" data-en="P1–P4 · PD Track" data-zh="P1–P4 · PD 轨道">P1–P4 · PD Track</span>
-              </div>
-              <h3 data-en="Programmability &amp; Control (Intent &amp; Rule Grounding)" data-zh="可编程性与控制（意图与规则接地）">Programmability &amp; Control (Intent &amp; Rule Grounding)</h3>
-              <p
-                data-en="Grounds natural-language or visual intervention intent into typed pwm-state-v1 rule edits (set_rule, add_rule, revoke, schedule, cancel) across single-turn (P-intent) and multi-turn (P-session) rule lifecycles."
-                data-zh="将自然语言或视觉编辑意图接地为 pwm-state-v1 类型化规则操作（set_rule、add_rule、revoke、schedule、cancel），覆盖单轮（P-intent）与多轮生命周期（P-session）。"
-              >
-                Grounds natural-language or visual intervention intent into typed pwm-state-v1 rule edits (set_rule, add_rule, revoke, schedule, cancel) across single-turn (P-intent) and multi-turn (P-session) rule lifecycles.
-              </p>
-              <code class="pdr-sig">(intent_t, s_t, R_t) → edit_t ∈ {set_rule, add_rule, revoke, schedule, cancel}</code>
-            </article>
-
-            <article class="pdr-card pdr-card--focus">
-              <div class="pdr-card__top">
-                <span class="pdr-letter">D</span>
-                <span class="status-chip status-chip--muted" data-en="D1–D4 · PD Track" data-zh="D1–D4 · PD 轨道">D1–D4 · PD 轨道</span>
-              </div>
-              <h3 data-en="World Dynamics &amp; Counterfactual Rollout" data-zh="世界动力学与反事实推演">World Dynamics &amp; Counterfactual Rollout</h3>
-              <p
-                data-en="Executes deterministic or induced transition programs (D-direct, D-program, D-induce, D-img, P∘D) obeying the 6-step tick order, priority tie-breaking, and counterfactual parameter twins."
-                data-zh="按 6 步时间步序、优先级裁决与反事实参数孪生体执行或归纳状态转移程序（D-direct、D-program、D-induce、D-img、P∘D），输出可执行状态轨迹。"
-              >
-                Executes deterministic or induced transition programs (D-direct, D-program, D-induce, D-img, P∘D) obeying the 6-step tick order, priority tie-breaking, and counterfactual parameter twins.
-              </p>
-              <code class="pdr-sig">W.step(s_t, a_t, edit_t) → s_{t+1} (pwm-state-v1)</code>
-            </article>
-
-            <article class="pdr-card">
-              <div class="pdr-card__top">
-                <span class="pdr-letter">R</span>
-                <span class="status-chip status-chip--muted" data-en="L0–L4 · R1–R4 · R Track" data-zh="L0–L4 · R1–R4 · R 轨道">L0–L4 · R1–R4 · R Track</span>
-              </div>
-              <h3 data-en="State-Conditioned Rendering &amp; Readout" data-zh="状态条件渲染与对称读出校准">State-Conditioned Rendering &amp; Readout</h3>
-              <p
-                data-en="Materializes state trajectories under strict conditioning levels (L1–L4; L0 banned from scoring) and maps pixels back to pwm-state-v1 through a symmetric, certified dual-annotator gate."
-                data-zh="在严格分级的条件接口（L1–L4；L0 禁止计分）下将状态物化为视频帧，并通过对称、经认证的双标注器门控将视觉证据回读为 pwm-state-v1。"
-              >
-                Materializes state trajectories under strict conditioning levels (L1–L4; L0 banned from scoring) and maps pixels back to pwm-state-v1 through a symmetric, certified dual-annotator gate.
-              </p>
-              <code class="pdr-sig">render(s_{t+1} | cond_L) → ô_{t+1} ↔ readout(ô_{t+1})</code>
-            </article>
-
-            <article class="pdr-card">
-              <div class="pdr-card__top">
-                <span class="pdr-letter">E</span>
-                <span class="status-chip status-chip--muted" data-en="E-action/text/composed/memory" data-zh="E-action/text/composed/memory">E-action/text/composed/memory</span>
-              </div>
-              <h3 data-en="End-to-End Pixel Loop &amp; P → D → R Integration" data-zh="端到端像素闭环与 P → D → R 集成校验">End-to-End Pixel Loop &amp; P → D → R Integration</h3>
-              <p
-                data-en="Evaluates pure pixel simulators via the exact same R-track readout (with Expressivity Coverage, Delayed-Trigger, and Anti-Collapse rules), plus an unranked P→D→R check for interface mismatches."
-                data-zh="使用同一套 R 轨读出器评测纯像素闭环模型（结合表达力覆盖率、延迟触发与防塌缩检验），并设非排名 P→D→R 集成子集排查模块接口失配。"
-              >
-                Evaluates pure pixel simulators via the exact same R-track readout (with Expressivity Coverage, Delayed-Trigger, and Anti-Collapse rules), plus an unranked P→D→R check for interface mismatches.
-              </p>
-              <code class="pdr-sig">E(o_0, intent_t, a_t) → ô_{t+1} | P → D_pred → R</code>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 3: pwm-state-v1 CONTRACT -->
-      <section class="arena-section" id="contract">
-        <div class="arena-container">
-          <div class="section-head">
-            <div class="arena-kicker-row">
-              <span class="stage-badge stage-badge--neutral" data-en="UNIFIED CONTRACT" data-zh="统一状态契约">UNIFIED CONTRACT</span>
-              <span class="mono-muted">pwm-state-v1 · 6-step tick · obs routing</span>
-            </div>
-            <h2
-              class="lp-lead"
-              data-en="State Contract, 6-Step Tick Order &amp; Field Denominator Routing"
-              data-zh="pwm-state-v1 状态契约、6 步时间步序与字段分母路由"
-            >
-              State Contract, 6-Step Tick Order &amp; Field Denominator Routing
-            </h2>
-            <p
-              class="lp-sub"
-              data-en="Excluding meta-headers (tick, schema_version, random_stream) and routing hidden/unbound fields out of R prevents unobservable states from inflating or distorting visual failure counts."
-              data-zh="剔除元数据头（tick、schema_version、random_stream），并按 obs 与 frame_bound 将不可见或未绑定字段路由出 R 轨，避免不可观测状态误判为“不可读”。"
-            >
-              Excluding meta-headers (tick, schema_version, random_stream) and routing hidden/unbound fields out of R prevents unobservable states from inflating or distorting visual failure counts.
-            </p>
-          </div>
-
-          <div class="arena-contract-grid">
-            <div class="arena-box">
-              <div class="app-pane-head">
-                <span class="app-pane-title" data-en="Mandatory 6-Step Tick Execution Order" data-zh="强制 6 步确定性时间步序">Mandatory 6-Step Tick Execution Order</span>
-                <span class="mono-tag">step(s_t, op_t)</span>
-              </div>
-              <ol class="arena-tick-list">
-                <li>
-                  <span class="arena-step-num">01</span>
-                  <div>
-                    <strong data-en="Apply Meta-Edits" data-zh="应用元编辑操作">Apply Meta-Edits</strong>
-                    <p data-en="Execute set_rule, add_rule, revoke(rule_id, cancel_pending), set_param, schedule(id, at, do), and cancel(id | rule_id)." data-zh="执行 set_rule、add_rule、revoke(rule_id, cancel_pending)、set_param、schedule(id, at, do) 与 cancel(id | rule_id)。">Execute set_rule, add_rule, revoke(rule_id, cancel_pending), set_param, schedule(id, at, do), and cancel(id | rule_id).</p>
-                  </div>
-                </li>
-                <li>
-                  <span class="arena-step-num">02</span>
-                  <div>
-                    <strong data-en="Fire Due Pending Events" data-zh="触发到期挂起事件">Fire Due Pending Events</strong>
-                    <p data-en="Drain pending[] entries where e.at === tick in ascending event id order before agent actions run." data-zh="在智能体动作前，按事件 id 升序触发 pending[] 中所有 e.at === tick 的挂起事件。">Drain pending[] entries where e.at === tick in ascending event id order before agent actions run.</p>
-                  </div>
-                </li>
-                <li>
-                  <span class="arena-step-num">03</span>
-                  <div>
-                    <strong data-en="Apply Agent Actions" data-zh="应用智能体动作">Apply Agent Actions</strong>
-                    <p data-en="Apply closed typed actions (activate, use, attack, place, insert_item, enter_zone, pan) and record entity state deltas." data-zh="应用闭集类型化动作（activate、use、attack、place、insert_item、enter_zone、pan）并更新实体输入态。">Apply closed typed actions (activate, use, attack, place, insert_item, enter_zone, pan) and record entity state deltas.</p>
-                  </div>
-                </li>
-                <li>
-                  <span class="arena-step-num">04</span>
-                  <div>
-                    <strong data-en="Resolve Triggered Active Rules" data-zh="裁决并执行触发规则">Resolve Triggered Active Rules</strong>
-                    <p data-en="Evaluate rules with status === 'active' inside [active_from, expires_at] in descending priority, tie-breaking by higher version, then insertion order." data-zh="对时间窗 [active_from, expires_at] 内的 active 规则按 priority 降序求值，同优先级按 version 降序、再按插入序裁决。">Evaluate rules with status === 'active' inside [active_from, expires_at] in descending priority, tie-breaking by higher version, then insertion order.</p>
-                  </div>
-                </li>
-                <li>
-                  <span class="arena-step-num">05</span>
-                  <div>
-                    <strong data-en="Consume One-Shot Rules" data-zh="消耗一次性规则">Consume One-Shot Rules</strong>
-                    <p data-en="Transition any fired rule with once: true to status = 'consumed' so subsequent triggers are deterministic no-ops." data-zh="将本步触发且 once: true 的规则置为 status = 'consumed'，确保后续重入不再误触发。">Transition any fired rule with once: true to status = 'consumed' so subsequent triggers are deterministic no-ops.</p>
-                  </div>
-                </li>
-                <li>
-                  <span class="arena-step-num">06</span>
-                  <div>
-                    <strong data-en="Advance Logical Tick &amp; Log" data-zh="推进逻辑刻与审计日志">Advance Logical Tick &amp; Log</strong>
-                    <p data-en="Append causal trace entry to log[] and advance tick (meta-header excluded from accuracy denominator)." data-zh="写入因果轨迹 log[] 并推进 tick（tick 等元数据头不计入字段准确率分母）。">Append causal trace entry to log[] and advance tick (meta-header excluded from accuracy denominator).</p>
-                  </div>
-                </li>
-              </ol>
-            </div>
-
-            <div class="arena-box">
-              <div class="app-pane-head">
-                <span class="app-pane-title" data-en="Field-Level Denominator Routing (obs + frame_bound)" data-zh="字段级计分分母路由（obs + frame_bound）">Field-Level Denominator Routing (obs + frame_bound)</span>
-                <span class="mono-tag">PD vs R</span>
-              </div>
-              <div class="arena-table-wrap">
-                <table class="arena-table">
-                  <thead>
-                    <tr>
-                      <th data-en="Field Class" data-zh="字段类别">Field Class</th>
-                      <th data-en="Examples" data-zh="典型字段">Examples</th>
-                      <th data-en="PD Track" data-zh="PD 轨道">PD Track</th>
-                      <th data-en="R Track" data-zh="R 轨道">R Track</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><span class="obs-pill obs-pill--visible">visible</span> <code class="mono-tag">frame_bound: true</code></td>
-                      <td data-en="S12 door_A.open, S10 sand, S14 material, S22 wool" data-zh="S12 门开关、S10 落沙、S14 方块材质、S22 羊毛颜色">S12 door_A.open, S10 sand, S14 material, S22 wool</td>
-                      <td><span class="status-chip status-chip--green" data-en="Scored" data-zh="计分">Scored</span></td>
-                      <td><span class="status-chip status-chip--green" data-en="Scored (Edit Recall + Pres.)" data-zh="计分（召回 + 保持）">Scored (Edit Recall + Pres.)</span></td>
-                    </tr>
-                    <tr>
-                      <td><span class="obs-pill obs-pill--ui">ui</span> <code class="mono-tag">HUD only</code></td>
-                      <td data-en="S08 scoreboard sidebar counter" data-zh="S08 计分板侧栏数值">S08 scoreboard sidebar counter</td>
-                      <td><span class="status-chip status-chip--green" data-en="Scored" data-zh="计分">Scored</span></td>
-                      <td><span class="status-chip status-chip--blue" data-en="Separate UI-Render Sub-score" data-zh="单列 UI 渲染子项">Separate UI-Render Sub-score</span></td>
-                    </tr>
-                    <tr>
-                      <td><span class="obs-pill obs-pill--hidden">hidden</span> <code class="mono-tag">frame_bound: false</code></td>
-                      <td data-en="S04/S05 chest items, S11 health, S17 pending[], S18 rules[].version" data-zh="S04/S05 容器库存、S11 生命值、S17 pending[]、S18 规则版本">S04/S05 chest items, S11 health, S17 pending[], S18 rules[].version</td>
-                      <td><span class="status-chip status-chip--green" data-en="Scored" data-zh="计分">Scored</span></td>
-                      <td><span class="status-chip status-chip--muted" data-en="Excluded (never 'unreadable')" data-zh="不计入分母（非不可读）">Excluded (never 'unreadable')</span></td>
-                    </tr>
-                    <tr>
-                      <td><span class="obs-pill obs-pill--unbound">phase-unbound</span> <code class="mono-tag">tick↔frame</code></td>
-                      <td data-en="S16, S18 boundary frames before alignment; S24 occluded frame" data-zh="对齐前 S16/S18 边界帧；S24 转开遮挡帧">S16, S18 boundary frames before alignment; S24 occluded frame</td>
-                      <td><span class="status-chip status-chip--green" data-en="Scored" data-zh="计分">Scored</span></td>
-                      <td><span class="status-chip status-chip--muted" data-en="Withheld / Excluded" data-zh="对齐前暂不计分">Withheld / Excluded</span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="arena-metrics-glossary">
-                <div class="arena-metric-item">
-                  <strong>Edit Recall &amp; Preservation</strong>
-                  <span data-en="Separates changed target fields from the 77.2% unchanged bystander fields; combined via Edit F." data-zh="将变化的目标字段与 77.2% 不变旁观字段拆开报告，并以 Edit F 汇总。">Separates changed target fields from the 77.2% unchanged bystander fields; combined via Edit F.</span>
-                </div>
-                <div class="arena-metric-item">
-                  <strong>Strict Pair (A ∧ B) &amp; TwinContrast</strong>
-                  <span data-en="Requires A ≠ B on discriminating checkpoints AND exact match on both branches (drives B-init/frozen/ignore/replay to 0.0)." data-zh="要求判别检查点上 A ≠ B 且双分支均正确（将 B-init/frozen/ignore/replay 全部压至 0.0）。">Requires A ≠ B on discriminating checkpoints AND exact match on both branches (drives B-init/frozen/ignore/replay to 0.0).</span>
-                </div>
-                <div class="arena-metric-item">
-                  <strong>Prior Dependence Δ</strong>
-                  <span data-en="Vanilla parameter score minus counterfactual twin parameter score (e.g. smelt 137 ticks vs vanilla 200)." data-zh="原版参数得分减去反事实参数孪生体得分（如将烧炼从 200 刻改为 137 刻）。">Vanilla parameter score minus counterfactual twin parameter score (e.g. smelt 137 ticks vs vanilla 200).</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 4: P · D · R · E TRACK SPECIFICATIONS -->
-      <section class="arena-section arena-section--tint" id="tracks">
-        <div class="arena-container">
-          <div class="section-head">
-            <div class="arena-kicker-row">
-              <span class="stage-badge stage-badge--pro" data-en="SPECIFICATION EXPLORER" data-zh="三轨评测规范">SPECIFICATION EXPLORER</span>
-              <span class="mono-muted" data-en="PD Modes · R Conditioning L0–L4 · E Loop" data-zh="PD 七种模式 · R 条件层级 L0–L4 · E 闭环">PD Modes · R Conditioning L0–L4 · E Loop</span>
-            </div>
-            <h2
-              class="lp-lead"
-              data-en="Track Specifications: PD Track, R Track &amp; E Track"
-              data-zh="轨道细则：PD 轨、R 轨与 E 闭环轨"
-            >
-              Track Specifications: PD Track, R Track &amp; E Track
-            </h2>
-            <p
-              class="lp-sub"
-              data-en="Inspect the 7 PD execution modes and 8 template families, the L0–L4 R-track conditioning hierarchy and symmetric readout certification rules, and the 4 E-track end-to-end sub-tracks."
-              data-zh="切换查看 PD 轨 7 种执行模式与 8 大模板族、R 轨 L0–L4 状态条件层级与对称读出认证标准，以及 E 轨 4 个端到端像素子轨道与 P→D→R 集成检验。"
-            >
-              Inspect the 7 PD execution modes and 8 template families, the L0–L4 R-track conditioning hierarchy and symmetric readout certification rules, and the 4 E-track end-to-end sub-tracks.
-            </p>
-          </div>
-
-          <!-- Dynamic Track Tabs Mount (never add data-en/data-zh on this container) -->
-          <div id="arenaTracksRoot"></div>
-        </div>
-      </section>
-
-      <!-- CLOSING CROSS-NAVIGATION -->
-      <section class="arena-section">
-        <div class="arena-container">
-          <div class="arena-closing-band">
-            <div>
-              <span class="mono-tag arena-sand-tag" data-en="CONNECTED WORKSTREAMS" data-zh="关联研究工作线">CONNECTED WORKSTREAMS</span>
-              <h3
-                class="arena-closing-band__title"
-                data-en="Continue across the Program World Model Portal"
-                data-zh="继续探索 Program World Model 关联子站"
-              >
-                Continue across the Program World Model Portal
-              </h3>
-              <p
-                class="arena-closing-band__sub"
-                data-en="Compare benchmark literature in 01 · Survey &amp; Dot Atlas or inspect our executable world-synthesis sandbox in 03 · Agent Method."
-                data-zh="前往「01 · 综述与点阵图谱」检索基准相关文献，或进入「03 · 智能体方法」体验可执行世界程序合成沙箱。"
-              >
-                Compare benchmark literature in 01 · Survey &amp; Dot Atlas or inspect our executable world-synthesis sandbox in 03 · Agent Method.
+                Currently on hold for internal iteration — no specific task designs, datasets, or evaluation results
+                are disclosed at this stage. In the meantime, you can browse existing benchmarks across the field in
+                our Survey &amp; Catalogue.
               </p>
             </div>
-            <div class="arena-closing-band__actions">
+
+            <div class="wip-actions">
               <a
                 class="btn btn--primary"
-                href="../method/"
-                data-en="Open 03 · Agent Method →"
-                data-zh="进入 03 · 智能体方法 →"
-                >Open 03 · Agent Method →</a
-              >
-              <a
-                class="btn btn--secondary"
                 href="../survey/?sec=benchmark#library"
-                data-en="01 · Benchmark Survey →"
-                data-zh="01 · 基准综述文献 →"
-                >01 · Benchmark Survey →</a
+                data-en="Browse Field Benchmarks in 01 · Survey →"
+                data-zh="前往 01 · 综述查看领域评测文献 →"
+                >Browse Field Benchmarks in 01 · Survey →</a
               >
               <a
                 class="btn btn--secondary"
                 href="../"
-                data-en="← Overview"
-                data-zh="← 返回总览"
-                >← Overview</a
+                data-en="← Back to Overview"
+                data-zh="← 返回总览主页"
+                >← Back to Overview</a
               >
             </div>
           </div>
@@ -490,7 +104,7 @@
     <footer class="lp-footer">
       <div class="lp-footer__inner">
         <div class="lp-footer__brand">
-          <a class="brand" href="#top">
+          <a class="brand" href="../">
             <svg class="brand__mark" width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <rect x="7" y="1" width="5" height="5" rx="1" fill="currentColor" />
               <rect x="12" y="6" width="5" height="5" rx="1" fill="currentColor" />
@@ -501,12 +115,12 @@
           </a>
           <p
             class="lp-footer__tagline"
-            data-en="Open research on executable world models, counterfactual benchmarks, and code-agent synthesis."
-            data-zh="聚焦可执行世界模型、反事实评测基准与 Code-Agent 世界构建的开放研究计划。"
+            data-en="Open research on executable world models, benchmarks, and modeling methods."
+            data-zh="围绕可执行世界模型、评测基准与建模方法展开的开放研究计划。"
           >
-            Open research on executable world models, counterfactual benchmarks, and code-agent synthesis.
+            Open research on executable world models, benchmarks, and modeling methods.
           </p>
-          <span class="lp-footer__copy">PROGRAM WORLD MODEL · PWM-ARENA · 2026</span>
+          <span class="lp-footer__copy">PROGRAM WORLD MODEL · 2026</span>
         </div>
 
         <div class="lp-footer__cols">
@@ -514,49 +128,15 @@
             <strong data-en="Sub-pages" data-zh="研究子页面">Sub-pages</strong>
             <a href="../" data-en="Overview →" data-zh="总览主页 →">Overview →</a>
             <a href="../survey/" data-en="01 · Survey &amp; Dot Atlas →" data-zh="01 · 综述与点阵图谱 →">01 · Survey &amp; Dot Atlas →</a>
-            <a href="#top" data-en="02 · PWM-Arena Benchmark" data-zh="02 · PWM-Arena 评测基准">02 · PWM-Arena Benchmark</a>
-            <a href="../method/" data-en="03 · Agent Synthesis Method →" data-zh="03 · 智能体合成方法 →">03 · Agent Synthesis Method →</a>
+            <a href="../method/" data-en="03 · Method (In Progress) →" data-zh="03 · 建模方法（In Progress） →">03 · Method (In Progress) →</a>
           </div>
-
           <div class="lp-footer__col">
-            <strong data-en="Arena Sections" data-zh="本页导航">Arena Sections</strong>
-            <a href="#workbench" data-en="Counterfactual Workbench" data-zh="反事实工作台">Counterfactual Workbench</a>
-            <a href="#pdr" data-en="P · D · R Architecture" data-zh="P · D · R 三轨架构">P · D · R Architecture</a>
-            <a href="#contract" data-en="pwm-state-v1 Contract" data-zh="pwm-state-v1 契约">pwm-state-v1 Contract</a>
-            <a href="#tracks" data-en="PD · R · E Track Specs" data-zh="PD · R · E 轨道细则">PD · R · E Track Specs</a>
-          </div>
-
-          <div class="lp-footer__col">
-            <strong data-en="References" data-zh="参考与仓库">References</strong>
-            <a
-              href="https://jz-jimmy.github.io/blog/pwm-arena/#minecraft"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-en="Minecraft Base Set ↗"
-              data-zh="Minecraft 基础集原页 ↗"
-              >Minecraft Base Set ↗</a
+            <strong data-en="Open Source" data-zh="开源链接">Open Source</strong>
+            <a href="https://github.com/FreedomIntelligence/Awesome-Code-World-Model" target="_blank" rel="noopener"
+              >Awesome-Code-World-Model ↗</a
             >
-            <a
-              href="../survey/?sec=benchmark#library"
-              data-en="Benchmark Papers →"
-              data-zh="综述基准文献 →"
-              >Benchmark Papers →</a
-            >
-            <a
-              href="https://github.com/MichaelCao0/program-world-models.github.io"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-en="Homepage Repo ↗"
-              data-zh="主页源码仓库 ↗"
-              >Homepage Repo ↗</a
-            >
-            <a
-              href="https://github.com/FreedomIntelligence/Awesome-Code-World-Model"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-en="Catalogue Repo ↗"
-              data-zh="文献目录仓库 ↗"
-              >Catalogue Repo ↗</a
+            <a href="https://github.com/MichaelCao0/program-world-models.github.io" target="_blank" rel="noopener"
+              >Portal Source ↗</a
             >
           </div>
         </div>

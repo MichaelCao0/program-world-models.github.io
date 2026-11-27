@@ -72,21 +72,22 @@
     {
       id: 'arena',
       num: '02',
-      badge: 'P·D·R',
+      badge: 'WIP',
       href: `${basePrefix}/arena/`,
-      en: 'PWM-Arena',
+      en: 'Benchmark',
       zh: '评测基准',
-      desc_en: 'Counterfactual A/B runtime rule-editing scenarios and decoupled P/D/R tracks.',
-      desc_zh: '成对反事实 A/B 运行时规则编辑场景与解耦的 P/D/R 评测赛道。',
+      desc_en: 'In Progress — Evaluation benchmark currently in preparation. Details will be shared upon release.',
+      desc_zh: 'In Progress（推进中）—— 评测基准筹备中，具体细节将于完成后公开。',
     },
     {
       id: 'method',
       num: '03',
+      badge: 'WIP',
       href: `${basePrefix}/method/`,
-      en: 'Agent Method',
-      zh: '智能体方法',
-      desc_en: 'Code-agent synthesis loop, step-trace sandbox, and closed-loop world verification.',
-      desc_zh: 'Code-Agent 世界程序归纳、单步因果轨迹沙箱与闭环验证方法。',
+      en: 'Method',
+      zh: '建模方法',
+      desc_en: 'In Progress — Modeling method currently in preparation. Details will be shared upon release.',
+      desc_zh: 'In Progress（推进中）—— 建模方法筹备中，具体细节将于完成后公开。',
     },
   ];
 
@@ -96,7 +97,7 @@
       const dismissed = localStorage.getItem('pwm-banner-dismissed') === '1';
       headerMount.innerHTML = `
         <div class="pwm-topbar" id="pwmTopbar" ${dismissed ? 'hidden' : ''}>
-          <a class="pwm-topbar__link" href="${basePrefix}/${pageId === 'survey' ? 'arena/' : 'survey/'}">
+          <a class="pwm-topbar__link" href="${basePrefix}/${pageId === 'survey' ? '' : 'survey/'}">
             <span class="pwm-topbar__tag">PROGRAM WORLD MODEL</span>
             <strong id="pwmTopbarLead"></strong>
             <span class="pwm-topbar__muted" id="pwmTopbarCta"></span>
@@ -205,9 +206,9 @@
     if (lead && cta) {
       if (pageId === 'survey') {
         lead.textContent = zh ? '子站 01 · 代码世界模型综述与 201 篇实时点阵图谱' : 'Work 01 · Code World Models Survey & 201-Paper Dot Atlas';
-        cta.textContent = zh ? '继续查看 02 · PWM-Arena 评测基准 →' : 'Next: Open 02 · PWM-Arena Benchmark →';
+        cta.textContent = zh ? '← 返回 Program World Model 总览主页' : '← Back to Program World Model Overview';
       } else {
-        lead.textContent = zh ? '开放研究计划 · 覆盖综述图谱、反事实基准与智能体方法三个子站' : 'Unified Research Portal · Survey Atlas, PWM-Arena & Agent Method';
+        lead.textContent = zh ? '开放研究计划 · 子站 01 领域综述与 201 篇点阵图谱已上线（02 / 03 推进中）' : 'Open Research Portal · 01 Survey & 201-Paper Dot Atlas Live (02 & 03 In Progress)';
         cta.textContent = zh ? '点开 01 · 综述与 201 篇点阵图谱子页 →' : 'Open 01 · Survey & 201-Paper Dot Atlas →';
       }
     }

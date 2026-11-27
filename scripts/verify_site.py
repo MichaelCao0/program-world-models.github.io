@@ -1814,127 +1814,56 @@ def run_tier1(
 
         runner.record("Tier 1", "T1-05", t1_05)
 
-        # T1-06: /arena/ links & 4 counterfactual archetypes
+        # T1-06: /arena/ In Progress status & zero unreleased detail leaks
         def t1_06() -> str:
             require_route_available(root, "arena/", skip_missing_routes)
             navigate_route(page, monitor, f"{base_url}/arena/")
-            ext_link = page.locator('a[href*="jz-jimmy.github.io/blog/pwm-arena/#minecraft"]')
+            main_txt = page.locator("main").inner_text()
+            assert re.search(r"In\s*Progress|推进中", main_txt, re.I), "Missing 'In Progress' status on /arena/"
+            assert page.locator('a[href*="jz-jimmy"]').count() == 0, "Unreleased jz-jimmy link still present on /arena/"
+            for leak in ("PWM-Arena", "Minecraft", "S01", "S24", "923"):
+                assert not re.search(rf"\b{re.escape(leak)}\b", main_txt, re.I), (
+                    f"Unreleased benchmark detail {leak!r} leaked on /arena/"
+                )
             int_link = page.locator('a[href*="survey/?sec=benchmark"]')
-            assert ext_link.count() >= 1 and ext_link.first.is_visible(), "Missing PWM-Arena Minecraft external link"
+            root_link = page.locator('main a[href="../"]')
             assert int_link.count() >= 1 and int_link.first.is_visible(), "Missing relative ../survey/?sec=benchmark#library link"
-
-            archetype_patterns = [
-                ("Rule Rebinding", r"Rule\s*Rebinding|规则重绑定"),
-                ("Priority Override & Revocation", r"Priority\s*Override|Revocation|优先级覆写|撤销"),
-                ("Scheduled / One-Shot Events", r"Scheduled|One-Shot|定时|一次性"),
-                ("Out-of-View Persistence", r"Out-of-View|Persistence|跨遮挡|视锥外"),
-            ]
-            snapshots: List[str] = []
-            for label, pat in archetype_patterns:
-                ctrl = find_visible_text_control(page, pat)
-                assert ctrl is not None, f"Could not find selectable control for archetype {label!r}"
-                ctrl.click()
-                page.wait_for_timeout(120)
-                snapshots.append(page.locator("main").inner_text())
-
-            assert len(set(snapshots)) >= 3, "Selecting the 4 counterfactual archetypes did not mutate arena content"
-
-            first_arch_tab = page.locator('.wb-archetype-bar [role="tab"]').first
-            first_arch_tab.focus()
-            page.keyboard.press("ArrowRight")
-            page.wait_for_timeout(80)
-            second_selected = page.locator('.wb-archetype-bar [role="tab"]').nth(1).get_attribute("aria-selected")
-            assert second_selected == "true", "ArrowRight on /arena/ archetype tablist did not select tab 2"
-            focused_is_second = page.evaluate(
-                "() => document.activeElement === document.querySelectorAll('.wb-archetype-bar [role=\"tab\"]')[1]"
-            )
-            assert focused_is_second, "ArrowRight on /arena/ archetype tablist did not focus refreshed tab 2"
+            assert root_link.count() >= 1 and root_link.first.is_visible(), "Missing relative ../ overview link on /arena/"
             monitor.assert_clean("T1-06")
-            return "external/relative links, 4 counterfactual archetypes, and tablist keyboard verified"
+            return "/arena/ In Progress framing, relative links, and zero unreleased detail leaks verified"
 
         runner.record("Tier 1", "T1-06", t1_06)
 
-        # T1-07: /arena/ Branch A/B diff, Strict Pair, visibility tags, P·D·R
+        # T1-07: Overview & /arena/ In Progress consistency + bilingual toggle
         def t1_07() -> str:
             require_route_available(root, "arena/", skip_missing_routes)
-            navigate_route(page, monitor, f"{base_url}/arena/")
-            main_txt = page.locator("main").inner_text()
-            assert re.search(r"Branch\s*A", main_txt, re.I) and re.search(r"Branch\s*B", main_txt, re.I), (
-                "Missing Branch A / Branch B counterfactual comparison"
-            )
-            assert re.search(r"Strict\s*Pair|A\s*[∧&]\s*B", main_txt, re.I), "Missing Strict Pair (A ∧ B) scoring logic"
-
-            for tag in ("visible", "ui", "hidden"):
-                assert re.search(rf"\b{tag}\b", main_txt, re.I), f"Missing visibility tag {tag!r}"
-
-            assert re.search(r"PD\s*Track|P\s*·\s*D", main_txt, re.I), "Missing PD Track"
-            assert re.search(r"R\s*Track", main_txt, re.I), "Missing R Track"
-            assert re.search(r"E\s*Track", main_txt, re.I), "Missing E Track"
-
-            # Exercise interactive Branch / Candidate comparison & P·D·R track tabs (no tautological fallback)
-            branch_toggle = find_visible_text_control(
-                page,
-                r"^\s*(?:Branch\s*[AB]|分支\s*[AB])",
-                roles=("tab", "button", "radio"),
-            )
-            if branch_toggle is not None:
-                before_branch = page.locator("main").inner_text()
-                branch_toggle.click()
-                page.wait_for_timeout(120)
-                other_branch = find_visible_text_control(
-                    page,
-                    r"^\s*(?:Branch\s*[AB]|分支\s*[AB])",
-                    roles=("tab", "button", "radio"),
+            navigate_route(page, monitor, f"{base_url}/")
+            work_txt = page.locator("#work").inner_text()
+            assert work_txt.lower().count("in progress") >= 2, "Expected both Work 02 and Work 03 marked In Progress on /"
+            for leak in ("PWM-Arena", "jz-jimmy", "S01", "S24"):
+                assert not re.search(rf"\b{re.escape(leak)}\b", page.locator("body").inner_text(), re.I), (
+                    f"Unreleased detail {leak!r} leaked on /"
                 )
-                if other_branch is not None and other_branch != branch_toggle:
-                    other_branch.click()
-                    page.wait_for_timeout(120)
-                after_branch = page.locator("main").inner_text()
-                assert after_branch != before_branch, "Branch A/B toggle did not change arena DOM state"
 
-            before_cand = page.locator("main").inner_text()
-            cand_ctrl = find_visible_text_control(
-                page,
-                r"B-ignore|Ignores\s*Edit|B-replay|Swapped|忽略规则编辑|对调",
-                roles=("button", "tab", "radio"),
-            )
-            assert cand_ctrl is not None, "Could not find counterfactual candidate comparison button on /arena/"
-            cand_ctrl.click()
-            page.wait_for_timeout(120)
-            after_cand = page.locator("main").inner_text()
-            assert after_cand != before_cand, "Candidate comparison toggle did not change Branch A/B evaluation state"
-            assert re.search(r"FAIL\s*\(0\.0\)|未通过\s*\(0\.0\)|Gate failed|配对门控未通过", after_cand, re.I), (
-                "Switching to non-oracle counterfactual candidate did not fail Strict Pair (A ∧ B)"
-            )
-            oracle_ctrl = find_visible_text_control(page, r"Oracle|参考引擎", roles=("button", "tab", "radio"))
-            assert oracle_ctrl is not None, "Could not find Oracle candidate button to restore /arena/ state"
-            oracle_ctrl.click()
-            page.wait_for_timeout(120)
-            restored_cand = page.locator("main").inner_text()
-            assert restored_cand != after_cand, "Restoring Oracle candidate did not update arena state"
-
-            r_tab = find_visible_text_control(page, r"R\s*Track.*Readout|R\s*轨.*读出", roles=("tab", "button"))
-            if r_tab is None:
-                r_tab = find_visible_text_control(page, r"R\s*Track|R\s*轨", roles=("tab",))
-            assert r_tab is not None, "Could not find interactive R Track tab on /arena/"
-            before_track = page.locator("main").inner_text()
-            r_tab.click()
-            page.wait_for_timeout(120)
-            after_track = page.locator("main").inner_text()
-            assert after_track != before_track, "Switching to R Track tab did not update P·D·R panel"
-
+            navigate_route(page, monitor, f"{base_url}/arena/")
+            page.locator("#pwmLangZh").click()
+            page.wait_for_timeout(80)
+            assert "推进中" in page.locator("main").inner_text(), "/arena/ did not render Chinese In Progress notice"
+            page.locator("#pwmLangEn").click()
+            page.wait_for_timeout(80)
+            assert "In Progress" in page.locator("main").inner_text(), "/arena/ did not revert to English In Progress notice"
             monitor.assert_clean("T1-07")
-            return "Branch A/B diff, Strict Pair (A ∧ B), candidate toggle, visible/ui/hidden tags, and P·D·R tracks verified"
+            return "Overview 02/03 In Progress cards & /arena/ EN <-> 中文 notice verified"
 
         runner.record("Tier 1", "T1-07", t1_07)
 
-        # T1-08: /method/ In Active Development framing, zero fabricated metrics, world.step + rule patch + occlusion
+        # T1-08: /method/ In Progress framing & zero unreleased/fabricated claims
         def t1_08() -> str:
             require_route_available(root, "method/", skip_missing_routes)
             navigate_route(page, monitor, f"{base_url}/method/")
             main_txt = page.locator("main").inner_text()
-            assert re.search(r"In Active Development|积极研发中|开发中", main_txt, re.I), (
-                "Missing 'In Active Development' status framing"
+            assert re.search(r"In\s*Progress|推进中", main_txt, re.I), (
+                "Missing 'In Progress' status framing on /method/"
             )
             assert not re.search(r"\b\d{2}\.\d+%\s*(?:accuracy|pass|score|rate|SOTA)\b", main_txt, re.I), (
                 "Detected fabricated benchmark score claim on /method/"
@@ -1942,103 +1871,34 @@ def run_tier1(
             assert not re.search(r"\b(?:NeurIPS|ICLR|ICML|CVPR|ACL)\s*202[6-9]\b", main_txt, re.I), (
                 "Detected fabricated paper publication venue/date on /method/"
             )
-
-            json_loc = find_json_state_locator(page)
-            assert json_loc is not None, "Could not locate authoritative JSON state view on /method/"
-            trace_loc = find_trace_locator(page)
-            assert trace_loc is not None, "Could not locate causal trace waterfall on /method/"
-
-            before_json = json_loc.inner_text()
-            before_trace = trace_loc.inner_text()
-
-            step_btn = find_visible_text_control(
-                page,
-                r"pickup|take_key|pull\(|toggle\(|lamp|brass_key|open_door|拾取|开关",
-                roles=("button",),
-            )
-            assert step_btn is not None, "Could not find world.step action button on /method/"
-            step_btn.click()
-            page.wait_for_timeout(120)
-            after_json = json_loc.inner_text()
-            after_trace = trace_loc.inner_text()
-            assert after_json != before_json, "world.step action did not mutate JSON state"
-            assert after_trace != before_trace, "world.step action did not append causal trace"
-
-            # Rule patch toggle (single-open vs double-lock or revoke)
-            patch_btn = find_visible_text_control(
-                page,
-                r"double_lock|2\s*pulls|rule\s*patch|热更|双锁",
-                roles=("button",),
-            )
-            assert patch_btn is not None, "Could not find live rule-patch toggle on /method/"
-            before_main = page.locator("main").inner_text()
-            patch_btn.click()
-            page.wait_for_timeout(120)
-            after_main = page.locator("main").inner_text()
-            assert after_main != before_main, "Rule-patch toggle did not update kernel/sandbox state"
-
-            # Out-of-view occlusion memory check
-            pan_btn = find_visible_text_control(
-                page,
-                r"camera\.pan|pan\(|occlude|遮挡",
-                roles=("button",),
-            )
-            assert pan_btn is not None, "Could not find out-of-view occlusion toggle on /method/"
-            before_pan_json = json_loc.inner_text()
-            before_pan_trace = trace_loc.inner_text()
-            occ_loc = first_matching_locator(
-                page,
-                ["#method-occlusion-status", "[id*='occlusion' i]", "[class*='occlusion' i]"],
-                require_visible=False,
-            )
-            before_pan_occ = occ_loc.inner_text() if occ_loc is not None else ""
-            pan_btn.click()
-            page.wait_for_timeout(140)
-            after_pan_json = json_loc.inner_text()
-            after_pan_trace = trace_loc.inner_text()
-            after_pan_occ = occ_loc.inner_text() if occ_loc is not None else ""
-            assert after_pan_json != before_pan_json, "camera.pan did not mutate authoritative JSON state"
-            assert after_pan_trace != before_pan_trace, "camera.pan did not append causal trace entry"
-            assert re.search(
-                r'"frustum_occluded"\s*:\s*true|"in_view"\s*:\s*false|frustum_occluded|occlud|遮挡',
-                after_pan_json,
-                re.I,
-            ), f"Occlusion check did not report occluded camera in JSON state: {after_pan_json[:200]!r}"
-            if occ_loc is not None:
-                assert after_pan_occ != before_pan_occ, "Occlusion status text did not change after camera.pan"
-                assert re.search(r"occlud|occlusion\s*memory\s*check\s*·\s*active|off-screen|遮挡|out-of-view", after_pan_occ, re.I), (
-                    f"Occlusion status text did not reflect occluded state: {after_pan_occ!r}"
+            for leak in ("pwm-state-v1", "double_lock", "single_open", "PWM-Arena"):
+                assert not re.search(rf"\b{re.escape(leak)}\b", main_txt, re.I), (
+                    f"Unreleased method detail {leak!r} leaked on /method/"
                 )
             monitor.assert_clean("T1-08")
-            return "In Active Development framing, world.step mutation, rule patch toggle, and occlusion delta verified"
+            return "/method/ In Progress framing, zero fabricated metrics, and zero unreleased method details verified"
 
         runner.record("Tier 1", "T1-08", t1_08)
 
-        # T1-09: /method/ 3-stage loop & relative links
+        # T1-09: /method/ relative links & bilingual toggle
         def t1_09() -> str:
             require_route_available(root, "method/", skip_missing_routes)
             navigate_route(page, monitor, f"{base_url}/method/")
-            main_txt = page.locator("main").inner_text()
-            assert re.search(r"Induce State|状态契约与规则归纳", main_txt, re.I), "Missing Stage 01"
-            assert re.search(r"Counterfactual|反事实与不变量", main_txt, re.I), "Missing Stage 02"
-            assert re.search(r"Proxy-Conditioned|代理条件渲染", main_txt, re.I), "Missing Stage 03"
-
             survey_link = page.locator('a[href*="survey/?layer=L2"]')
             arena_link = page.locator('a[href*="arena/"]')
+            root_link = page.locator('main a[href="../"]')
             assert survey_link.count() >= 1 and survey_link.first.is_visible(), "Missing link to ../survey/?layer=L2#paradigms"
             assert arena_link.count() >= 1 and arena_link.first.is_visible(), "Missing link to ../arena/"
+            assert root_link.count() >= 1 and root_link.first.is_visible(), "Missing link to ../ on /method/"
 
-            page.locator('.method-loop-grid [role="tab"][data-stage="01"]').focus()
-            page.keyboard.press("ArrowRight")
+            page.locator("#pwmLangZh").click()
             page.wait_for_timeout(80)
-            assert page.locator('.method-loop-grid [role="tab"][data-stage="02"]').get_attribute("aria-selected") == "true", (
-                "ArrowRight on /method/ stage tablist did not select Stage 02"
-            )
-            assert page.evaluate("() => document.activeElement && document.activeElement.getAttribute('data-stage')") == "02", (
-                "ArrowRight on /method/ stage tablist did not move focus to Stage 02"
-            )
+            assert "推进中" in page.locator("main").inner_text(), "/method/ did not render Chinese In Progress notice"
+            page.locator("#pwmLangEn").click()
+            page.wait_for_timeout(80)
+            assert "In Progress" in page.locator("main").inner_text(), "/method/ did not revert to English In Progress notice"
             monitor.assert_clean("T1-09")
-            return "3-stage Code-Agent loop, tablist keyboard, and relative links to L2 survey & /arena/ verified"
+            return "/method/ relative links (L2 survey, /arena/, ../) & EN <-> 中文 toggle verified"
 
         runner.record("Tier 1", "T1-09", t1_09)
     finally:
@@ -2482,25 +2342,12 @@ def run_tier3(
                 assert state["pwmLang"] == "zh" and state["cwmLang"] == "zh", f"/{route} localStorage mismatch: {state}"
                 assert re.search(r"[\u4e00-\u9fff]{3,}", state["mainText"]), f"/{route} missing Chinese text"
 
-                # Mid-simulation EN <-> 中文 toggle on /arena/ and /method/
-                if route == "arena/":
-                    cand_ctrl = find_visible_text_control(pg, r"B-ignore|Ignores\s*Edit|忽略规则编辑", roles=("button", "tab", "radio"))
-                    if cand_ctrl is not None:
-                        cand_ctrl.click()
+                # Live EN <-> 中文 toggle on /arena/ and /method/
+                if route in ("arena/", "method/"):
+                    assert "推进中" in pg.locator("main").inner_text(), f"/{route} missing Chinese In Progress notice"
                     pg.locator("#pwmLangEn").click()
                     pg.wait_for_timeout(80)
-                    assert "Strict Pair" in pg.locator("main").inner_text(), "/arena/ mid-sim toggle to EN failed"
-                    pg.locator("#pwmLangZh").click()
-                    pg.wait_for_timeout(80)
-                elif route == "method/":
-                    step_btn = find_visible_text_control(pg, r"take_key|pickup|拾取", roles=("button",))
-                    if step_btn is not None:
-                        step_btn.click()
-                    pg.locator("#pwmLangEn").click()
-                    pg.wait_for_timeout(80)
-                    assert "Execution Trace" in pg.locator("main").inner_text() or "In Active Development" in pg.locator("main").inner_text(), (
-                        "/method/ mid-sim toggle to EN failed"
-                    )
+                    assert "In Progress" in pg.locator("main").inner_text(), f"/{route} toggle to EN failed"
                     pg.locator("#pwmLangZh").click()
                     pg.wait_for_timeout(80)
 
@@ -2667,52 +2514,27 @@ def run_tier4(
             assert "@" in pg.locator("#paperDialogBody").inner_text(), "BibTeX missing in T4-01 modal"
             pg.locator("#closePaperBtn").click()
 
-            # 3. Navigate via shell to /arena/, verify Dark theme & exercise counterfactual archetypes
+            # 3. Navigate via shell to /arena/, verify Dark theme & In Progress state
             pg.locator('.pwm-route-link[data-route-id="arena"]').click()
             pg.wait_for_load_state("domcontentloaded")
             pg.wait_for_selector('body[data-pwm-page="arena"]')
             pg.wait_for_selector("#pwm-shell-header .pwm-global-nav", state="attached")
             pg.wait_for_timeout(180)
             assert pg.locator("html").get_attribute("data-theme") == "dark", "Dark theme dropped on /arena/"
-            arch = find_visible_text_control(pg, r"Priority\s*Override|Revocation|Rule\s*Rebinding|优先级覆写|规则重绑定")
-            assert arch is not None, "Counterfactual archetype control missing in T4-01"
-            arch.click()
-            pg.wait_for_timeout(100)
             arena_txt = pg.locator("main").inner_text()
-            assert re.search(r"Branch\s*A", arena_txt, re.I) and re.search(r"Strict\s*Pair", arena_txt, re.I), (
-                "Branch A / Strict Pair missing on /arena/"
-            )
+            assert re.search(r"In\s*Progress|推进中", arena_txt, re.I), "In Progress status missing on /arena/ in T4-01"
+            assert not re.search(r"PWM-Arena|jz-jimmy|S01|S24", arena_txt, re.I), "Unreleased details leaked on /arena/ in T4-01"
 
-            # 4. Navigate via shell to /method/, verify Dark theme, toggle patch, run world.step + occlusion
+            # 4. Navigate via shell to /method/, verify Dark theme & In Progress state
             pg.locator('.pwm-route-link[data-route-id="method"]').click()
             pg.wait_for_load_state("domcontentloaded")
             pg.wait_for_selector('body[data-pwm-page="method"]')
             pg.wait_for_selector("#pwm-shell-header .pwm-global-nav", state="attached")
             pg.wait_for_timeout(180)
             assert pg.locator("html").get_attribute("data-theme") == "dark", "Dark theme dropped on /method/"
-            assert re.search(r"In Active Development|积极研发中", pg.locator("main").inner_text(), re.I), (
-                "Missing In Active Development badge in T4-01"
-            )
-            patch_btn = find_visible_text_control(
-                pg,
-                r"double_lock|2\s*pulls|rule\s*patch|热更|双锁",
-                roles=("button",),
-            )
-            if patch_btn is not None:
-                patch_btn.click()
-                pg.wait_for_timeout(100)
-            json_loc = find_json_state_locator(pg)
-            assert json_loc is not None, "JSON state box missing on /method/"
-            before_json = json_loc.inner_text()
-            step_btn = find_visible_text_control(
-                pg,
-                r"pickup|take_key|pull\(|toggle\(|lamp|brass_key|open_door|拾取|开关",
-                roles=("button",),
-            )
-            assert step_btn is not None, "world.step button missing in T4-01"
-            step_btn.click()
-            pg.wait_for_timeout(100)
-            assert json_loc.inner_text() != before_json, "JSON state did not update in T4-01"
+            method_txt = pg.locator("main").inner_text()
+            assert re.search(r"In\s*Progress|推进中", method_txt, re.I), "In Progress status missing on /method/ in T4-01"
+            assert not re.search(r"pwm-state-v1|double_lock|PWM-Arena", method_txt, re.I), "Unreleased details leaked on /method/ in T4-01"
 
             mon.assert_clean("T4-01 full journey")
             return "full / -> /survey/?layer=L2 -> /arena/ -> /method/ journey completed with 0 errors"
